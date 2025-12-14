@@ -3,19 +3,24 @@ import { reader } from '@/lib/reader';
 
 const awardTypeOrder = ['grand', 'excellence', 'merit', 'special'];
 
-const getAwardBadge = (type: string) => {
-  switch (type) {
-    case 'grand':
-      return { label: '대상', className: 'badge-grand' };
-    case 'excellence':
-      return { label: '최우수상', className: 'badge-excellence' };
-    case 'merit':
-      return { label: '우수상', className: 'badge-merit' };
-    case 'special':
-      return { label: '특별상', className: 'badge-special' };
-    default:
-      return { label: '수상', className: 'badge-merit' };
-  }
+const getAwardLabel = (type: string) => {
+  const labels: Record<string, string> = {
+    grand: 'Grand Prize',
+    excellence: 'Excellence',
+    merit: 'Merit',
+    special: 'Special',
+  };
+  return labels[type] || 'Award';
+};
+
+const getBadgeClass = (type: string) => {
+  const classes: Record<string, string> = {
+    grand: 'badge-grand',
+    excellence: 'badge-excellence',
+    merit: 'badge-merit',
+    special: 'badge-special',
+  };
+  return classes[type] || 'badge-merit';
 };
 
 export default async function AwardsPage() {
@@ -37,20 +42,16 @@ export default async function AwardsPage() {
     .sort((a, b) => b - a);
 
   return (
-    <div className="min-h-screen bg-dark-950 bg-noise pt-28 md:pt-32">
-      <div className="container-custom py-10 lg:py-16 px-4 md:px-0">
+    <div className="min-h-screen bg-dark-950 pt-24 md:pt-32">
+      <div className="container-custom py-12 lg:py-20">
         {/* Header */}
-        <div className="mb-16 md:mb-24 text-center">
-          <div className="flex items-center justify-center gap-5 mb-8">
-            <div className="w-20 h-px bg-gradient-to-r from-transparent to-gold-500/25" />
-            <span className="text-gold-400/70 text-[10px] tracking-[0.4em] uppercase">Hall of Fame</span>
-            <div className="w-20 h-px bg-gradient-to-l from-transparent to-gold-500/25" />
-          </div>
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-dark-100 mb-6">
-            역대 수상작
+        <div className="mb-20 md:mb-28">
+          <p className="text-label mb-4">Hall of Fame</p>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl text-dark-100 mb-6">
+            Winners
           </h1>
-          <p className="text-dark-400 max-w-xl mx-auto font-light leading-loose text-sm">
-            대한민국 청년정책 어워즈에서 선정된 우수 정책들을 만나보세요.<br className="hidden md:block" />
+          <p className="text-dark-400 text-lg max-w-2xl">
+            대한민국 청년정책 어워즈에서 선정된 우수 정책들을 만나보세요.
             청년들의 삶을 변화시킨 의미있는 정책들입니다.
           </p>
         </div>
@@ -67,61 +68,60 @@ export default async function AwardsPage() {
             return (
               <section key={year}>
                 {/* Year Header */}
-                <div className="flex items-center gap-8 mb-12 md:mb-16">
-                  <h2 className="text-5xl md:text-6xl font-serif font-bold text-gold-400/80">
+                <div className="flex items-center gap-8 mb-10">
+                  <span className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-dark-800">
                     {year}
-                  </h2>
-                  <div className="flex-1">
-                    <div className="h-px bg-gradient-to-r from-gold-500/20 to-transparent mb-3" />
-                    <p className="text-dark-600 text-[10px] tracking-[0.2em] uppercase">
-                      {yearAwards.length} policies selected
-                    </p>
-                  </div>
+                  </span>
+                  <div className="flex-1 h-px bg-dark-800" />
+                  <span className="text-label">
+                    {yearAwards.length} Winners
+                  </span>
                 </div>
 
-                {/* Awards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {yearAwards.map((award) => {
-                    const badge = getAwardBadge(award.entry.awardType);
-                    return (
-                      <Link
-                        key={award.slug}
-                        href={`/awards/${award.slug}`}
-                        className="group block"
-                      >
-                        <div className="border border-dark-800/50 hover:border-gold-500/20 p-8 md:p-10 transition-luxury bg-dark-950/50">
-                          <div className="mb-5">
-                            <span className={`badge ${badge.className}`}>
-                              {badge.label}
-                            </span>
-                          </div>
+                {/* Awards List */}
+                <div className="border-t border-dark-800">
+                  {yearAwards.map((award) => (
+                    <Link
+                      key={award.slug}
+                      href={`/awards/${award.slug}`}
+                      className="group block"
+                    >
+                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-5 md:py-6 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
+                        {/* Badge */}
+                        <div className="col-span-12 md:col-span-2">
+                          <span className={`badge ${getBadgeClass(award.entry.awardType)}`}>
+                            {getAwardLabel(award.entry.awardType)}
+                          </span>
+                        </div>
 
-                          <h3 className="text-base font-bold text-dark-200 mb-3 group-hover:text-gold-300 transition-luxury tracking-tight">
+                        {/* Title */}
+                        <div className="col-span-12 md:col-span-5">
+                          <h3 className="text-dark-100 text-base md:text-lg font-medium transition-smooth group-hover:text-gold-300">
                             {award.entry.title}
                           </h3>
+                        </div>
 
-                          <p className="text-dark-500 text-sm mb-4 font-light">
+                        {/* Provider */}
+                        <div className="col-span-10 md:col-span-4">
+                          <p className="text-dark-500 text-sm">
                             {award.entry.provider}
                           </p>
-
-                          {award.entry.summary && (
-                            <p className="text-dark-500 text-sm line-clamp-2 leading-relaxed font-light">
-                              {award.entry.summary}
-                            </p>
-                          )}
-
-                          <div className="mt-8 pt-5 border-t border-dark-800/30 flex items-center justify-between">
-                            <span className="text-dark-600 text-[10px] tracking-[0.2em] uppercase group-hover:text-gold-400/70 transition-luxury">
-                              View Details
-                            </span>
-                            <svg className="w-4 h-4 text-gold-500/30 group-hover:text-gold-500/60 group-hover:translate-x-1 transition-luxury" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                          </div>
                         </div>
-                      </Link>
-                    );
-                  })}
+
+                        {/* Arrow */}
+                        <div className="col-span-2 md:col-span-1 flex justify-end">
+                          <svg
+                            className="w-5 h-5 text-dark-600 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </section>
             );
@@ -129,13 +129,8 @@ export default async function AwardsPage() {
         </div>
 
         {sortedYears.length === 0 && (
-          <div className="text-center py-24 border border-dark-800/30">
-            <div className="flex items-center justify-center gap-5 mb-10">
-              <div className="w-20 h-px bg-gradient-to-r from-transparent to-gold-500/20" />
-              <div className="w-2.5 h-2.5 border border-gold-500/30 rotate-45" />
-              <div className="w-20 h-px bg-gradient-to-l from-transparent to-gold-500/20" />
-            </div>
-            <p className="text-base text-dark-500 font-light">
+          <div className="text-center py-32">
+            <p className="text-dark-500 text-lg">
               아직 등록된 수상작이 없습니다.
             </p>
           </div>
