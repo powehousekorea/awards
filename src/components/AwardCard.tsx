@@ -9,14 +9,13 @@ interface AwardCardProps {
   categoryIcon?: string;
   provider: string;
   summary: string;
-  votePercentage?: number;
 }
 
-const awardTypeConfig: Record<string, { label: string; className: string; icon: string }> = {
-  grand: { label: '대상', className: 'badge-grand', icon: '🏆' },
-  excellence: { label: '최우수상', className: 'badge-excellence', icon: '🥇' },
-  merit: { label: '우수상', className: 'badge-merit', icon: '🥈' },
-  special: { label: '특별상', className: 'badge-special', icon: '⭐' },
+const awardTypeConfig: Record<string, { label: string; className: string }> = {
+  grand: { label: '대상', className: 'badge-grand' },
+  excellence: { label: '최우수상', className: 'badge-excellence' },
+  merit: { label: '우수상', className: 'badge-merit' },
+  special: { label: '특별상', className: 'badge-special' },
 };
 
 export default function AwardCard({
@@ -25,33 +24,38 @@ export default function AwardCard({
   year,
   awardType,
   category,
-  categoryIcon,
   provider,
   summary,
-  votePercentage,
 }: AwardCardProps) {
   const awardInfo = awardTypeConfig[awardType] || awardTypeConfig.grand;
 
   return (
     <Link href={`/awards/${slug}`} className="block group">
-      <article className="card-premium rounded-2xl overflow-hidden h-full flex flex-col card-hover">
+      <article className="border border-dark-800/50 hover:border-gold-500/20 h-full flex flex-col transition-luxury bg-dark-950/50">
         {/* Award Type Header */}
-        <div className={`px-5 py-4 ${
+        <div className={`px-6 py-5 border-b border-dark-800/30 ${
           awardType === 'grand'
-            ? 'bg-gradient-to-r from-gold-400 to-gold-600'
+            ? 'bg-gradient-to-r from-gold-500/10 to-transparent'
             : awardType === 'excellence'
-            ? 'bg-gradient-to-r from-silver-400 to-silver-500'
+            ? 'bg-gradient-to-r from-silver-400/5 to-transparent'
             : awardType === 'merit'
-            ? 'bg-gradient-to-r from-bronze-400 to-bronze-500'
-            : 'bg-gradient-to-r from-purple-500 to-purple-700'
+            ? 'bg-gradient-to-r from-bronze-400/5 to-transparent'
+            : 'bg-gradient-to-r from-purple-500/5 to-transparent'
         }`}>
           <div className="flex items-center justify-between">
-            <span className="text-3xl">{awardInfo.icon}</span>
+            {/* Geometric Icon */}
+            <div className={`w-8 h-8 border flex items-center justify-center ${
+              awardType === 'grand' ? 'border-gold-500/30' : 'border-dark-700/50'
+            }`}>
+              <div className={`w-3 h-3 border rotate-45 ${
+                awardType === 'grand' ? 'border-gold-500/50' : 'border-dark-600/50'
+              }`} />
+            </div>
             <div className="text-right">
-              <p className={`font-bold ${awardType === 'grand' ? 'text-dark-950' : 'text-white'}`}>
-                {year}년
+              <p className="font-serif font-bold text-dark-200 text-sm">
+                {year}
               </p>
-              <p className={`text-sm font-semibold ${awardType === 'grand' ? 'text-dark-800' : 'text-white/80'}`}>
+              <p className="text-[10px] text-dark-500 tracking-[0.15em] uppercase">
                 {awardInfo.label}
               </p>
             </div>
@@ -59,44 +63,36 @@ export default function AwardCard({
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col flex-grow bg-dark-900/50">
-          {/* Category & Vote */}
-          <div className="flex items-center justify-between mb-3">
-            {category && (
-              <div className="flex items-center gap-2">
-                {categoryIcon && <span className="text-lg">{categoryIcon}</span>}
-                <span className="text-sm font-medium text-dark-400">{category}</span>
-              </div>
-            )}
-            {votePercentage && (
-              <span className="text-gold-400 text-sm font-bold">
-                {votePercentage}%
-              </span>
-            )}
-          </div>
+        <div className="p-6 flex flex-col flex-grow">
+          {/* Category */}
+          {category && (
+            <div className="mb-4">
+              <span className="text-[10px] font-light text-dark-500 tracking-[0.15em] uppercase">{category}</span>
+            </div>
+          )}
 
           {/* Title */}
-          <h3 className="font-bold text-lg text-white mb-2 line-clamp-2 group-hover:text-gold-400 transition-colors">
+          <h3 className="font-bold text-base text-dark-200 mb-3 line-clamp-2 group-hover:text-gold-300 transition-luxury tracking-tight">
             {title}
           </h3>
 
           {/* Provider */}
-          <p className="text-sm text-dark-400 mb-3">
+          <p className="text-sm text-dark-500 mb-4 font-light">
             {provider}
           </p>
 
           {/* Summary */}
-          <p className="text-sm text-dark-500 line-clamp-3 flex-grow">
+          <p className="text-sm text-dark-500 line-clamp-3 flex-grow font-light leading-relaxed">
             {summary}
           </p>
 
           {/* View More */}
-          <div className="mt-4 pt-4 border-t border-dark-800 flex items-center justify-between">
-            <span className="text-dark-500 text-xs group-hover:text-gold-400 transition-colors">
-              자세히 보기
+          <div className="mt-6 pt-5 border-t border-dark-800/30 flex items-center justify-between">
+            <span className="text-dark-600 text-[10px] tracking-[0.2em] uppercase group-hover:text-gold-400/70 transition-luxury">
+              View Details
             </span>
-            <svg className="w-4 h-4 text-gold-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg className="w-4 h-4 text-gold-500/30 group-hover:text-gold-500/60 group-hover:translate-x-1 transition-luxury" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </div>
         </div>

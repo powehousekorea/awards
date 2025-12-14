@@ -142,7 +142,6 @@ export default config({
           publicPath: '/images/awards',
         }),
         videoUrl: fields.url({ label: '관련 영상 URL' }),
-        votePercentage: fields.integer({ label: '득표율 (%)' }),
       },
     }),
     // 뉴스/공지사항

@@ -1,0 +1,3072 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.claude/settings.local.json
+.gitignore
+eslint.config.mjs
+keystatic.config.tsx
+next.config.ts
+package.json
+postcss.config.mjs
+public/file.svg
+public/globe.svg
+public/next.svg
+public/vercel.svg
+public/window.svg
+README.md
+src/app/about/page.tsx
+src/app/api/keystatic/[...params]/route.tsx
+src/app/awards/[slug]/page.tsx
+src/app/awards/page.tsx
+src/app/favicon.ico
+src/app/globals.css
+src/app/keystatic/[[...params]]/page.tsx
+src/app/keystatic/keystatic.tsx
+src/app/keystatic/layout.tsx
+src/app/layout.tsx
+src/app/news/[slug]/page.tsx
+src/app/news/page.tsx
+src/app/page.tsx
+src/components/AwardCard.tsx
+src/components/Footer.tsx
+src/components/Header.tsx
+src/content/awards/2023-best-altteul/index.json
+src/content/awards/2023-best-altteul/index.mdoc
+src/content/awards/2023-excellence-kua/index.json
+src/content/awards/2023-excellence-kua/index.mdoc
+src/content/awards/2023-merit-doyak/index.json
+src/content/awards/2023-merit-doyak/index.mdoc
+src/content/awards/2023-merit-naebaeum/index.json
+src/content/awards/2023-merit-naebaeum/index.mdoc
+src/content/awards/2023-special-jeonse/index.json
+src/content/awards/2023-special-jeonse/index.mdoc
+src/content/categories/culture.json
+src/content/categories/education.json
+src/content/categories/finance.json
+src/content/categories/health.json
+src/content/categories/housing.json
+src/content/categories/jobs.json
+src/content/categories/participation.json
+src/content/categories/welfare.json
+src/content/policies/altteul-card/index.json
+src/content/policies/altteul-card/index.mdoc
+src/content/policies/kemployment-support/index.json
+src/content/policies/kemployment-support/index.mdoc
+src/content/policies/naebaeum-card/index.json
+src/content/policies/naebaeum-card/index.mdoc
+src/content/policies/sme-jeonse/index.json
+src/content/policies/sme-jeonse/index.mdoc
+src/content/policies/youth-culture-pass/index.json
+src/content/policies/youth-culture-pass/index.mdoc
+src/content/policies/youth-doyak/index.json
+src/content/policies/youth-doyak/index.mdoc
+src/content/policies/youth-housing-fund/index.json
+src/content/policies/youth-housing-fund/index.mdoc
+src/content/policies/youth-tomorrow-savings/index.json
+src/content/policies/youth-tomorrow-savings/index.mdoc
+src/content/settings/about.json
+src/content/settings/site.json
+src/lib/reader.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".claude/settings.local.json">
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="README.md">
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</file>
+
+<file path="src/app/about/page.tsx">
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+export default async function AboutPage() {
+  const about = await reader.singletons.about.read();
+
+  // 시상 부문 정의
+  const awardCategories = [
+    {
+      title: '청년정책 대상',
+      description: '올해 가장 많은 청년의 사랑을 받은 최고의 정책',
+    },
+    {
+      title: '최우수 청년정책상',
+      description: '각 부문별(정부/지자체/기업/비영리) 우수 정책',
+    },
+    {
+      title: '청년정책 혁신상',
+      description: '창의적 접근으로 청년 문제를 해결한 혁신 정책',
+    },
+    {
+      title: '글로벌 청년정책상',
+      description: '해외 우수 청년정책 중 벤치마킹 가치가 높은 정책',
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0d0a07] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12 px-4 md:px-0">
+        {/* Header */}
+        <div className="text-center mb-16 md:mb-20">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+            <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">About the Awards</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+          </div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-6">
+            {about?.title || '청년정책 어워즈란?'}
+          </h1>
+          <p className="text-dark-400 max-w-3xl mx-auto leading-relaxed font-serif">
+            대한민국 청년정책 어워즈는 청년을 위한 우수 정책을 발굴하고,
+            <br className="hidden md:block" />
+            더 많은 청년이 정책 혜택을 받을 수 있도록 정보를 제공하는 프로젝트입니다.
+          </p>
+        </div>
+
+        {/* Vision & Mission */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20">
+          <div className="border border-gold-500/30 p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-2 h-2 bg-gold-500 rounded-full" />
+              <h2 className="text-lg font-serif font-bold text-gold-500 tracking-wide">VISION</h2>
+            </div>
+            <p className="text-dark-200 leading-relaxed font-serif text-lg">
+              {about?.vision || '모든 청년이 자신에게 맞는 정책을 쉽게 찾고 활용할 수 있는 세상을 만듭니다.'}
+            </p>
+          </div>
+
+          <div className="border border-dark-700/50 p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-2 h-2 bg-gold-500 rounded-full" />
+              <h2 className="text-lg font-serif font-bold text-white tracking-wide">MISSION</h2>
+            </div>
+            <p className="text-dark-300 leading-relaxed font-serif text-lg">
+              {about?.mission || '청년정책의 가치를 발굴하고, 우수 정책을 널리 알려 더 많은 청년이 혜택을 받을 수 있도록 합니다.'}
+            </p>
+          </div>
+        </div>
+
+        {/* What We Do */}
+        <section className="mb-16 md:mb-24">
+          <div className="text-center mb-10 md:mb-14">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">What We Do</span>
+              <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-white">
+              어워즈가 하는 일
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {[
+              { num: '01', title: '정책 아카이빙', desc: '전국의 청년 정책을 수집하고 체계적으로 분류하여 청년들이 쉽게 찾아볼 수 있도록 정리합니다.' },
+              { num: '02', title: '우수 정책 선정', desc: '청년들의 참여를 통해 실제로 도움이 되는 우수 정책을 선정하고 시상합니다.' },
+              { num: '03', title: '정보 확산', desc: '선정된 우수 정책을 널리 알려 더 많은 청년이 혜택을 받을 수 있도록 합니다.' },
+            ].map((item) => (
+              <div key={item.title} className="border border-dark-700/50 hover:border-gold-500/30 p-8 md:p-10 text-center transition-all group">
+                <div className="text-gold-500/30 text-4xl font-serif mb-6">{item.num}</div>
+                <h3 className="text-lg font-serif font-bold text-white mb-4">{item.title}</h3>
+                <p className="text-sm text-dark-400 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Award Categories - 4개 시상부문 */}
+        <section className="mb-16 md:mb-24" id="criteria">
+          <div className="text-center mb-10 md:mb-14">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">Award Categories</span>
+              <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-white">
+              시상 부문
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {awardCategories.map((category, index) => (
+              <div key={category.title} className="border border-dark-700/50 hover:border-gold-500/30 p-8 text-center transition-all relative">
+                <div className="absolute top-4 left-4 text-gold-500/20 text-3xl font-serif">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <h3 className="font-serif font-bold text-white mb-3 mt-4">{category.title}</h3>
+                <p className="text-sm text-dark-400 leading-relaxed">{category.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Selection Process */}
+        <section className="mb-16 md:mb-24">
+          <div className="text-center mb-10 md:mb-14">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">Selection Process</span>
+              <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-white">
+              선정 과정
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              { step: '01', title: '정책 수집', desc: '전국 청년정책 데이터 수집 및 분류' },
+              { step: '02', title: '후보 선정', desc: '전문가 심사를 통한 후보 정책 선정' },
+              { step: '03', title: '청년 투표', desc: '청년들의 온라인 투표 진행' },
+              { step: '04', title: '최종 선정', desc: '투표 결과와 심사를 종합해 수상작 선정' },
+            ].map((item, index) => (
+              <div key={item.step} className="relative">
+                <div className="border border-dark-700/50 p-8 text-center h-full">
+                  <div className="text-4xl font-serif font-bold text-gold-500 mb-4">{item.step}</div>
+                  <h3 className="font-serif font-bold text-white mb-3">{item.title}</h3>
+                  <p className="text-sm text-dark-400">{item.desc}</p>
+                </div>
+                {index < 3 && (
+                  <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 text-gold-500/30 text-2xl">
+                    →
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Timeline */}
+        <section id="organization" className="mb-16 md:mb-24">
+          <div className="text-center mb-10 md:mb-14">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">History</span>
+              <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-white">
+              어워즈 연혁
+            </h2>
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <div className="relative">
+              <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-gold-500/50 to-transparent" />
+
+              {[
+                { year: '2021', title: '제1회 청년정책 어워즈', desc: '알뜰교통카드 대상 수상' },
+                { year: '2022', title: '제2회 청년정책 어워즈', desc: '국민취업지원제도 대상 수상' },
+                { year: '2023', title: '제3회 청년정책 어워즈', desc: '알뜰교통카드 2연속 대상 수상, 45만+ 참여' },
+                { year: '2024', title: '제4회 청년정책 어워즈', desc: '더욱 확대된 참여와 함께 준비 중' },
+              ].map((item) => (
+                <div key={item.year} className="relative pl-20 pb-10 last:pb-0">
+                  <div className="absolute left-0 text-3xl font-serif font-bold text-gold-500">
+                    {item.year}
+                  </div>
+                  <div className="absolute left-[30px] top-2 w-3 h-3 border-2 border-gold-500 bg-dark-950 rounded-full" />
+                  <div className="border border-dark-700/50 p-6">
+                    <h3 className="font-serif font-bold text-white mb-2">{item.title}</h3>
+                    <p className="text-sm text-dark-400">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="text-center">
+          <div className="border border-gold-500/30 p-10 md:p-16">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/30" />
+              <div className="w-3 h-3 border border-gold-500/50 rotate-45" />
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/30" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-white mb-6">
+              역대 수상작을 만나보세요
+            </h2>
+            <p className="text-dark-400 mb-10 max-w-xl mx-auto font-serif">
+              청년들이 직접 선택한 최고의 정책들을 확인하고,<br className="hidden md:block" />
+              나에게 도움이 되는 정책을 찾아보세요.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/awards" className="btn-gold inline-flex items-center justify-center font-serif">
+                역대 수상작 보기
+              </Link>
+              <Link href="/news" className="btn-outline-gold inline-flex items-center justify-center font-serif">
+                뉴스/공지사항
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/api/keystatic/[...params]/route.tsx">
+import { makeRouteHandler } from '@keystatic/next/route-handler';
+import config from '../../../../../keystatic.config';
+
+export const { POST, GET } = makeRouteHandler({ config });
+</file>
+
+<file path="src/app/awards/[slug]/page.tsx">
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+const awardTypeConfig: Record<string, { label: string; className: string; icon: string }> = {
+  grand: { label: '대상', className: 'badge-grand', icon: '🥇' },
+  excellence: { label: '최우수상', className: 'badge-excellence', icon: '🥈' },
+  merit: { label: '우수상', className: 'badge-merit', icon: '🥉' },
+  special: { label: '특별상', className: 'badge-special', icon: '⭐' },
+};
+
+export async function generateStaticParams() {
+  const awards = await reader.collections.awards.all();
+  return awards.map((award) => ({
+    slug: award.slug,
+  }));
+}
+
+export default async function AwardDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const award = await reader.collections.awards.read(slug);
+
+  if (!award) {
+    notFound();
+  }
+
+  const category = award.category
+    ? await reader.collections.categories.read(award.category)
+    : null;
+
+  const relatedPolicy = award.policy
+    ? await reader.collections.policies.read(award.policy)
+    : null;
+
+  const awardInfo = awardTypeConfig[award.awardType] || awardTypeConfig.grand;
+
+  return (
+    <div className="py-8 lg:py-12">
+      <div className="container-custom">
+        {/* Breadcrumb */}
+        <nav className="mb-6">
+          <ol className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+            <li>
+              <Link href="/" className="hover:text-[var(--color-navy-600)]">홈</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <Link href="/awards" className="hover:text-[var(--color-navy-600)]">역대 수상작</Link>
+            </li>
+            <li>/</li>
+            <li className="text-[var(--color-navy-900)]">{award.title}</li>
+          </ol>
+        </nav>
+
+        {/* Award Header */}
+        <div className={`rounded-xl p-8 lg:p-12 mb-8 ${
+          award.awardType === 'grand'
+            ? 'bg-gradient-to-br from-[var(--color-yellow-400)] to-[var(--color-yellow-500)]'
+            : 'bg-gradient-to-br from-[var(--color-navy-100)] to-[var(--color-navy-200)]'
+        }`}>
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-4xl">{awardInfo.icon}</span>
+              <div>
+                <p className={`text-sm font-medium ${
+                  award.awardType === 'grand' ? 'text-[var(--color-navy-700)]' : 'text-[var(--color-navy-600)]'
+                }`}>
+                  {award.year}년 대한민국 청년정책 어워즈
+                </p>
+                <p className={`text-2xl font-bold ${
+                  award.awardType === 'grand' ? 'text-[var(--color-navy-900)]' : 'text-[var(--color-navy-800)]'
+                }`}>
+                  {awardInfo.label}
+                </p>
+              </div>
+            </div>
+
+            <h1 className={`text-3xl lg:text-4xl font-bold mb-4 ${
+              award.awardType === 'grand' ? 'text-[var(--color-navy-900)]' : 'text-[var(--color-navy-900)]'
+            }`}>
+              {award.title}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-4">
+              {category && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{category.icon}</span>
+                  <span className={`font-medium ${
+                    award.awardType === 'grand' ? 'text-[var(--color-navy-800)]' : 'text-[var(--color-navy-700)]'
+                  }`}>
+                    {category.name}
+                  </span>
+                </div>
+              )}
+              {award.provider && (
+                <span className={`${
+                  award.awardType === 'grand' ? 'text-[var(--color-navy-700)]' : 'text-[var(--color-navy-600)]'
+                }`}>
+                  {award.provider}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            {/* Summary */}
+            <div className="bg-white rounded-xl border border-[var(--border)] p-6 lg:p-8 mb-6">
+              <h2 className="text-xl font-bold text-[var(--color-navy-900)] mb-4">
+                수상 사유
+              </h2>
+              <p className="text-[var(--color-navy-700)] text-lg leading-relaxed">
+                {award.summary}
+              </p>
+            </div>
+
+            {/* Description */}
+            <div className="bg-white rounded-xl border border-[var(--border)] p-6 lg:p-8">
+              <h2 className="text-xl font-bold text-[var(--color-navy-900)] mb-4">
+                상세 내용
+              </h2>
+              <div className="prose prose-slate max-w-none">
+                {/* MDX 콘텐츠는 추후 렌더링 구현 필요 */}
+                <p className="text-[var(--muted-foreground)]">
+                  상세 내용이 준비 중입니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Related Policy */}
+            {relatedPolicy && (
+              <div className="bg-white rounded-xl border border-[var(--border)] p-6 mb-6">
+                <h3 className="text-lg font-bold text-[var(--color-navy-900)] mb-4">
+                  관련 정책
+                </h3>
+                <Link
+                  href={`/policies/${award.policy}`}
+                  className="block p-4 bg-[var(--muted)] rounded-lg hover:bg-[var(--color-navy-100)] transition-colors"
+                >
+                  <p className="font-semibold text-[var(--color-navy-900)] mb-1">
+                    {relatedPolicy.title}
+                  </p>
+                  <p className="text-sm text-[var(--muted-foreground)]">
+                    {relatedPolicy.provider}
+                  </p>
+                </Link>
+              </div>
+            )}
+
+            {/* Video */}
+            {award.videoUrl && (
+              <div className="bg-white rounded-xl border border-[var(--border)] p-6">
+                <h3 className="text-lg font-bold text-[var(--color-navy-900)] mb-4">
+                  관련 영상
+                </h3>
+                <a
+                  href={award.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <span className="font-medium text-[var(--color-navy-900)]">
+                    영상 보기
+                  </span>
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/awards/page.tsx">
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+const awardTypeOrder = ['grand', 'excellence', 'merit', 'special'];
+
+const getAwardBadge = (type: string) => {
+  switch (type) {
+    case 'grand':
+      return { label: '대상', className: 'badge-grand' };
+    case 'excellence':
+      return { label: '최우수상', className: 'badge-excellence' };
+    case 'merit':
+      return { label: '우수상', className: 'badge-merit' };
+    case 'special':
+      return { label: '특별상', className: 'badge-special' };
+    default:
+      return { label: '수상', className: 'badge-merit' };
+  }
+};
+
+export default async function AwardsPage() {
+  const awards = await reader.collections.awards.all();
+
+  // 연도별로 그룹화
+  const awardsByYear = awards.reduce((acc, award) => {
+    const year = award.entry.year;
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(award);
+    return acc;
+  }, {} as Record<number, typeof awards>);
+
+  // 연도 내림차순 정렬
+  const sortedYears = Object.keys(awardsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+  return (
+    <div className="min-h-screen bg-[#0d0a07] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12 px-4 md:px-0">
+        {/* Header */}
+        <div className="mb-14 md:mb-20 text-center">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+            <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">Hall of Fame</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+          </div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-4">
+            역대 수상작
+          </h1>
+          <p className="text-dark-400 max-w-2xl mx-auto font-serif">
+            대한민국 청년정책 어워즈에서 선정된 우수 정책들을 만나보세요.<br className="hidden md:block" />
+            청년들의 삶을 변화시킨 의미있는 정책들입니다.
+          </p>
+        </div>
+
+        {/* Awards by Year */}
+        <div className="space-y-20 md:space-y-28">
+          {sortedYears.map((year) => {
+            const yearAwards = awardsByYear[year].sort((a, b) => {
+              const aOrder = awardTypeOrder.indexOf(a.entry.awardType);
+              const bOrder = awardTypeOrder.indexOf(b.entry.awardType);
+              return aOrder - bOrder;
+            });
+
+            return (
+              <section key={year}>
+                {/* Year Header */}
+                <div className="flex items-center gap-6 mb-10 md:mb-14">
+                  <h2 className="text-5xl md:text-6xl font-serif font-bold text-gold-500">
+                    {year}
+                  </h2>
+                  <div className="flex-1">
+                    <div className="h-px bg-gradient-to-r from-gold-500/30 to-transparent mb-2" />
+                    <p className="text-dark-500 text-sm tracking-wide">
+                      {yearAwards.length}개 정책 선정
+                    </p>
+                  </div>
+                </div>
+
+                {/* Awards Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {yearAwards.map((award) => {
+                    const badge = getAwardBadge(award.entry.awardType);
+                    return (
+                      <Link
+                        key={award.slug}
+                        href={`/awards/${award.slug}`}
+                        className="group block"
+                      >
+                        <div className="border border-dark-700/50 hover:border-gold-500/30 p-6 md:p-8 transition-all duration-300">
+                          <div className="mb-4">
+                            <span className={`badge ${badge.className} text-xs`}>
+                              {badge.label}
+                            </span>
+                          </div>
+
+                          <h3 className="text-lg font-serif font-bold text-white mb-2 group-hover:text-gold-400 transition-colors">
+                            {award.entry.title}
+                          </h3>
+
+                          <p className="text-dark-400 text-sm mb-4">
+                            {award.entry.provider}
+                          </p>
+
+                          {award.entry.summary && (
+                            <p className="text-dark-500 text-sm line-clamp-2 leading-relaxed">
+                              {award.entry.summary}
+                            </p>
+                          )}
+
+                          <div className="mt-6 pt-4 border-t border-dark-800 flex items-center justify-between">
+                            <span className="text-dark-500 text-xs tracking-wide group-hover:text-gold-400 transition-colors">
+                              자세히 보기
+                            </span>
+                            <svg className="w-4 h-4 text-gold-500/50 group-hover:text-gold-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+
+        {sortedYears.length === 0 && (
+          <div className="text-center py-20 border border-dark-700/50">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/30" />
+              <div className="w-3 h-3 border border-gold-500/30 rotate-45" />
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/30" />
+            </div>
+            <p className="text-lg text-dark-400 font-serif">
+              아직 등록된 수상작이 없습니다.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/keystatic/[[...params]]/page.tsx">
+export { default } from '../keystatic';
+</file>
+
+<file path="src/app/keystatic/keystatic.tsx">
+'use client';
+
+import { makePage } from '@keystatic/next/ui/app';
+import config from '../../../keystatic.config';
+
+export default makePage(config);
+</file>
+
+<file path="src/app/keystatic/layout.tsx">
+import KeystaticApp from './keystatic';
+
+export default function Layout() {
+  return <KeystaticApp />;
+}
+</file>
+
+<file path="src/app/news/[slug]/page.tsx">
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+const categoryLabels: Record<string, { label: string; className: string }> = {
+  notice: { label: '공지사항', className: 'bg-[var(--color-navy-100)] text-[var(--color-navy-700)]' },
+  news: { label: '뉴스', className: 'bg-[var(--color-mint-100)] text-[var(--color-mint-700)]' },
+  event: { label: '이벤트', className: 'bg-[var(--color-yellow-100)] text-[var(--color-yellow-700)]' },
+};
+
+export async function generateStaticParams() {
+  const news = await reader.collections.news.all();
+  return news.map((item) => ({
+    slug: item.slug,
+  }));
+}
+
+export default async function NewsDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const newsItem = await reader.collections.news.read(slug);
+
+  if (!newsItem) {
+    notFound();
+  }
+
+  const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
+
+  return (
+    <div className="py-8 lg:py-12">
+      <div className="container-custom max-w-3xl">
+        {/* Breadcrumb */}
+        <nav className="mb-6">
+          <ol className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+            <li>
+              <Link href="/" className="hover:text-[var(--color-navy-600)]">홈</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <Link href="/news" className="hover:text-[var(--color-navy-600)]">뉴스/공지</Link>
+            </li>
+            <li>/</li>
+            <li className="text-[var(--color-navy-900)] truncate max-w-[200px]">{newsItem.title}</li>
+          </ol>
+        </nav>
+
+        {/* Article */}
+        <article className="bg-white rounded-xl border border-[var(--border)] p-6 lg:p-10">
+          {/* Header */}
+          <header className="mb-8 pb-8 border-b border-[var(--border)]">
+            <div className="flex items-center gap-2 mb-4">
+              <span className={`text-sm px-3 py-1 rounded-full font-medium ${categoryInfo.className}`}>
+                {categoryInfo.label}
+              </span>
+              {newsItem.isImportant && (
+                <span className="text-sm px-3 py-1 rounded-full font-medium bg-red-100 text-red-700">
+                  중요
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-2xl lg:text-3xl font-bold text-[var(--color-navy-900)] mb-4">
+              {newsItem.title}
+            </h1>
+
+            <time className="text-[var(--muted-foreground)]">
+              {newsItem.date}
+            </time>
+          </header>
+
+          {/* Content */}
+          <div className="prose prose-slate max-w-none">
+            {newsItem.summary && (
+              <p className="text-lg text-[var(--color-navy-700)] leading-relaxed">
+                {newsItem.summary}
+              </p>
+            )}
+            {/* MDX 콘텐츠는 추후 렌더링 구현 필요 */}
+            <p className="text-[var(--muted-foreground)] mt-4">
+              상세 내용이 준비 중입니다.
+            </p>
+          </div>
+        </article>
+
+        {/* Back Button */}
+        <div className="mt-8">
+          <Link
+            href="/news"
+            className="inline-flex items-center text-[var(--color-navy-600)] hover:text-[var(--color-navy-800)] font-medium"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            목록으로 돌아가기
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/news/page.tsx">
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+const categoryLabels: Record<string, { label: string; className: string }> = {
+  notice: { label: '공지사항', className: 'bg-gold-500/20 text-gold-400 border border-gold-500/30' },
+  news: { label: '뉴스', className: 'bg-blue-500/20 text-blue-400 border border-blue-500/30' },
+  event: { label: '이벤트', className: 'bg-purple-500/20 text-purple-400 border border-purple-500/30' },
+};
+
+export default async function NewsPage() {
+  const news = await reader.collections.news.all();
+
+  // 날짜순 정렬 (최신순)
+  const sortedNews = news.sort((a, b) => {
+    const dateA = a.entry.date ? new Date(a.entry.date).getTime() : 0;
+    const dateB = b.entry.date ? new Date(b.entry.date).getTime() : 0;
+    return dateB - dateA;
+  });
+
+  // 중요 공지 분리
+  const importantNews = sortedNews.filter((n) => n.entry.isImportant);
+  const regularNews = sortedNews.filter((n) => !n.entry.isImportant);
+
+  return (
+    <div className="min-h-screen bg-[#0d0a07] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12 px-4 md:px-0">
+        {/* Header */}
+        <div className="mb-12 md:mb-16 text-center">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+            <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">News & Notice</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+          </div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-4">
+            뉴스 / 공지사항
+          </h1>
+          <p className="text-dark-400 max-w-2xl mx-auto font-serif">
+            청년정책 어워즈의 최신 소식을 확인하세요
+          </p>
+        </div>
+
+        {/* Important News */}
+        {importantNews.length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-2 h-2 bg-gold-500 rounded-full" />
+              <h2 className="text-sm font-serif font-bold text-gold-500 tracking-wide uppercase">중요 공지</h2>
+            </div>
+            <div className="space-y-4">
+              {importantNews.map((item) => {
+                const categoryInfo = categoryLabels[item.entry.category] || categoryLabels.notice;
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/news/${item.slug}`}
+                    className="block border border-gold-500/30 p-6 md:p-8 hover:border-gold-500/50 transition-all group"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className={`text-xs px-3 py-1 font-medium ${categoryInfo.className}`}>
+                            {categoryInfo.label}
+                          </span>
+                          <span className="text-sm text-dark-500 font-serif">
+                            {item.entry.date}
+                          </span>
+                        </div>
+                        <h3 className="font-serif font-semibold text-white mb-2 group-hover:text-gold-400 transition-colors">
+                          {item.entry.title}
+                        </h3>
+                        {item.entry.summary && (
+                          <p className="text-sm text-dark-400 line-clamp-2">
+                            {item.entry.summary}
+                          </p>
+                        )}
+                      </div>
+                      <svg className="w-5 h-5 text-gold-500/50 flex-shrink-0 group-hover:text-gold-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Regular News */}
+        <div>
+          {regularNews.length > 0 ? (
+            <div className="border border-dark-700/50 divide-y divide-dark-800/50">
+              {regularNews.map((item) => {
+                const categoryInfo = categoryLabels[item.entry.category] || categoryLabels.notice;
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/news/${item.slug}`}
+                    className="block p-6 md:p-8 hover:bg-dark-900/30 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className={`text-xs px-3 py-1 font-medium ${categoryInfo.className}`}>
+                            {categoryInfo.label}
+                          </span>
+                          <span className="text-sm text-dark-500 font-serif">
+                            {item.entry.date}
+                          </span>
+                        </div>
+                        <h3 className="font-serif font-semibold text-white mb-2 group-hover:text-gold-400 transition-colors">
+                          {item.entry.title}
+                        </h3>
+                        {item.entry.summary && (
+                          <p className="text-sm text-dark-400 line-clamp-2">
+                            {item.entry.summary}
+                          </p>
+                        )}
+                      </div>
+                      <svg className="w-5 h-5 text-gold-500/50 flex-shrink-0 group-hover:text-gold-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-20 border border-dark-700/50">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/30" />
+                <div className="w-3 h-3 border border-gold-500/30 rotate-45" />
+                <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/30" />
+              </div>
+              <p className="text-lg text-dark-400 font-serif">
+                아직 등록된 뉴스가 없습니다.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/AwardCard.tsx">
+import Link from 'next/link';
+
+interface AwardCardProps {
+  slug: string;
+  title: string;
+  year: number;
+  awardType: string;
+  category?: string;
+  categoryIcon?: string;
+  provider: string;
+  summary: string;
+}
+
+const awardTypeConfig: Record<string, { label: string; className: string; icon: string }> = {
+  grand: { label: '대상', className: 'badge-grand', icon: '🏆' },
+  excellence: { label: '최우수상', className: 'badge-excellence', icon: '🥇' },
+  merit: { label: '우수상', className: 'badge-merit', icon: '🥈' },
+  special: { label: '특별상', className: 'badge-special', icon: '⭐' },
+};
+
+export default function AwardCard({
+  slug,
+  title,
+  year,
+  awardType,
+  category,
+  categoryIcon,
+  provider,
+  summary,
+}: AwardCardProps) {
+  const awardInfo = awardTypeConfig[awardType] || awardTypeConfig.grand;
+
+  return (
+    <Link href={`/awards/${slug}`} className="block group">
+      <article className="card-premium rounded-2xl overflow-hidden h-full flex flex-col card-hover">
+        {/* Award Type Header */}
+        <div className={`px-5 py-4 ${
+          awardType === 'grand'
+            ? 'bg-gradient-to-r from-gold-400 to-gold-600'
+            : awardType === 'excellence'
+            ? 'bg-gradient-to-r from-silver-400 to-silver-500'
+            : awardType === 'merit'
+            ? 'bg-gradient-to-r from-bronze-400 to-bronze-500'
+            : 'bg-gradient-to-r from-purple-500 to-purple-700'
+        }`}>
+          <div className="flex items-center justify-between">
+            <span className="text-3xl">{awardInfo.icon}</span>
+            <div className="text-right">
+              <p className={`font-bold ${awardType === 'grand' ? 'text-dark-950' : 'text-white'}`}>
+                {year}년
+              </p>
+              <p className={`text-sm font-semibold ${awardType === 'grand' ? 'text-dark-800' : 'text-white/80'}`}>
+                {awardInfo.label}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-5 flex flex-col flex-grow bg-dark-900/50">
+          {/* Category */}
+          {category && (
+            <div className="flex items-center gap-2 mb-3">
+              {categoryIcon && <span className="text-lg">{categoryIcon}</span>}
+              <span className="text-sm font-medium text-dark-400">{category}</span>
+            </div>
+          )}
+
+          {/* Title */}
+          <h3 className="font-bold text-lg text-white mb-2 line-clamp-2 group-hover:text-gold-400 transition-colors">
+            {title}
+          </h3>
+
+          {/* Provider */}
+          <p className="text-sm text-dark-400 mb-3">
+            {provider}
+          </p>
+
+          {/* Summary */}
+          <p className="text-sm text-dark-500 line-clamp-3 flex-grow">
+            {summary}
+          </p>
+
+          {/* View More */}
+          <div className="mt-4 pt-4 border-t border-dark-800 flex items-center justify-between">
+            <span className="text-dark-500 text-xs group-hover:text-gold-400 transition-colors">
+              자세히 보기
+            </span>
+            <svg className="w-4 h-4 text-gold-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </article>
+    </Link>
+  );
+}
+</file>
+
+<file path="src/components/Footer.tsx">
+import Link from 'next/link';
+
+const footerLinks = {
+  about: [
+    { name: '어워즈 소개', href: '/about' },
+    { name: '선정 기준', href: '/about#criteria' },
+    { name: '운영 주체', href: '/about#organization' },
+  ],
+  resources: [
+    { name: '역대 수상작', href: '/awards' },
+    { name: '뉴스/공지', href: '/news' },
+  ],
+  legal: [
+    { name: '이용약관', href: '/terms' },
+    { name: '개인정보처리방침', href: '/privacy' },
+  ],
+};
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#0a0806] text-white border-t border-dark-800/50">
+      <div className="container-custom py-16 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full border border-gold-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-gold-500" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M5 3h14a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h-1a5 5 0 0 1-10 0H5a4 4 0 0 1-4-4V5a2 2 0 0 1 2-2zm2 4h10V5H7v2zm0 4a3 3 0 0 0 6 0H7zm12-4h2V5h-2v2zM3 5v2H1V5h2zm9 15a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p className="font-serif font-bold text-white">청년정책 어워즈</p>
+                <p className="text-[10px] text-dark-500 tracking-wider">YOUTH POLICY AWARDS</p>
+              </div>
+            </div>
+            <p className="text-dark-400 text-sm leading-relaxed font-serif">
+              청년을 위한 최고의 정책을 발굴하고,<br />
+              더 나은 청년정책을 만들어갑니다.
+            </p>
+          </div>
+
+          {/* About Links */}
+          <div>
+            <h3 className="font-serif font-semibold text-gold-500 mb-6 text-xs uppercase tracking-[0.2em]">어워즈</h3>
+            <ul className="space-y-4">
+              {footerLinks.about.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-dark-400 hover:text-gold-400 text-sm transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources Links */}
+          <div>
+            <h3 className="font-serif font-semibold text-gold-500 mb-6 text-xs uppercase tracking-[0.2em]">자료실</h3>
+            <ul className="space-y-4">
+              {footerLinks.resources.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-dark-400 hover:text-gold-400 text-sm transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="font-serif font-semibold text-gold-500 mb-6 text-xs uppercase tracking-[0.2em]">문의</h3>
+            <ul className="space-y-4 text-sm text-dark-400">
+              <li className="flex items-center gap-3">
+                <div className="w-8 h-8 border border-dark-700/50 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gold-500/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <span>contact@youthpolicy.kr</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-8 h-8 border border-dark-700/50 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gold-500/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <span>02-1234-5678</span>
+              </li>
+            </ul>
+            <div className="flex gap-3 mt-8">
+              <a
+                href="#"
+                className="w-10 h-10 border border-dark-700/50 hover:border-gold-500/30 flex items-center justify-center transition-colors group"
+                aria-label="Instagram"
+              >
+                <svg className="w-4 h-4 text-dark-500 group-hover:text-gold-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 border border-dark-700/50 hover:border-gold-500/30 flex items-center justify-center transition-colors group"
+                aria-label="YouTube"
+              >
+                <svg className="w-4 h-4 text-dark-500 group-hover:text-gold-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 border border-dark-700/50 hover:border-gold-500/30 flex items-center justify-center transition-colors group"
+                aria-label="Blog"
+              >
+                <svg className="w-4 h-4 text-dark-500 group-hover:text-gold-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="border-t border-dark-800/50 mt-16 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-dark-600 text-xs tracking-wide">
+            © 2025 대한민국 청년정책 어워즈. All rights reserved.
+          </p>
+          <div className="flex gap-8">
+            {footerLinks.legal.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-dark-600 hover:text-gold-400 text-xs transition-colors"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="src/components/Header.tsx">
+'use client';
+
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+const navigation = [
+  { name: '홈', href: '/' },
+  { name: '어워즈 소개', href: '/about' },
+  { name: '역대 수상작', href: '/awards' },
+  { name: '뉴스', href: '/news' },
+];
+
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-dark-950/98 backdrop-blur-md border-b border-gold-500/20'
+          : 'bg-dark-950/80 backdrop-blur-sm'
+      }`}
+    >
+      <nav className="container-custom">
+        {/* Compact Header */}
+        <div className={`flex items-center justify-center transition-all duration-300 ${isScrolled ? 'py-3' : 'py-4'}`}>
+          {/* Left spacer for centering */}
+          <div className="flex-1 hidden lg:block" />
+
+          {/* Center - Logo + Nav */}
+          <div className="flex flex-col items-center">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2 group mb-2">
+              {/* Trophy Icon */}
+              <div className={`rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/30 transition-all duration-300 ${isScrolled ? 'w-8 h-8' : 'w-9 h-9'}`}>
+                <svg className={`text-dark-950 transition-all duration-300 ${isScrolled ? 'w-4 h-4' : 'w-5 h-5'}`} fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M5 3h14a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h-1a5 5 0 0 1-10 0H5a4 4 0 0 1-4-4V5a2 2 0 0 1 2-2zm2 4h10V5H7v2zm0 4a3 3 0 0 0 6 0H7zm12-4h2V5h-2v2zM3 5v2H1V5h2zm9 15a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/>
+                </svg>
+              </div>
+
+              {/* Title */}
+              <div className="text-center">
+                <p className={`font-serif font-bold text-white transition-all duration-300 ${isScrolled ? 'text-sm' : 'text-base'}`}>
+                  대한민국 청년정책 어워즈
+                </p>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center justify-center">
+              <div className="flex items-center">
+                {navigation.map((item, index) => (
+                  <div key={item.name} className="flex items-center">
+                    {index > 0 && (
+                      <span className="mx-3 text-gold-500/30 text-xs">|</span>
+                    )}
+                    <Link
+                      href={item.href}
+                      className={`py-1 text-dark-300 hover:text-gold-400 font-serif tracking-wide transition-colors ${isScrolled ? 'text-xs' : 'text-sm'}`}
+                    >
+                      {item.name}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right spacer + Mobile menu button */}
+          <div className="flex-1 flex justify-end">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-dark-800/50 transition-colors"
+              aria-label="메뉴 열기"
+            >
+              <svg
+                className="w-6 h-6 text-gold-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="lg:hidden border-t border-gold-500/20 py-4 bg-dark-950/98 backdrop-blur-md">
+            <div className="flex flex-col items-center gap-1">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="px-6 py-3 text-dark-200 hover:text-gold-400 font-serif tracking-wide transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
+    </header>
+  );
+}
+</file>
+
+<file path="src/content/awards/2023-best-altteul/index.json">
+{
+  "title": "알뜰교통카드",
+  "year": 2023,
+  "awardType": "grand",
+  "category": "welfare",
+  "provider": "국토교통부",
+  "summary": "대중교통 이용 시 보행/자전거 이동거리에 비례해 마일리지 지급. 청년 선호도 18.1%로 1위 달성"
+}
+</file>
+
+<file path="src/content/awards/2023-best-altteul/index.mdoc">
+2023 열고닫기 청년정책 어워즈 **열고닫기 최우수상(대상)** 수상작입니다.
+
+## 알뜰교통카드란?
+
+대중교통 이용 시 보행·자전거로 이동한 거리(최대 800m)에 비례해 최대 20%의 마일리지를 지급하고, 카드사가 약 10%의 추가 할인을 제공하여 대중교통비를 절감하는 교통카드입니다.
+
+## 수상 사유
+
+- 청년 선호도 **18.1%**로 전체 정책 중 1위
+- 실질적인 교통비 절감 효과
+- 친환경 이동수단 장려 효과
+- 전국 어디서나 사용 가능한 접근성
+
+## 주요 혜택
+
+- 보행/자전거 이동거리 비례 마일리지 적립 (최대 800m)
+- 카드사 추가 할인 약 10%
+- 월 최대 66회까지 적립 가능
+</file>
+
+<file path="src/content/awards/2023-excellence-kua/index.json">
+{
+  "title": "국민취업지원제도",
+  "year": 2023,
+  "awardType": "excellence",
+  "category": "jobs",
+  "provider": "고용노동부",
+  "summary": "취업지원서비스와 생계지원을 함께 제공하는 한국형 실업부조. 청년 선호도 15%로 2위"
+}
+</file>
+
+<file path="src/content/awards/2023-excellence-kua/index.mdoc">
+2023 열고닫기 청년정책 어워즈 **최우수상** 수상작입니다.
+
+## 국민취업지원제도란?
+
+취업을 원하는 사람에게 취업지원서비스와 생계지원을 함께 제공하는 한국형 실업부조 제도입니다.
+
+## 수상 사유
+
+- 청년 선호도 **15%**로 2위
+- 구직촉진수당 월 50만원 × 6개월 지원
+- 맞춤형 취업지원서비스 제공
+- 2022년 기준 약 80만 명 참여
+
+## 주요 혜택
+
+- 구직촉진수당 월 50만원 × 6개월
+- 1:1 맞춤형 취업지원서비스
+- 직업훈련, 일경험 프로그램 연계
+</file>
+
+<file path="src/content/awards/2023-merit-doyak/index.json">
+{
+  "title": "청년도약계좌",
+  "year": 2023,
+  "awardType": "merit",
+  "category": "finance",
+  "provider": "금융위원회",
+  "summary": "청년의 중장기 자산형성 지원. 월 70만원 납입 시 5년 만기 약 5,000만원 마련 가능"
+}
+</file>
+
+<file path="src/content/awards/2023-merit-doyak/index.mdoc">
+2023 열고닫기 청년정책 어워즈 **우수상** 수상작입니다.
+
+또한 '갑자기떡상' 부문에서 27.1%로 1위를 차지했습니다.
+
+## 청년도약계좌란?
+
+청년의 중장기 자산형성을 지원하는 정책형 금융상품으로, 정부 기여금과 비과세 혜택을 제공합니다.
+
+## 수상 사유
+
+- 청년 선호도 **14.7%**로 3위
+- '갑자기떡상' 부문 **27.1%**로 1위
+- 5년 만기 시 약 5,000만원 목돈 마련 가능
+- 2023년 새롭게 출시되어 큰 관심
+
+## 주요 혜택
+
+- 월 최대 70만원 납입
+- 정부 기여금 월 최대 2.4만원
+- 5년 만기 시 약 5,000만원 마련
+- 이자소득 비과세
+</file>
+
+<file path="src/content/awards/2023-merit-naebaeum/index.json">
+{
+  "title": "국민내일배움카드",
+  "year": 2023,
+  "awardType": "merit",
+  "category": "education",
+  "provider": "고용노동부",
+  "summary": "직업훈련비 최대 500만원 지원. 청년 선호도 13.8%로 4위"
+}
+</file>
+
+<file path="src/content/awards/2023-merit-naebaeum/index.mdoc">
+2023 열고닫기 청년정책 어워즈 **우수상** 수상작입니다.
+
+## 국민내일배움카드란?
+
+국민 누구나 직업훈련에 참여할 수 있도록 훈련비를 지원하는 제도입니다.
+
+## 수상 사유
+
+- 청년 선호도 **13.8%**로 4위
+- '갑자기떡상' 부문에서도 10.1%로 3위
+- 직업훈련비 최대 500만원 지원
+- 5년간 유효하여 장기적 활용 가능
+
+## 주요 혜택
+
+- 훈련비 최대 500만원 지원 (5년간)
+- 자부담 15~55%
+- 전국 직업훈련기관 이용 가능
+- 온라인/오프라인 훈련 모두 가능
+</file>
+
+<file path="src/content/awards/2023-special-jeonse/index.json">
+{
+  "title": "중소기업취업청년 전월세보증금대출",
+  "year": 2023,
+  "awardType": "special",
+  "category": "housing",
+  "provider": "중소벤처기업부",
+  "summary": "중소기업 재직 청년 대상 저금리 전월세 대출. 청년 선호도 11.7%로 5위"
+}
+</file>
+
+<file path="src/content/awards/2023-special-jeonse/index.mdoc">
+2023 열고닫기 청년정책 어워즈 **특별상** 수상작입니다.
+
+## 중소기업취업청년 전월세보증금대출이란?
+
+중소·중견기업에 재직 중인 청년에게 저금리로 전월세 보증금을 대출해주는 제도입니다.
+
+## 수상 사유
+
+- 청년 선호도 **11.7%**로 5위
+- 연 1.2% 초저금리 대출
+- 최대 1억원까지 대출 가능
+- 중소기업 재직 청년의 주거 부담 완화
+
+## 주요 혜택
+
+- 연 1.2% 고정금리
+- 최대 1억원 대출
+- 2년 거치 후 8년 분할상환
+- 만 19~34세 중소기업 재직자 대상
+</file>
+
+<file path="src/content/categories/culture.json">
+{
+  "name": "문화·여가",
+  "description": "문화생활, 여행, 체육활동 등 여가 관련 정책",
+  "icon": "🎨",
+  "order": 7,
+  "color": "#e83e8c"
+}
+</file>
+
+<file path="src/content/categories/education.json">
+{
+  "name": "교육",
+  "description": "학자금, 교육비 지원, 평생교육 등 교육 관련 정책",
+  "icon": "📚",
+  "order": 3,
+  "color": "#3d7ab0"
+}
+</file>
+
+<file path="src/content/categories/finance.json">
+{
+  "name": "금융·자산",
+  "description": "저축, 대출, 자산형성 등 금융 관련 정책",
+  "icon": "💰",
+  "order": 6,
+  "color": "#28a745"
+}
+</file>
+
+<file path="src/content/categories/health.json">
+{
+  "name": "건강·의료",
+  "description": "건강검진, 심리상담, 의료비 지원 등 건강 관련 정책",
+  "icon": "❤️",
+  "order": 8,
+  "color": "#dc3545"
+}
+</file>
+
+<file path="src/content/categories/housing.json">
+{
+  "name": "주거",
+  "description": "주거비 지원, 청년 주택, 전월세 지원 등 주거 관련 정책",
+  "icon": "🏠",
+  "order": 2,
+  "color": "#2d5a87"
+}
+</file>
+
+<file path="src/content/categories/jobs.json">
+{
+  "name": "일자리",
+  "description": "취업, 창업, 직업훈련 등 청년 일자리 관련 정책",
+  "icon": "💼",
+  "order": 1,
+  "color": "#1e3a5f"
+}
+</file>
+
+<file path="src/content/categories/participation.json">
+{
+  "name": "참여·권리",
+  "description": "청년 참여, 정책 제안, 권리 보장 관련 정책",
+  "icon": "✋",
+  "order": 5,
+  "color": "#f4c430"
+}
+</file>
+
+<file path="src/content/categories/welfare.json">
+{
+  "name": "생활·복지",
+  "description": "생활비, 건강, 문화생활 등 복지 관련 정책",
+  "icon": "🌟",
+  "order": 4,
+  "color": "#4a9ad8"
+}
+</file>
+
+<file path="src/content/policies/altteul-card/index.json">
+{
+  "title": "알뜰교통카드",
+  "category": "welfare",
+  "providerType": "government",
+  "provider": "국토교통부",
+  "year": 2023,
+  "targetAge": "만 19세 이상",
+  "benefits": "대중교통비 최대 30% 절감, 보행/자전거 마일리지 적립",
+  "officialUrl": "https://www.alcard.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "grand"
+}
+</file>
+
+<file path="src/content/policies/altteul-card/index.mdoc">
+알뜰교통카드는 대중교통 이용 시 보행·자전거로 이동한 거리에 비례해 마일리지를 지급하는 교통카드입니다.
+
+## 지원 내용
+
+- 보행·자전거 이동거리(최대 800m)에 비례해 최대 20% 마일리지 적립
+- 카드사 추가 할인 약 10% 제공
+- 월 최대 66회까지 적립 가능
+
+## 신청 자격
+
+- 만 19세 이상 대한민국 국민
+- 알뜰교통카드 앱 설치 필수
+- 대중교통 이용자
+
+## 이용 방법
+
+1. 알뜰교통카드 앱 다운로드
+2. 회원가입 및 카드 신청
+3. 출발 전 앱에서 '출발' 버튼 클릭
+4. 대중교통 하차 후 '도착' 버튼 클릭
+5. 월말 마일리지 정산 및 지급
+</file>
+
+<file path="src/content/policies/kemployment-support/index.json">
+{
+  "title": "국민취업지원제도",
+  "category": "jobs",
+  "providerType": "government",
+  "provider": "고용노동부",
+  "year": 2025,
+  "targetAge": "15세 ~ 69세 (청년 우대)",
+  "benefits": "구직촉진수당 월 50만원 × 6개월, 맞춤형 취업지원서비스",
+  "officialUrl": "https://www.kua.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "grand"
+}
+</file>
+
+<file path="src/content/policies/kemployment-support/index.mdoc">
+국민취업지원제도는 취업을 원하는 청년에게 취업지원서비스와 생계지원을 함께 제공합니다.
+
+## 지원 내용
+
+- 구직촉진수당 월 50만원 × 6개월 지급
+- 1:1 맞춤형 취업지원서비스
+- 직업훈련, 일경험, 복지서비스 연계
+
+## 신청 자격
+
+- 만 15세 ~ 69세 구직자
+- 청년(15~34세)은 소득·재산 요건 완화 적용
+</file>
+
+<file path="src/content/policies/naebaeum-card/index.json">
+{
+  "title": "국민내일배움카드",
+  "category": "education",
+  "providerType": "government",
+  "provider": "고용노동부",
+  "year": 2023,
+  "targetAge": "만 18세 이상",
+  "benefits": "직업훈련비 최대 500만원 지원 (5년간 유효)",
+  "officialUrl": "https://www.hrd.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "merit"
+}
+</file>
+
+<file path="src/content/policies/naebaeum-card/index.mdoc">
+국민내일배움카드는 국민 누구나 직업훈련에 참여할 수 있도록 훈련비를 지원하는 제도입니다.
+
+## 지원 내용
+
+- 훈련비 최대 500만원 지원 (5년간)
+- 자부담 15~55% (훈련 유형별 상이)
+- 전국 직업훈련기관 이용 가능
+
+## 신청 자격
+
+- 만 18세 이상 국민
+- 현직 공무원, 사립학교 교직원, 졸업예정자가 아닌 재학생 등 제외
+- 연 매출 1.5억원 이상 자영업자 제외
+
+## 이용 방법
+
+1. HRD-Net에서 국민내일배움카드 신청
+2. 심사 후 카드 발급
+3. 원하는 훈련과정 검색 및 수강신청
+4. 훈련 수료 후 자부담금 결제
+</file>
+
+<file path="src/content/policies/sme-jeonse/index.json">
+{
+  "title": "중소기업취업청년 전월세보증금대출",
+  "category": "housing",
+  "providerType": "government",
+  "provider": "중소벤처기업부",
+  "year": 2023,
+  "targetAge": "만 19세 ~ 34세",
+  "benefits": "연 1.2% 초저금리 전월세 대출, 최대 1억원",
+  "officialUrl": "https://www.kosmes.or.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "special"
+}
+</file>
+
+<file path="src/content/policies/sme-jeonse/index.mdoc">
+중소기업취업청년 전월세보증금대출은 중소·중견기업에 재직 중인 청년에게 저금리로 전월세 보증금을 대출해주는 제도입니다.
+
+## 지원 내용
+
+- 연 1.2% 고정금리 대출
+- 최대 1억원까지 대출 가능
+- 2년 거치 후 8년 분할상환
+
+## 신청 자격
+
+- 만 19세 ~ 34세 청년
+- 중소·중견기업 재직자
+- 부부합산 연소득 5천만원 이하
+- 무주택 세대주 (예비 세대주 포함)
+
+## 대출 조건
+
+- 대출한도: 전세 최대 1억원, 월세 최대 3,500만원
+- 대출금리: 연 1.2% 고정
+- 대출기간: 2년 거치 + 8년 상환
+</file>
+
+<file path="src/content/policies/youth-culture-pass/index.json">
+{
+  "title": "문화누리카드",
+  "category": "culture",
+  "providerType": "government",
+  "provider": "문화체육관광부",
+  "year": 2025,
+  "targetAge": "전연령 (기초생활수급자, 차상위계층)",
+  "benefits": "연간 13만원 문화생활비 지원",
+  "officialUrl": "https://www.munhwanuri.or.kr",
+  "status": "active",
+  "isAwarded": false,
+  "awardType": "none"
+}
+</file>
+
+<file path="src/content/policies/youth-culture-pass/index.mdoc">
+문화누리카드는 청년을 포함한 저소득층에게 문화생활 기회를 제공합니다.
+
+## 지원 내용
+
+- 연간 13만원 문화누리카드 지급
+- 공연, 영화, 전시, 여행, 체육활동 등 이용 가능
+- 전국 가맹점에서 사용
+
+## 신청 자격
+
+- 기초생활수급자
+- 차상위계층
+</file>
+
+<file path="src/content/policies/youth-doyak/index.json">
+{
+  "title": "청년도약계좌",
+  "category": "finance",
+  "providerType": "government",
+  "provider": "금융위원회",
+  "year": 2023,
+  "targetAge": "만 19세 ~ 34세",
+  "benefits": "5년 만기 시 약 5,000만원 목돈 마련, 정부 기여금 + 비과세",
+  "officialUrl": "https://ylaccount.kinfa.or.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "merit"
+}
+</file>
+
+<file path="src/content/policies/youth-doyak/index.mdoc">
+청년도약계좌는 청년의 중장기 자산형성을 지원하는 정책형 금융상품입니다.
+
+## 지원 내용
+
+- 월 최대 70만원 납입 시 정부 기여금 월 최대 2.4만원 지원
+- 5년 만기 시 약 5,000만원 목돈 마련 가능
+- 이자소득 비과세 혜택
+
+## 신청 자격
+
+- 만 19세 ~ 34세 청년
+- 개인소득 연 6,000만원 이하
+- 가구소득 중위 180% 이하
+- 금융소득종합과세 대상자 제외
+
+## 가입 조건
+
+- 가입기간: 5년
+- 월 납입한도: 최대 70만원
+- 정부기여금: 소득구간별 차등 지급
+</file>
+
+<file path="src/content/policies/youth-housing-fund/index.json">
+{
+  "title": "청년전용 버팀목전세자금",
+  "category": "housing",
+  "providerType": "government",
+  "provider": "국토교통부",
+  "year": 2025,
+  "targetAge": "19세 ~ 34세",
+  "benefits": "연 1.8~2.4% 저금리 전세자금 대출, 최대 2억원",
+  "officialUrl": "https://nhuf.molit.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2024,
+  "awardType": "excellence"
+}
+</file>
+
+<file path="src/content/policies/youth-housing-fund/index.mdoc">
+청년전용 버팀목전세자금은 청년의 주거 안정을 위한 저금리 전세자금 대출 정책입니다.
+
+## 지원 내용
+
+- 연 1.8~2.4% 저금리 전세자금 대출
+- 최대 2억원까지 대출 가능
+- 최대 10년간 이용 가능
+
+## 신청 자격
+
+- 만 19세 ~ 34세 무주택 청년
+- 연소득 5천만원 이하
+- 순자산 3.61억원 이하
+</file>
+
+<file path="src/content/policies/youth-tomorrow-savings/index.json">
+{
+  "title": "청년내일저축계좌",
+  "category": "finance",
+  "providerType": "government",
+  "provider": "보건복지부",
+  "year": 2025,
+  "targetAge": "19세 ~ 34세",
+  "benefits": "3년 만기 시 최대 1,440만 원 지원, 정부 매칭금 월 10~30만원",
+  "officialUrl": "https://www.bokjiro.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2024,
+  "awardType": "grand"
+}
+</file>
+
+<file path="src/content/policies/youth-tomorrow-savings/index.mdoc">
+청년내일저축계좌는 일하는 저소득 청년의 자산형성을 지원하는 정책입니다.
+
+## 지원 내용
+
+- 본인 저축액(월 10만원)에 정부지원금(월 10~30만원) 매칭
+- 3년 만기 시 최대 1,440만 원 목돈 마련 가능
+- 근로소득장려금 추가 지원
+
+## 신청 자격
+
+- 만 19세 ~ 34세 청년
+- 현재 근로활동 중인 자
+- 기준 중위소득 100% 이하 가구
+</file>
+
+<file path="src/content/settings/about.json">
+{
+  "title": "청년정책 어워즈란?",
+  "content": "",
+  "vision": "모든 청년이 자신에게 맞는 정책을 쉽게 찾고 활용할 수 있는 세상을 만듭니다.",
+  "mission": "청년정책의 가치를 발굴하고, 우수 정책을 널리 알려 더 많은 청년이 혜택을 받을 수 있도록 합니다."
+}
+</file>
+
+<file path="src/content/settings/site.json">
+{
+  "siteName": "대한민국 청년정책 어워즈",
+  "siteDescription": "청년을 위한 최고의 정책을 선정하는 대한민국 청년정책 어워즈입니다.",
+  "heroTitle": "2025 대한민국 청년정책 어워즈",
+  "heroSubtitle": "청년의 내일을 바꾸는 정책,\n당신의 선택으로 빛나게 하세요.",
+  "heroVideoUrl": "",
+  "footerText": "© 2025 대한민국 청년정책 어워즈. All rights reserved."
+}
+</file>
+
+<file path="src/lib/reader.ts">
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+export const reader = createReader(process.cwd(), keystaticConfig);
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="keystatic.config.tsx">
+import { config, fields, collection, singleton } from '@keystatic/core';
+
+export default config({
+  storage: {
+    kind: 'local',
+  },
+  ui: {
+    brand: {
+      name: '청년정책 어워즈 CMS',
+    },
+  },
+  singletons: {
+    // 사이트 설정
+    siteSettings: singleton({
+      label: '사이트 설정',
+      path: 'src/content/settings/site',
+      schema: {
+        siteName: fields.text({ label: '사이트명', validation: { isRequired: true } }),
+        siteDescription: fields.text({ label: '사이트 설명', multiline: true }),
+        heroTitle: fields.text({ label: '히어로 타이틀' }),
+        heroSubtitle: fields.text({ label: '히어로 서브타이틀', multiline: true }),
+        heroVideoUrl: fields.url({ label: '히어로 영상 URL (YouTube)' }),
+        footerText: fields.text({ label: '푸터 텍스트' }),
+      },
+    }),
+    // 어워즈 소개
+    about: singleton({
+      label: '어워즈 소개',
+      path: 'src/content/settings/about',
+      schema: {
+        title: fields.text({ label: '제목', validation: { isRequired: true } }),
+        content: fields.mdx({ label: '소개 내용' }),
+        vision: fields.text({ label: '비전', multiline: true }),
+        mission: fields.text({ label: '미션', multiline: true }),
+      },
+    }),
+  },
+  collections: {
+    // 8대 분야 카테고리
+    categories: collection({
+      label: '정책 분야 (8대 분야)',
+      slugField: 'name',
+      path: 'src/content/categories/*',
+      schema: {
+        name: fields.slug({ name: { label: '분야명', validation: { isRequired: true } } }),
+        description: fields.text({ label: '설명', multiline: true }),
+        icon: fields.text({ label: '아이콘 (이모지 또는 아이콘명)' }),
+        order: fields.integer({ label: '정렬 순서', defaultValue: 0 }),
+        color: fields.text({ label: '대표 색상 (HEX)', defaultValue: '#1e3a5f' }),
+      },
+    }),
+    // 정책 아카이브
+    policies: collection({
+      label: '정책 아카이브',
+      slugField: 'title',
+      path: 'src/content/policies/*',
+      schema: {
+        title: fields.slug({ name: { label: '정책명', validation: { isRequired: true } } }),
+        category: fields.relationship({
+          label: '분야',
+          collection: 'categories',
+        }),
+        providerType: fields.select({
+          label: '제공 기관 유형',
+          options: [
+            { label: '중앙정부', value: 'government' },
+            { label: '광역지자체', value: 'metropolitan' },
+            { label: '기초지자체', value: 'local' },
+            { label: '공공기관', value: 'public' },
+            { label: '민간기업', value: 'private' },
+            { label: '비영리단체', value: 'nonprofit' },
+          ],
+          defaultValue: 'government',
+        }),
+        provider: fields.text({ label: '주관기관', validation: { isRequired: true } }),
+        year: fields.integer({ label: '연도', validation: { isRequired: true }, defaultValue: 2025 }),
+        targetAge: fields.text({ label: '지원 대상 연령', defaultValue: '19세 ~ 34세' }),
+        benefits: fields.text({ label: '주요 혜택', multiline: true }),
+        description: fields.mdx({ label: '상세 설명' }),
+        thumbnail: fields.image({
+          label: '썸네일 이미지',
+          directory: 'public/images/policies',
+          publicPath: '/images/policies',
+        }),
+        officialUrl: fields.url({ label: '공식 페이지 URL' }),
+        status: fields.select({
+          label: '상태',
+          options: [
+            { label: '진행중', value: 'active' },
+            { label: '마감', value: 'closed' },
+            { label: '예정', value: 'upcoming' },
+          ],
+          defaultValue: 'active',
+        }),
+        isAwarded: fields.checkbox({ label: '수상 정책 여부', defaultValue: false }),
+        awardYear: fields.integer({ label: '수상 연도' }),
+        awardType: fields.select({
+          label: '수상 유형',
+          options: [
+            { label: '없음', value: 'none' },
+            { label: '대상', value: 'grand' },
+            { label: '최우수상', value: 'excellence' },
+            { label: '우수상', value: 'merit' },
+            { label: '특별상', value: 'special' },
+          ],
+          defaultValue: 'none',
+        }),
+      },
+    }),
+    // 역대 수상작
+    awards: collection({
+      label: '역대 수상작',
+      slugField: 'title',
+      path: 'src/content/awards/*',
+      schema: {
+        title: fields.slug({ name: { label: '수상작 제목', validation: { isRequired: true } } }),
+        year: fields.integer({ label: '수상 연도', validation: { isRequired: true } }),
+        awardType: fields.select({
+          label: '수상 유형',
+          options: [
+            { label: '대상', value: 'grand' },
+            { label: '최우수상', value: 'excellence' },
+            { label: '우수상', value: 'merit' },
+            { label: '특별상', value: 'special' },
+          ],
+          defaultValue: 'grand',
+        }),
+        policy: fields.relationship({
+          label: '관련 정책',
+          collection: 'policies',
+        }),
+        category: fields.relationship({
+          label: '분야',
+          collection: 'categories',
+        }),
+        provider: fields.text({ label: '주관기관' }),
+        summary: fields.text({ label: '수상 사유 요약', multiline: true }),
+        description: fields.mdx({ label: '상세 설명' }),
+        image: fields.image({
+          label: '수상 이미지',
+          directory: 'public/images/awards',
+          publicPath: '/images/awards',
+        }),
+        videoUrl: fields.url({ label: '관련 영상 URL' }),
+      },
+    }),
+    // 뉴스/공지사항
+    news: collection({
+      label: '뉴스/공지',
+      slugField: 'title',
+      path: 'src/content/news/*',
+      schema: {
+        title: fields.slug({ name: { label: '제목', validation: { isRequired: true } } }),
+        date: fields.date({ label: '날짜', validation: { isRequired: true } }),
+        category: fields.select({
+          label: '카테고리',
+          options: [
+            { label: '공지사항', value: 'notice' },
+            { label: '뉴스', value: 'news' },
+            { label: '이벤트', value: 'event' },
+          ],
+          defaultValue: 'notice',
+        }),
+        summary: fields.text({ label: '요약', multiline: true }),
+        content: fields.mdx({ label: '내용' }),
+        thumbnail: fields.image({
+          label: '썸네일',
+          directory: 'public/images/news',
+          publicPath: '/images/news',
+        }),
+        isImportant: fields.checkbox({ label: '중요 공지', defaultValue: false }),
+      },
+    }),
+  },
+});
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="src/app/globals.css">
+@import "tailwindcss";
+
+:root {
+  /* Primary Colors - Dark Premium */
+  --color-dark-50: #f7f7f7;
+  --color-dark-100: #e3e3e3;
+  --color-dark-200: #c8c8c8;
+  --color-dark-300: #a4a4a4;
+  --color-dark-400: #818181;
+  --color-dark-500: #666666;
+  --color-dark-600: #515151;
+  --color-dark-700: #434343;
+  --color-dark-800: #383838;
+  --color-dark-900: #1a1a1a;
+  --color-dark-950: #0d0d0d;
+
+  /* Gold Colors - Premium Accent */
+  --color-gold-50: #fefdf8;
+  --color-gold-100: #fdf8e1;
+  --color-gold-200: #faefb8;
+  --color-gold-300: #f7e485;
+  --color-gold-400: #f4d03f;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b8960f;
+  --color-gold-700: #936f0a;
+  --color-gold-800: #7a5a0e;
+  --color-gold-900: #664a12;
+
+  /* Bronze/Copper for secondary */
+  --color-bronze-400: #cd7f32;
+  --color-bronze-500: #b87333;
+
+  /* Silver for tertiary */
+  --color-silver-400: #c0c0c0;
+  --color-silver-500: #a8a8a8;
+
+  /* Semantic Colors */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --muted: #f5f5f5;
+  --muted-foreground: #666666;
+  --border: #e5e5e5;
+  --ring: #d4af37;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-serif: 'Noto Serif KR', 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* Dark Colors */
+  --color-dark-50: var(--color-dark-50);
+  --color-dark-100: var(--color-dark-100);
+  --color-dark-200: var(--color-dark-200);
+  --color-dark-300: var(--color-dark-300);
+  --color-dark-400: var(--color-dark-400);
+  --color-dark-500: var(--color-dark-500);
+  --color-dark-600: var(--color-dark-600);
+  --color-dark-700: var(--color-dark-700);
+  --color-dark-800: var(--color-dark-800);
+  --color-dark-900: var(--color-dark-900);
+  --color-dark-950: var(--color-dark-950);
+
+  /* Gold Colors */
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+  --color-gold-800: var(--color-gold-800);
+  --color-gold-900: var(--color-gold-900);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+/* Custom utility classes */
+.container-custom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding: 0 2rem;
+  }
+}
+
+/* Premium Dark Background */
+.bg-premium-dark {
+  background: linear-gradient(180deg, #1a1410 0%, #0d0a07 50%, #1a1410 100%);
+}
+
+.bg-premium-gradient {
+  background: radial-gradient(ellipse at top center, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+              linear-gradient(180deg, #1a1410 0%, #0d0a07 100%);
+}
+
+/* Gold Text Gradient */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 50%, #b8960f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light beam effect */
+.light-beam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Card */
+.card-premium {
+  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.card-premium:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+}
+
+/* Badge styles - Premium */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  letter-spacing: 0.025em;
+}
+
+.badge-grand {
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 50%, #b8960f 100%);
+  color: #1a1410;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.badge-excellence {
+  background: linear-gradient(135deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%);
+  color: #1a1a1a;
+  box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3);
+}
+
+.badge-merit {
+  background: linear-gradient(135deg, #e8c496 0%, #cd7f32 50%, #b87333 100%);
+  color: #1a1a1a;
+  box-shadow: 0 4px 15px rgba(205, 127, 50, 0.3);
+}
+
+.badge-special {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+/* Gold Button */
+.btn-gold {
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 100%);
+  color: #1a1410;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+}
+
+/* Outline Button */
+.btn-outline-gold {
+  background: transparent;
+  color: #d4af37;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  transition: all 0.3s ease;
+}
+
+.btn-outline-gold:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4af37, #b8960f);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #f4d03f, #d4af37);
+}
+
+/* Laurel wreath decoration */
+.laurel-left {
+  position: absolute;
+  left: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 4rem;
+  opacity: 0.8;
+}
+
+.laurel-right {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1);
+  font-size: 4rem;
+  opacity: 0.8;
+}
+</file>
+
+<file path="src/app/layout.tsx">
+import type { Metadata } from 'next';
+import './globals.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: '대한민국 청년정책 어워즈',
+  description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식입니다.',
+  keywords: ['청년정책', '어워즈', '청년', '정책', '시상식'],
+  openGraph: {
+    title: '대한민국 청년정책 어워즈',
+    description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
+    type: 'website',
+    locale: 'ko_KR',
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="ko">
+      <head>
+        {/* Noto Serif KR - 권위있는 세리프 폰트 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Playfair+Display:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* Pretendard for body text */}
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+        />
+      </head>
+      <body className="min-h-screen flex flex-col antialiased bg-[#0d0a07]">
+        <Header />
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="src/app/page.tsx">
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+
+export default async function Home() {
+  // 데이터 불러오기
+  const [siteSettings, awards] = await Promise.all([
+    reader.singletons.siteSettings.read(),
+    reader.collections.awards.all(),
+  ]);
+
+  // 연도별 수상작 그룹핑
+  const awardsByYear = awards.reduce((acc, award) => {
+    const year = award.entry.year;
+    if (!acc[year]) acc[year] = [];
+    acc[year].push(award);
+    return acc;
+  }, {} as Record<number, typeof awards>);
+
+  // 최신 연도순 정렬
+  const sortedYears = Object.keys(awardsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+  // 시상 부문 정의
+  const awardCategories = [
+    {
+      title: '청년정책 대상',
+      description: '올해 가장 많은 청년의 사랑을 받은 최고의 정책',
+    },
+    {
+      title: '최우수 청년정책상',
+      description: '각 부문별 우수 정책',
+    },
+    {
+      title: '청년정책 혁신상',
+      description: '창의적 접근으로 청년 문제를 해결한 정책',
+    },
+    {
+      title: '글로벌 청년정책상',
+      description: '해외 우수 청년정책 중 벤치마킹 가치가 높은 정책',
+    },
+  ];
+
+  // 수상 타입별 스타일
+  const getAwardBadge = (type: string) => {
+    switch (type) {
+      case 'grand':
+        return { label: '대상', className: 'badge-grand' };
+      case 'excellence':
+        return { label: '최우수상', className: 'badge-excellence' };
+      case 'merit':
+        return { label: '우수상', className: 'badge-merit' };
+      case 'special':
+        return { label: '특별상', className: 'badge-special' };
+      default:
+        return { label: '수상', className: 'badge-merit' };
+    }
+  };
+
+  return (
+    <div className="bg-[#0d0a07] min-h-screen">
+      {/* Hero Section - Nobel Prize style */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 md:pt-32">
+        {/* Subtle gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0a07] via-[#151210] to-[#0d0a07]" />
+
+        {/* Elegant radial light */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-gold-500/5 via-transparent to-transparent rounded-full" />
+
+        <div className="container-custom relative z-10 text-center py-12 md:py-20 px-4">
+          {/* Simple Trophy Icon */}
+          <div className="mb-8 md:mb-10">
+            <div className="w-16 h-16 md:w-20 md:h-20 mx-auto border border-gold-500/40 rounded-full flex items-center justify-center">
+              <span className="text-3xl md:text-4xl">🏆</span>
+            </div>
+          </div>
+
+          {/* Year Badge */}
+          <div className="inline-flex items-center gap-3 mb-8">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+            <span className="text-gold-500 text-sm font-serif tracking-[0.3em]">2024</span>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+          </div>
+
+          {/* Main Title - Serif Font */}
+          <h1 className="font-serif mb-6">
+            <span className="block text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-wide mb-2">대한민국</span>
+            <span className="block text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-wide">
+              청년정책 어워즈
+            </span>
+          </h1>
+
+          {/* English Subtitle */}
+          <p className="text-gold-500/70 text-sm md:text-base tracking-[0.25em] uppercase mb-10 md:mb-14 font-serif">
+            Korea Youth Policy Awards
+          </p>
+
+          {/* Tagline */}
+          <p className="text-dark-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-12 md:mb-16 leading-relaxed font-serif">
+            청년이 직접 선정하는 대한민국 최고의 청년정책
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 md:mb-20">
+            <Link href="/awards" className="btn-gold inline-flex items-center justify-center font-serif">
+              역대 수상작 보기
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <Link href="/about" className="btn-outline-gold inline-flex items-center justify-center font-serif">
+              어워즈 소개
+            </Link>
+          </div>
+
+          {/* Stats - Minimal */}
+          <div className="flex items-center justify-center gap-8 md:gap-16">
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-serif font-bold text-gold-500 mb-1">200+</p>
+              <p className="text-dark-500 text-xs md:text-sm tracking-wide">후보 정책</p>
+            </div>
+            <div className="w-px h-10 bg-dark-700" />
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-serif font-bold text-white mb-1">45만+</p>
+              <p className="text-dark-500 text-xs md:text-sm tracking-wide">참여 청년</p>
+            </div>
+            <div className="w-px h-10 bg-dark-700" />
+            <div className="text-center">
+              <p className="text-3xl md:text-4xl font-serif font-bold text-gold-500 mb-1">3회</p>
+              <p className="text-dark-500 text-xs md:text-sm tracking-wide">어워즈 개최</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:block">
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-dark-500 text-xs tracking-widest">SCROLL</span>
+            <div className="w-px h-10 bg-gradient-to-b from-gold-500/50 to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* Award Categories Section */}
+      <section className="py-20 md:py-32 bg-[#0d0a07] border-t border-dark-800/50">
+        <div className="container-custom px-4 md:px-0">
+          {/* Section Header */}
+          <div className="text-center mb-14 md:mb-20">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">Award Categories</span>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white">
+              시상 부문
+            </h2>
+          </div>
+
+          {/* Categories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {awardCategories.map((category, index) => (
+              <div
+                key={category.title}
+                className="relative group"
+              >
+                <div className="border border-dark-700/50 hover:border-gold-500/30 rounded-none p-8 md:p-10 text-center transition-all duration-500 bg-gradient-to-b from-dark-900/20 to-transparent">
+                  {/* Number */}
+                  <div className="absolute top-4 left-4 text-gold-500/20 text-4xl font-serif">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+
+                  <h3 className="text-lg md:text-xl font-serif font-bold text-white mb-4 mt-6">
+                    {category.title}
+                  </h3>
+                  <p className="text-dark-400 text-sm leading-relaxed">
+                    {category.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Past Winners Section */}
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[#0d0a07] to-[#151210]">
+        <div className="container-custom px-4 md:px-0">
+          {/* Section Header */}
+          <div className="text-center mb-14 md:mb-20">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold-500/50" />
+              <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">Hall of Fame</span>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold-500/50" />
+            </div>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-4">
+              역대 수상작
+            </h2>
+            <p className="text-dark-400 font-serif">
+              청년들이 직접 선택한 최고의 정책들
+            </p>
+          </div>
+
+          {/* Timeline */}
+          <div className="space-y-16 md:space-y-24">
+            {sortedYears.map((year) => (
+              <div key={year} className="relative">
+                {/* Year Header */}
+                <div className="flex items-center gap-6 mb-8 md:mb-12">
+                  <h3 className="text-4xl md:text-5xl font-serif font-bold text-gold-500">
+                    {year}
+                  </h3>
+                  <div className="flex-1 h-px bg-gradient-to-r from-gold-500/30 to-transparent" />
+                </div>
+
+                {/* Awards Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {awardsByYear[year]
+                    .sort((a, b) => {
+                      const order = { grand: 0, excellence: 1, merit: 2, special: 3 };
+                      return (order[a.entry.awardType as keyof typeof order] || 4) -
+                             (order[b.entry.awardType as keyof typeof order] || 4);
+                    })
+                    .map((award) => {
+                      const badge = getAwardBadge(award.entry.awardType);
+                      return (
+                        <Link
+                          key={award.slug}
+                          href={`/awards/${award.slug}`}
+                          className="group block"
+                        >
+                          <div className="border border-dark-700/50 hover:border-gold-500/30 p-6 md:p-8 transition-all duration-300">
+                            <div className="mb-4">
+                              <span className={`badge ${badge.className} text-xs`}>
+                                {badge.label}
+                              </span>
+                            </div>
+
+                            <h4 className="text-lg font-serif font-bold text-white mb-2 group-hover:text-gold-400 transition-colors">
+                              {award.entry.title}
+                            </h4>
+
+                            <p className="text-dark-400 text-sm mb-4">
+                              {award.entry.provider}
+                            </p>
+
+                            {award.entry.summary && (
+                              <p className="text-dark-500 text-sm line-clamp-2 leading-relaxed">
+                                {award.entry.summary}
+                              </p>
+                            )}
+
+                            <div className="mt-6 pt-4 border-t border-dark-800 flex items-center justify-between">
+                              <span className="text-dark-500 text-xs tracking-wide group-hover:text-gold-400 transition-colors">
+                                자세히 보기
+                              </span>
+                              <svg className="w-4 h-4 text-gold-500/50 group-hover:text-gold-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                              </svg>
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* View All Button */}
+          <div className="text-center mt-16 md:mt-24">
+            <Link href="/awards" className="btn-outline-gold inline-flex items-center justify-center font-serif">
+              모든 수상작 보기
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-20 md:py-32 bg-[#151210] border-t border-dark-800/50">
+        <div className="container-custom px-4 md:px-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+            {/* Left Content */}
+            <div>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-px bg-gold-500/50" />
+                <span className="text-gold-500 text-xs tracking-[0.3em] uppercase">About</span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-8 leading-tight">
+                청년의 목소리로<br />
+                <span className="text-gold-500">정책의 가치</span>를 발견합니다
+              </h2>
+
+              <p className="text-dark-300 leading-relaxed mb-10 font-serif text-lg">
+                대한민국 청년정책 어워즈는 전국의 청년정책 중 실제로 청년에게 도움이 되는
+                우수 정책을 청년이 직접 선정하는 시상식입니다.
+              </p>
+
+              {/* Features */}
+              <div className="space-y-6">
+                {[
+                  { title: '청년 직접 투표', desc: '청년이 직접 참여하여 선정' },
+                  { title: '객관적 평가', desc: '데이터 기반의 투명한 심사' },
+                  { title: '실질적 혜택', desc: '실제 혜택 중심의 평가 기준' },
+                ].map((feature) => (
+                  <div key={feature.title} className="flex items-start gap-4">
+                    <div className="w-2 h-2 bg-gold-500 rounded-full mt-2 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-white font-serif font-semibold mb-1">{feature.title}</h4>
+                      <p className="text-dark-400 text-sm">{feature.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-12">
+                <Link href="/about" className="btn-gold inline-flex items-center justify-center font-serif">
+                  자세히 알아보기
+                </Link>
+              </div>
+            </div>
+
+            {/* Right - Stats */}
+            <div className="grid grid-cols-2 gap-6">
+              {[
+                { number: '2021', label: '첫 개최' },
+                { number: '3회', label: '누적 개최' },
+                { number: '45만+', label: '누적 참여자' },
+                { number: '200+', label: '후보 정책' },
+              ].map((stat) => (
+                <div key={stat.label} className="border border-dark-700/50 p-8 md:p-10 text-center">
+                  <p className="text-3xl md:text-4xl font-serif font-bold text-gold-500 mb-2">{stat.number}</p>
+                  <p className="text-dark-400 text-sm tracking-wide">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-16 md:py-20 bg-[#0d0a07] border-t border-dark-800/50">
+        <div className="container-custom px-4 md:px-0">
+          <div className="text-center mb-10">
+            <span className="text-dark-500 text-xs tracking-[0.2em] uppercase">Partners</span>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
+            {[
+              { name: '열고닫기', desc: '청년정책 플랫폼' },
+              { name: '도도한콜라보', desc: '운영사' },
+              { name: '온통청년', desc: '정부 청년포털' },
+              { name: '청년재단', desc: '협력기관' },
+            ].map((partner) => (
+              <div key={partner.name} className="text-center opacity-50 hover:opacity-100 transition-opacity">
+                <p className="font-serif font-semibold text-dark-200 text-lg">{partner.name}</p>
+                <p className="text-dark-600 text-xs mt-1">{partner.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[#0d0a07] to-[#151210] border-t border-dark-800/50">
+        <div className="container-custom text-center px-4">
+          <div className="max-w-3xl mx-auto">
+            {/* Decorative */}
+            <div className="flex items-center justify-center gap-4 mb-10">
+              <div className="w-20 h-px bg-gradient-to-r from-transparent to-gold-500/30" />
+              <div className="w-3 h-3 border border-gold-500/50 rotate-45" />
+              <div className="w-20 h-px bg-gradient-to-l from-transparent to-gold-500/30" />
+            </div>
+
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mb-6 leading-tight">
+              청년정책의 가치를<br />
+              <span className="text-gold-500">함께</span> 발견해요
+            </h2>
+
+            <p className="text-dark-300 text-lg mb-12 leading-relaxed font-serif">
+              대한민국 청년정책 어워즈는 청년을 위한 우수 정책을 발굴하고,<br className="hidden md:block" />
+              더 많은 청년이 혜택을 받을 수 있도록 정보를 제공합니다.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/awards" className="btn-gold inline-flex items-center justify-center font-serif">
+                역대 수상작 보기
+              </Link>
+              <Link href="/about" className="btn-outline-gold inline-flex items-center justify-center font-serif">
+                어워즈 소개
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "awards",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@keystatic/core": "^0.5.48",
+    "@keystatic/next": "^5.0.4",
+    "next": "16.0.10",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+</files>

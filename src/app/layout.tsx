@@ -38,7 +38,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased bg-[#0d0a07]">
+      <body className="min-h-screen flex flex-col antialiased bg-dark-950">
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
