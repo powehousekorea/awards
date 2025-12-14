@@ -1,0 +1,14 @@
+{
+  "title": "알뜰교통카드",
+  "category": "welfare",
+  "providerType": "government",
+  "provider": "국토교통부",
+  "year": 2023,
+  "targetAge": "만 19세 이상",
+  "benefits": "대중교통비 최대 30% 절감, 보행/자전거 마일리지 적립",
+  "officialUrl": "https://www.alcard.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "grand"
+}

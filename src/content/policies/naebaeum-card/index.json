@@ -1,0 +1,14 @@
+{
+  "title": "국민내일배움카드",
+  "category": "education",
+  "providerType": "government",
+  "provider": "고용노동부",
+  "year": 2023,
+  "targetAge": "만 18세 이상",
+  "benefits": "직업훈련비 최대 500만원 지원 (5년간 유효)",
+  "officialUrl": "https://www.hrd.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "merit"
+}

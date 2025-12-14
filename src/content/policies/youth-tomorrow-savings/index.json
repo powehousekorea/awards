@@ -1,0 +1,14 @@
+{
+  "title": "청년내일저축계좌",
+  "category": "finance",
+  "providerType": "government",
+  "provider": "보건복지부",
+  "year": 2025,
+  "targetAge": "19세 ~ 34세",
+  "benefits": "3년 만기 시 최대 1,440만 원 지원, 정부 매칭금 월 10~30만원",
+  "officialUrl": "https://www.bokjiro.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2024,
+  "awardType": "grand"
+}

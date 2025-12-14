@@ -1,0 +1,13 @@
+{
+  "title": "문화누리카드",
+  "category": "culture",
+  "providerType": "government",
+  "provider": "문화체육관광부",
+  "year": 2025,
+  "targetAge": "전연령 (기초생활수급자, 차상위계층)",
+  "benefits": "연간 13만원 문화생활비 지원",
+  "officialUrl": "https://www.munhwanuri.or.kr",
+  "status": "active",
+  "isAwarded": false,
+  "awardType": "none"
+}

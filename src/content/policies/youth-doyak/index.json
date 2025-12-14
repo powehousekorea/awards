@@ -1,0 +1,14 @@
+{
+  "title": "청년도약계좌",
+  "category": "finance",
+  "providerType": "government",
+  "provider": "금융위원회",
+  "year": 2023,
+  "targetAge": "만 19세 ~ 34세",
+  "benefits": "5년 만기 시 약 5,000만원 목돈 마련, 정부 기여금 + 비과세",
+  "officialUrl": "https://ylaccount.kinfa.or.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "merit"
+}

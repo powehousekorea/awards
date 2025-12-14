@@ -1,0 +1,14 @@
+{
+  "title": "국민취업지원제도",
+  "category": "jobs",
+  "providerType": "government",
+  "provider": "고용노동부",
+  "year": 2025,
+  "targetAge": "15세 ~ 69세 (청년 우대)",
+  "benefits": "구직촉진수당 월 50만원 × 6개월, 맞춤형 취업지원서비스",
+  "officialUrl": "https://www.kua.go.kr",
+  "status": "active",
+  "isAwarded": true,
+  "awardYear": 2023,
+  "awardType": "grand"
+}
