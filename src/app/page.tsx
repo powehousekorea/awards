@@ -1,49 +1,77 @@
 import Link from 'next/link';
-import { reader } from '@/lib/reader';
+import Image from 'next/image';
+import fs from 'fs';
+import path from 'path';
+
+interface AwardEntry {
+  title: string;
+  year: number;
+  awardType: string;
+  category?: string;
+  provider?: string;
+  sector?: string;
+  summary?: string;
+  image?: string;
+}
+
+async function getAwards() {
+  const awardsDir = path.join(process.cwd(), 'src/content/awards');
+  const folders = fs.readdirSync(awardsDir);
+
+  const awards = folders
+    .filter(folder => {
+      const folderPath = path.join(awardsDir, folder);
+      return fs.statSync(folderPath).isDirectory();
+    })
+    .map(folder => {
+      const jsonPath = path.join(awardsDir, folder, 'index.json');
+      if (fs.existsSync(jsonPath)) {
+        const content = JSON.parse(fs.readFileSync(jsonPath, 'utf8')) as AwardEntry;
+        return {
+          slug: folder,
+          entry: content,
+        };
+      }
+      return null;
+    })
+    .filter((award): award is { slug: string; entry: AwardEntry } => award !== null);
+
+  return awards;
+}
 
 export default async function Home() {
-  const awards = await reader.collections.awards.all();
-
-  // 연도별 수상작 그룹핑
-  const awardsByYear = awards.reduce((acc, award) => {
-    const year = award.entry.year;
-    if (!acc[year]) acc[year] = [];
-    acc[year].push(award);
-    return acc;
-  }, {} as Record<number, typeof awards>);
-
-  // 최신 연도순 정렬
-  const sortedYears = Object.keys(awardsByYear)
-    .map(Number)
-    .sort((a, b) => b - a);
+  const awards = await getAwards();
 
   // 수상 타입별 라벨
   const getAwardLabel = (type: string) => {
     const labels: Record<string, string> = {
-      grand: 'Grand Prize',
-      excellence: 'Excellence',
-      merit: 'Merit',
-      special: 'Special',
+      grand: '청년정책 대상',
+      excellence: '최우수 청년정책상',
+      merit: '우수 청년정책상',
+      innovation: '청년정책 혁신상',
+      global: '글로벌 청년정책상',
+      special: '특별상',
     };
     return labels[type] || 'Award';
   };
 
-  const getBadgeClass = (type: string) => {
-    const classes: Record<string, string> = {
-      grand: 'badge-grand',
-      excellence: 'badge-excellence',
-      merit: 'badge-merit',
-      special: 'badge-special',
+  const getSectorLabel = (sector: string | undefined) => {
+    if (!sector) return null;
+    const labels: Record<string, string> = {
+      government: '정부',
+      local: '지자체',
+      corporate: '기업',
+      nonprofit: 'NGO',
     };
-    return classes[type] || 'badge-merit';
+    return labels[sector] || null;
   };
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* ===== HERO SECTION: Editorial Typography ===== */}
+      {/* ===== 1. HERO SECTION ===== */}
       <section className="relative min-h-screen flex flex-col justify-center pt-20">
         <div className="container-custom">
-          {/* 1. Meta Info (Eyebrow) */}
+          {/* Meta Info (Eyebrow) */}
           <div className="flex justify-between items-end mb-6 border-b border-dark-800 pb-4 animate-slide-up">
             <span className="text-xs font-sans tracking-[0.2em] text-dark-500 uppercase">
               Since 2021
@@ -53,172 +81,32 @@ export default async function Home() {
             </span>
           </div>
 
-          {/* 2. Main Title (English) */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold leading-[0.9] tracking-tight mb-12">
-            <span className="block text-dark-100 animate-slide-up animate-delay-1">The Korea</span>
-            <span className="block text-dark-100 animate-slide-up animate-delay-2">Youth Policy</span>
-            <span className="block text-gold-300 animate-slide-up animate-delay-3">Awards</span>
+          {/* Main Title (English) */}
+          <h1 className="text-display text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-dark-50 mb-8 animate-slide-up animate-delay-1">
+            <span className="block">The Korea</span>
+            <span className="block">Youth Policy</span>
+            <span className="block text-gold-300">Awards</span>
           </h1>
 
-          {/* 3. Korean Title & Description (Grouped) */}
-          <div className="max-w-xl animate-slide-up animate-delay-4">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-dark-100 mb-4 tracking-tight font-sans">
-              대한민국 청년정책 어워즈
-            </h2>
-            <p className="text-dark-400 text-sm md:text-base font-light leading-relaxed mb-10">
-              청년이 직접 선정하는<br />
-              대한민국 최고의 청년정책 시상식
+          {/* Korean Title */}
+          <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-sans font-bold text-dark-100 leading-tight mb-12 animate-slide-up animate-delay-2">
+            대한민국 청년정책 어워즈
+          </h2>
+
+          {/* Description */}
+          <div className="max-w-2xl animate-slide-up animate-delay-3">
+            <p className="text-dark-300 text-base md:text-lg font-light leading-relaxed mb-10">
+              청년이 직접 선정하는 대한민국 최고의 청년정책 시상식
             </p>
-            <div className="flex items-center gap-6">
-              <Link href="/awards" className="btn-primary">
-                View Winners
-              </Link>
-              <Link href="/about" className="btn-text group">
-                About
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
+            <Link href="/awards" className="btn-primary">
+              역대 수상작 보기
+            </Link>
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="mt-16 md:mt-24 animate-slide-up animate-delay-5">
-            <p className="text-label mb-4">Scroll</p>
-            <div className="w-px h-16 bg-gradient-to-b from-dark-600 to-transparent" />
-          </div>
         </div>
       </section>
 
-      {/* ===== AWARDS LIST SECTION: The Authority List ===== */}
-      {/*
-        컨셉: "Living Authority" - 공식 기록(Official Record)처럼 보이는 리스트
-        카드 형태 금지, 가로로 긴 리스트(Table/Flex Row) 형태
-        얇은 border로 정돈된 문서 느낌 연출
-      */}
-      <section id="awards-list" className="py-24 md:py-32 border-t border-dark-800">
-        <div className="container-custom">
-          {/* Section Header - 공식 문서 스타일 */}
-          <header className="mb-16 md:mb-20">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-6 border-b border-dark-700/50">
-              <div>
-                <p className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase mb-3">
-                  Official Record
-                </p>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-dark-100">
-                  Recent Awards
-                </h2>
-              </div>
-              <Link href="/awards" className="btn-text group shrink-0">
-                View Complete Archive
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-          </header>
-
-          {/* Awards List - Authority Table Style */}
-          <div className="space-y-0">
-            {/* Table Header - Desktop Only */}
-            <div className="hidden md:grid grid-cols-12 gap-6 py-3 border-b border-dark-700/30 text-[10px] font-mono tracking-[0.2em] text-dark-600 uppercase">
-              <div className="col-span-2">Year / Type</div>
-              <div className="col-span-6">Policy Title</div>
-              <div className="col-span-3">Institution</div>
-              <div className="col-span-1"></div>
-            </div>
-
-            {/* Award Entries */}
-            {awards
-              .sort((a, b) => {
-                // 연도 내림차순, 같은 연도 내에서는 상 등급순
-                if (b.entry.year !== a.entry.year) return b.entry.year - a.entry.year;
-                const order = { grand: 0, excellence: 1, merit: 2, special: 3 };
-                return (order[a.entry.awardType as keyof typeof order] || 4) -
-                       (order[b.entry.awardType as keyof typeof order] || 4);
-              })
-              .slice(0, 8) // 최근 8개만 표시
-              .map((award, index) => (
-                <Link
-                  key={award.slug}
-                  href={`/awards/${award.slug}`}
-                  className="group block relative"
-                >
-                  {/* List Row */}
-                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-5 md:py-6 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
-
-                    {/* 연도 & 수상 타입 - 좌측 고정 정보 */}
-                    <div className="md:col-span-2 flex md:flex-col gap-3 md:gap-1">
-                      <span className="text-sm md:text-base font-mono font-medium text-dark-300 tabular-nums">
-                        {award.entry.year}
-                      </span>
-                      <span className={`text-[10px] font-mono tracking-wider uppercase ${
-                        award.entry.awardType === 'grand'
-                          ? 'text-gold-400'
-                          : award.entry.awardType === 'excellence'
-                          ? 'text-dark-300'
-                          : 'text-dark-500'
-                      }`}>
-                        {getAwardLabel(award.entry.awardType)}
-                      </span>
-                    </div>
-
-                    {/* 정책 타이틀 - 가장 눈에 띄게 */}
-                    <div className="md:col-span-6 mt-2 md:mt-0">
-                      <h3 className="text-lg md:text-xl font-semibold text-dark-100 leading-tight transition-colors duration-300 group-hover:text-gold-300">
-                        {award.entry.title}
-                      </h3>
-                    </div>
-
-                    {/* 기관명 */}
-                    <div className="md:col-span-3 mt-1 md:mt-0 flex items-center">
-                      <span className="text-sm text-dark-500 font-light">
-                        {award.entry.provider}
-                      </span>
-                    </div>
-
-                    {/* 화살표 - Hover시 나타남 */}
-                    <div className="md:col-span-1 hidden md:flex items-center justify-end">
-                      <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
-                        →
-                      </span>
-                    </div>
-
-                    {/* 썸네일 오버레이 - Hover시 우측에 나타남 (옵션) */}
-                    {award.entry.image && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 pointer-events-none transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 z-10 hidden lg:block">
-                        <div className="w-32 h-20 bg-dark-800 border border-dark-700 shadow-2xl overflow-hidden">
-                          {/* 이미지 플레이스홀더 - 실제 이미지가 있을 경우 표시 */}
-                          <div className="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
-                            <span className="text-[9px] font-mono text-dark-600 uppercase tracking-wider">Preview</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              ))}
-          </div>
-
-          {/* Empty State */}
-          {awards.length === 0 && (
-            <div className="text-center py-24 border border-dark-800/30">
-              <p className="text-dark-500 font-light">아직 등록된 수상작이 없습니다.</p>
-            </div>
-          )}
-
-          {/* View More - 하단 */}
-          {awards.length > 8 && (
-            <div className="mt-12 pt-8 border-t border-dark-800/30 flex justify-center">
-              <Link href="/awards" className="btn-outline">
-                View All {awards.length} Awards
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ===== ABOUT SECTION ===== */}
+      {/* ===== 2. ABOUT SECTION ===== */}
       <section className="py-24 md:py-32 border-t border-dark-800">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
@@ -248,7 +136,7 @@ export default async function Home() {
                 { number: '4th', label: '회차' },
                 { number: '450K+', label: '누적 참여' },
                 { number: '200+', label: '후보 정책' },
-              ].map((stat, index) => (
+              ].map((stat) => (
                 <div key={stat.label} className="bg-dark-950 p-8 md:p-12">
                   <p className="text-4xl md:text-5xl font-serif font-bold text-gold-300 mb-3">
                     {stat.number}
@@ -261,7 +149,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===== CATEGORIES SECTION ===== */}
+      {/* ===== 3. CATEGORIES SECTION ===== */}
       <section className="py-24 md:py-32 border-t border-dark-800">
         <div className="container-custom">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
@@ -313,22 +201,166 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===== PARTNERS SECTION ===== */}
+      {/* ===== 4. RECENT AWARDS SECTION ===== */}
+      <section id="awards-list" className="py-24 md:py-32 border-t border-dark-800">
+        <div className="container-custom">
+          {/* Section Header */}
+          <header className="mb-16 md:mb-20">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-6 border-b border-dark-700/50">
+              <div>
+                <p className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase mb-3">
+                  Official Record
+                </p>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-dark-100">
+                  Recent Awards
+                </h2>
+              </div>
+              <Link href="/awards" className="btn-text group shrink-0">
+                View Complete Archive
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </header>
+
+          {/* Awards List - 2024년 대상/최우수상 */}
+          <div className="space-y-0">
+            {/* 2024 Year Header */}
+            <div className="flex items-center gap-6 mb-8">
+              <span className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold text-dark-800">
+                2024
+              </span>
+              <div className="flex-1 h-px bg-dark-800" />
+            </div>
+
+            {/* Award Entries - 2024년 대상/최우수상만 표시 */}
+            {awards
+              .filter(award => award.entry.year === 2024 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
+              .sort((a, b) => {
+                // 먼저 awardType으로 정렬 (grand -> excellence)
+                const typeOrder = { grand: 0, excellence: 1 };
+                const typeA = typeOrder[a.entry.awardType as keyof typeof typeOrder] ?? 2;
+                const typeB = typeOrder[b.entry.awardType as keyof typeof typeOrder] ?? 2;
+                if (typeA !== typeB) return typeA - typeB;
+
+                // 같은 타입이면 sector로 정렬 (정부 -> 지자체 -> 기업 -> NGO)
+                const sectorOrder = { government: 0, local: 1, corporate: 2, nonprofit: 3 };
+                const sectorA = sectorOrder[a.entry.sector as keyof typeof sectorOrder] ?? 4;
+                const sectorB = sectorOrder[b.entry.sector as keyof typeof sectorOrder] ?? 4;
+                return sectorA - sectorB;
+              })
+              .map((award) => (
+                <Link
+                  key={award.slug}
+                  href={`/awards/${award.slug}`}
+                  className="group block relative"
+                >
+                  {/* List Row */}
+                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-6 md:py-8 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
+
+                    {/* 수상 타입 + 부문 */}
+                    <div className="md:col-span-3 flex items-center gap-2">
+                      <span className={`text-base md:text-lg font-medium ${
+                        award.entry.awardType === 'grand'
+                          ? 'text-gold-400'
+                          : 'text-dark-300'
+                      }`}>
+                        {getAwardLabel(award.entry.awardType)}
+                      </span>
+                      {getSectorLabel(award.entry.sector) && (
+                        <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
+                          {getSectorLabel(award.entry.sector)}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* 정책 타이틀 */}
+                    <div className="md:col-span-5 mt-2 md:mt-0">
+                      <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold text-dark-100 leading-tight transition-colors duration-300 group-hover:text-gold-300">
+                        {award.entry.title}
+                      </h3>
+                    </div>
+
+                    {/* 기관명 */}
+                    <div className="md:col-span-3 mt-2 md:mt-0 flex items-center">
+                      <span className="text-base md:text-lg text-dark-400">
+                        {award.entry.provider}
+                      </span>
+                    </div>
+
+                    {/* 화살표 - Hover시 나타남 */}
+                    <div className="md:col-span-1 hidden md:flex items-center justify-end">
+                      <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
+                        →
+                      </span>
+                    </div>
+
+                    {/* 썸네일 오버레이 - Hover시 우측에 나타남 (옵션) */}
+                    {award.entry.image && (
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 pointer-events-none transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 z-10 hidden lg:block">
+                        <div className="w-32 h-20 bg-dark-800 border border-dark-700 shadow-2xl overflow-hidden">
+                          <div className="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                            <span className="text-[9px] font-mono text-dark-600 uppercase tracking-wider">Preview</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+          </div>
+
+          {/* Empty State */}
+          {awards.length === 0 && (
+            <div className="text-center py-24 border border-dark-800/30">
+              <p className="text-dark-500 font-light">아직 등록된 수상작이 없습니다.</p>
+            </div>
+          )}
+
+          {/* View More - 하단 */}
+          {awards.length > 8 && (
+            <div className="mt-12 pt-8 border-t border-dark-800/30 flex justify-center">
+              <Link href="/awards" className="btn-outline">
+                View All Awards
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ===== 공동주최 SECTION ===== */}
       <section className="py-20 md:py-24 border-t border-dark-800">
         <div className="container-custom">
-          <p className="text-label text-center mb-12">Partners</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
+          <p className="text-label text-center mb-4">Co-hosted by</p>
+          <h3 className="text-xl md:text-2xl text-dark-200 text-center mb-12">
+            대한민국 청년정책 어워즈 추진위원회
+          </h3>
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
             {[
-              { name: '열고닫기', role: '청년정책 플랫폼' },
-              { name: '도도한콜라보', role: '운영사' },
-              { name: '온통청년', role: '정부 청년포털' },
-              { name: '청년재단', role: '협력기관' },
+              { name: '열고닫기(도도한콜라보)', logo: '/images/partners/dodocollab.png' },
+              { name: '(사)한국청년유권자연맹', logo: '/images/partners/kyva.png' },
+              { name: '유스나우', logo: '/images/partners/youthnow.png' },
+              { name: '로글로', logo: '/images/partners/roglo.png' },
             ].map((partner) => (
-              <div key={partner.name} className="text-center opacity-40 hover:opacity-70 transition-smooth">
-                <p className="text-dark-200 font-medium mb-1">{partner.name}</p>
-                <p className="text-label">{partner.role}</p>
+              <div key={partner.name} className="text-center opacity-60 hover:opacity-100 transition-smooth">
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={160}
+                  height={160}
+                  className="object-contain mx-auto"
+                />
               </div>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link href="/about#committee" className="btn-text group">
+              추진위원회 소개
+              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
@@ -338,7 +370,7 @@ export default async function Home() {
         <div className="container-custom text-center">
           <p className="text-label mb-6">Get Involved</p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl text-dark-100 mb-8">
-            청년정책의 미래를 함께 만들어요
+            청년들의 더 나은 미래를 함께 만들어요
           </h2>
           <p className="text-dark-400 text-lg mb-10 max-w-xl mx-auto">
             당신의 한 표가 더 나은 청년정책을 만듭니다

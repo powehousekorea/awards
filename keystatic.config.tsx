@@ -129,10 +129,7 @@ export default config({
           label: '관련 정책',
           collection: 'policies',
         }),
-        category: fields.relationship({
-          label: '분야',
-          collection: 'categories',
-        }),
+        category: fields.text({ label: '분야' }),
         provider: fields.text({ label: '주관기관' }),
         summary: fields.text({ label: '수상 사유 요약', multiline: true }),
         description: fields.mdx({ label: '상세 설명' }),
