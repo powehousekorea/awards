@@ -1,11 +1,4 @@
 import Link from 'next/link';
-import { reader } from '@/lib/reader';
-
-const categoryLabels: Record<string, { label: string; className: string }> = {
-  notice: { label: '공지사항', className: 'bg-gold-500/20 text-gold-400 border border-gold-500/30' },
-  news: { label: '뉴스', className: 'bg-blue-500/20 text-blue-400 border border-blue-500/30' },
-  event: { label: '이벤트', className: 'bg-purple-500/20 text-purple-400 border border-purple-500/30' },
-};
 
 // 외부 뉴스 데이터 - 청년정책 어워즈 관련 기사 (최신순 정렬)
 const externalNews = [
@@ -31,7 +24,7 @@ const externalNews = [
     source: '청년일보',
     date: '2024-02-08',
     url: 'https://www.youthdaily.co.kr/news/article.html?no=145274',
-    summary: '청년 정책정보 플랫폼 열고닫기가 2023 청년정책 어워즈 결과를 발표했다. 알뜰교통카드가 최우수상을 수상했다.',
+    summary: '열고닫기 최우수상·갑자기떡상·노력은가상·왕이될관상 4개 부문 수상작 발표. 알뜰교통카드(18.1%)가 최우수상, 청년도약계좌가 갑자기떡상(27.1%)과 노력은가상(17.5%) 동시 수상.',
   },
   {
     id: 4,
@@ -59,96 +52,25 @@ const externalNews = [
   },
 ];
 
-export default async function NewsPage() {
-  const news = await reader.collections.news.all();
-
-  // 날짜순 정렬 (최신순)
-  const sortedNews = news.sort((a, b) => {
-    const dateA = a.entry.date ? new Date(a.entry.date).getTime() : 0;
-    const dateB = b.entry.date ? new Date(b.entry.date).getTime() : 0;
-    return dateB - dateA;
-  });
-
-  // 중요 공지 분리
-  const importantNews = sortedNews.filter((n) => n.entry.isImportant);
-  const regularNews = sortedNews.filter((n) => !n.entry.isImportant);
-
+export default function NewsPage() {
   return (
     <div className="min-h-screen bg-dark-950 pt-28 md:pt-32">
       <div className="container-custom py-8 lg:py-12">
         {/* Header */}
         <header className="mb-16 md:mb-20">
           <p className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase mb-3">
-            News & Updates
+            Media Coverage
           </p>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-dark-100 mb-4">
-            뉴스
+            News
           </h1>
           <p className="text-dark-400 text-lg max-w-2xl">
-            대한민국 청년정책 어워즈의 최신 소식과 관련 뉴스를 확인하세요.
+            대한민국 청년정책 어워즈 관련 언론 보도를 확인하세요.
           </p>
         </header>
 
-        {/* Important News - 내부 공지 */}
-        {importantNews.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-2 h-2 bg-gold-400 rounded-full" />
-              <h2 className="text-sm font-mono font-medium text-gold-400 tracking-wide uppercase">
-                Important Notice
-              </h2>
-            </div>
-            <div className="space-y-4">
-              {importantNews.map((item) => {
-                const categoryInfo = categoryLabels[item.entry.category] || categoryLabels.notice;
-                return (
-                  <Link
-                    key={item.slug}
-                    href={`/news/${item.slug}`}
-                    className="block border border-gold-500/30 p-6 md:p-8 hover:border-gold-500/50 hover:bg-dark-900/30 transition-all group"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-grow">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className={`text-[10px] px-3 py-1 font-mono uppercase tracking-wider ${categoryInfo.className}`}>
-                            {categoryInfo.label}
-                          </span>
-                          <span className="text-sm text-dark-500 font-mono">
-                            {item.entry.date}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-semibold text-dark-100 mb-2 group-hover:text-gold-300 transition-colors">
-                          {item.entry.title}
-                        </h3>
-                        {item.entry.summary && (
-                          <p className="text-sm text-dark-500 line-clamp-2">
-                            {item.entry.summary}
-                          </p>
-                        )}
-                      </div>
-                      <span className="text-dark-600 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* External News - 외부 뉴스 기사 (썸네일 그리드) */}
-        <section className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <p className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase mb-2">
-                Media Coverage
-              </p>
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-dark-100">
-                언론 보도
-              </h2>
-            </div>
-          </div>
-
-          {/* News Grid - 카드 형태 (썸네일 없이 깔끔하게) */}
+        {/* News Grid */}
+        <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {externalNews.map((article) => (
               <a
@@ -166,7 +88,7 @@ export default async function NewsPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                       </svg>
                     </div>
-                    <span className="text-[10px] font-mono text-gold-400 uppercase tracking-wider">
+                    <span className="text-sm font-semibold text-gold-400 tracking-wide">
                       {article.source}
                     </span>
                   </div>
@@ -193,72 +115,16 @@ export default async function NewsPage() {
           </div>
         </section>
 
-        {/* Internal News - 내부 뉴스/공지 리스트 */}
-        {regularNews.length > 0 && (
-          <section>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <p className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase mb-2">
-                  Announcements
-                </p>
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-dark-100">
-                  공지사항
-                </h2>
-              </div>
-            </div>
-
-            {/* List View */}
-            <div className="border-t border-dark-800">
-              {regularNews.map((item) => {
-                const categoryInfo = categoryLabels[item.entry.category] || categoryLabels.notice;
-                return (
-                  <Link
-                    key={item.slug}
-                    href={`/news/${item.slug}`}
-                    className="group block"
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-5 md:py-6 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50">
-                      {/* Date */}
-                      <div className="md:col-span-2">
-                        <span className="text-sm font-mono text-dark-500">
-                          {item.entry.date}
-                        </span>
-                      </div>
-
-                      {/* Category */}
-                      <div className="md:col-span-2">
-                        <span className={`text-[10px] px-2 py-1 font-mono uppercase tracking-wider ${categoryInfo.className}`}>
-                          {categoryInfo.label}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <div className="md:col-span-7 mt-2 md:mt-0">
-                        <h3 className="text-base font-medium text-dark-100 group-hover:text-gold-300 transition-colors">
-                          {item.entry.title}
-                        </h3>
-                      </div>
-
-                      {/* Arrow */}
-                      <div className="md:col-span-1 hidden md:flex items-center justify-end">
-                        <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
-                          →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* Empty State */}
-        {regularNews.length === 0 && importantNews.length === 0 && (
-          <div className="text-center py-24 border border-dark-800/30">
-            <p className="text-dark-500 font-light">아직 등록된 공지사항이 없습니다.</p>
-          </div>
-        )}
+        {/* Notice Link */}
+        <div className="mt-16 pt-10 border-t border-dark-800 text-center">
+          <p className="text-dark-500 mb-4">공지사항을 찾으시나요?</p>
+          <Link href="/notice" className="btn-outline-gold inline-flex items-center gap-2">
+            공지사항 보기
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
       </div>
     </div>
   );

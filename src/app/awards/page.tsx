@@ -1,14 +1,23 @@
 import Link from 'next/link';
-import { reader } from '@/lib/reader';
+import fs from 'fs';
+import path from 'path';
 
-const awardTypeOrder = ['grand', 'excellence', 'merit', 'special'];
+const awardTypeOrder = ['grand', 'excellence', 'merit', 'innovation', 'global', 'special', 'best', 'trending', 'effort', 'potential'];
 
 const getAwardLabel = (type: string) => {
   const labels: Record<string, string> = {
-    grand: 'Grand Prize',
-    excellence: 'Excellence',
-    merit: 'Merit',
-    special: 'Special',
+    // 2024~ 상 부문
+    grand: '청년정책 대상',
+    excellence: '최우수 청년정책상',
+    merit: '우수 청년정책상',
+    innovation: '청년정책 혁신상',
+    global: '글로벌 청년정책상',
+    special: '특별상',
+    // 2023 상 부문
+    best: '열고닫기 최우수상',
+    trending: '갑자기떡상',
+    effort: '노력은가상',
+    potential: '왕이될관상',
   };
   return labels[type] || 'Award';
 };
@@ -18,13 +27,65 @@ const getBadgeClass = (type: string) => {
     grand: 'badge-grand',
     excellence: 'badge-excellence',
     merit: 'badge-merit',
+    innovation: 'badge-innovation',
+    global: 'badge-global',
     special: 'badge-special',
+    best: 'badge-best',
+    trending: 'badge-trending',
+    effort: 'badge-effort',
+    potential: 'badge-potential',
   };
   return classes[type] || 'badge-merit';
 };
 
+interface AwardEntry {
+  title: string;
+  year: number;
+  awardType: string;
+  category?: string;
+  provider?: string;
+  sector?: string;
+  summary?: string;
+}
+
+const getSectorLabel = (sector: string | undefined) => {
+  if (!sector) return null;
+  const labels: Record<string, string> = {
+    government: '정부',
+    local: '지자체',
+    corporate: '기업',
+    nonprofit: 'NGO',
+  };
+  return labels[sector] || null;
+};
+
+async function getAwards() {
+  const awardsDir = path.join(process.cwd(), 'src/content/awards');
+  const folders = fs.readdirSync(awardsDir);
+
+  const awards = folders
+    .filter(folder => {
+      const folderPath = path.join(awardsDir, folder);
+      return fs.statSync(folderPath).isDirectory();
+    })
+    .map(folder => {
+      const jsonPath = path.join(awardsDir, folder, 'index.json');
+      if (fs.existsSync(jsonPath)) {
+        const content = JSON.parse(fs.readFileSync(jsonPath, 'utf8')) as AwardEntry;
+        return {
+          slug: folder,
+          entry: content,
+        };
+      }
+      return null;
+    })
+    .filter((award): award is { slug: string; entry: AwardEntry } => award !== null);
+
+  return awards;
+}
+
 export default async function AwardsPage() {
-  const awards = await reader.collections.awards.all();
+  const awards = await getAwards();
 
   // 연도별로 그룹화
   const awardsByYear = awards.reduce((acc, award) => {
@@ -60,16 +121,23 @@ export default async function AwardsPage() {
         <div className="space-y-24 md:space-y-32">
           {sortedYears.map((year) => {
             const yearAwards = awardsByYear[year].sort((a, b) => {
+              // 먼저 awardType으로 정렬
               const aOrder = awardTypeOrder.indexOf(a.entry.awardType);
               const bOrder = awardTypeOrder.indexOf(b.entry.awardType);
-              return aOrder - bOrder;
+              if (aOrder !== bOrder) return aOrder - bOrder;
+
+              // 같은 타입이면 sector로 정렬 (정부 -> 지자체 -> 기업 -> NGO)
+              const sectorOrder = { government: 0, local: 1, corporate: 2, nonprofit: 3 };
+              const sectorA = sectorOrder[a.entry.sector as keyof typeof sectorOrder] ?? 4;
+              const sectorB = sectorOrder[b.entry.sector as keyof typeof sectorOrder] ?? 4;
+              return sectorA - sectorB;
             });
 
             return (
               <section key={year}>
                 {/* Year Header */}
                 <div className="flex items-center gap-8 mb-10">
-                  <span className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-dark-800">
+                  <span className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-dark-600">
                     {year}
                   </span>
                   <div className="flex-1 h-px bg-dark-800" />
@@ -86,24 +154,39 @@ export default async function AwardsPage() {
                       href={`/awards/${award.slug}`}
                       className="group block"
                     >
-                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-5 md:py-6 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
-                        {/* Badge */}
-                        <div className="col-span-12 md:col-span-2">
-                          <span className={`badge ${getBadgeClass(award.entry.awardType)}`}>
+                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-6 md:py-8 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
+                        {/* Badge + Sector */}
+                        <div className="col-span-12 md:col-span-3 flex items-center gap-2">
+                          <span className={`text-base md:text-lg lg:text-xl font-medium ${getBadgeClass(award.entry.awardType).replace('badge-', 'text-')}`} style={{
+                            color: award.entry.awardType === 'grand' ? '#D4B886'
+                              : award.entry.awardType === 'excellence' ? '#a3a3a3'
+                              : award.entry.awardType === 'innovation' ? '#34d399'
+                              : award.entry.awardType === 'global' ? '#7dd3c0'
+                              : award.entry.awardType === 'best' ? '#D4B886'
+                              : award.entry.awardType === 'trending' ? '#f472b6'
+                              : award.entry.awardType === 'effort' ? '#fbbf24'
+                              : award.entry.awardType === 'potential' ? '#a78bfa'
+                              : '#8b8b8b'
+                          }}>
                             {getAwardLabel(award.entry.awardType)}
                           </span>
+                          {getSectorLabel(award.entry.sector) && (
+                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
+                              {getSectorLabel(award.entry.sector)}
+                            </span>
+                          )}
                         </div>
 
                         {/* Title */}
                         <div className="col-span-12 md:col-span-5">
-                          <h3 className="text-dark-100 text-base md:text-lg font-medium transition-smooth group-hover:text-gold-300">
+                          <h3 className="text-dark-100 text-xl md:text-2xl lg:text-3xl font-medium transition-smooth group-hover:text-gold-300">
                             {award.entry.title}
                           </h3>
                         </div>
 
                         {/* Provider */}
-                        <div className="col-span-10 md:col-span-4">
-                          <p className="text-dark-500 text-sm">
+                        <div className="col-span-10 md:col-span-3">
+                          <p className="text-dark-400 text-base md:text-lg lg:text-xl">
                             {award.entry.provider}
                           </p>
                         </div>
