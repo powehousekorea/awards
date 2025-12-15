@@ -3,7 +3,23 @@
     "allow": [
       "Bash(npm create:*)",
       "Bash(npx create-next-app@latest:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(dir /s /b \"c:\\Users\\USER-PC\\AI project\\awards\\src\\content\\news\")",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill:*)",
+      "Bash(dir:*)",
+      "Bash(node -e:*)",
+      "Bash(for dir in 2024-*)",
+      "Bash(do if [ -f \"$dir/index.mdoc\" ])",
+      "Bash(then sed -i '1,/^---$/d; /^---$/d' \"$dir/index.mdoc\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

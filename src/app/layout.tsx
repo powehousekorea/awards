@@ -12,6 +12,20 @@ export const metadata: Metadata = {
     description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
     type: 'website',
     locale: 'ko_KR',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'The Korea Youth Policy Awards - 대한민국 청년정책 어워즈',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '대한민국 청년정책 어워즈',
+    description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
+    images: ['/images/og-image.jpg'],
   },
 };
 
