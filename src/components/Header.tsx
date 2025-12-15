@@ -35,23 +35,23 @@ export default function Header() {
         <div className={`flex items-center justify-between transition-smooth ${isScrolled ? 'py-4' : 'py-6'}`}>
           {/* Logo */}
           <Link href="/" className="group">
-            <div className="flex items-center gap-3">
-              <span className={`font-sans font-bold text-dark-100 transition-smooth ${isScrolled ? 'text-sm' : 'text-base'}`}>
+            <div className="flex items-center gap-4">
+              <span className={`font-sans font-bold text-dark-50 transition-smooth ${isScrolled ? 'text-base' : 'text-lg'}`}>
                 대한민국 청년정책 어워즈
               </span>
-              <span className="hidden sm:block text-dark-600 text-[10px] tracking-[0.2em] uppercase">
+              <span className="hidden sm:block text-dark-400 text-xs tracking-[0.15em] uppercase font-medium">
                 Korea Youth Policy Awards
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-10">
+          <div className="hidden lg:flex items-center gap-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-dark-400 hover:text-dark-100 text-[13px] font-medium tracking-wide transition-smooth"
+                className="text-dark-200 hover:text-gold-400 text-sm font-medium tracking-wide transition-smooth"
               >
                 {item.name}
               </Link>
