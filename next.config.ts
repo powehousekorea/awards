@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Vercel 배포시 content 폴더 포함
+  outputFileTracingIncludes: {
+    '/*': ['./src/content/**/*'],
+  },
 };
 
 export default nextConfig;
