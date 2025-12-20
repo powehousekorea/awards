@@ -1,14 +1,10 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 
 export default config({
-  storage: process.env.NODE_ENV === 'production'
-    ? {
-        kind: 'github',
-        repo: 'powehousekorea/awards',
-      }
-    : {
-        kind: 'local',
-      },
+  storage: {
+    kind: 'github',
+    repo: 'powehousekorea/awards',
+  },
   ui: {
     brand: {
       name: '청년정책 어워즈 CMS',
@@ -44,10 +40,11 @@ export default config({
     // 8대 분야 카테고리
     categories: collection({
       label: '정책 분야 (8대 분야)',
-      slugField: 'name',
       path: 'src/content/categories/*',
+      slugField: 'name',
+      format: { data: 'json' },
       schema: {
-        name: fields.slug({ name: { label: '분야명', validation: { isRequired: true } } }),
+        name: fields.text({ label: '분야명', validation: { isRequired: true } }),
         description: fields.text({ label: '설명', multiline: true }),
         icon: fields.text({ label: '아이콘 (이모지 또는 아이콘명)' }),
         order: fields.integer({ label: '정렬 순서', defaultValue: 0 }),
@@ -57,10 +54,11 @@ export default config({
     // 정책 아카이브
     policies: collection({
       label: '정책 아카이브',
+      path: 'src/content/policies/*/',
       slugField: 'title',
-      path: 'src/content/policies/*',
+      format: { data: 'json' },
       schema: {
-        title: fields.slug({ name: { label: '정책명', validation: { isRequired: true } } }),
+        title: fields.text({ label: '정책명', validation: { isRequired: true } }),
         category: fields.relationship({
           label: '분야',
           collection: 'categories',
@@ -115,10 +113,11 @@ export default config({
     // 역대 수상작
     awards: collection({
       label: '역대 수상작',
+      path: 'src/content/awards/*/',
       slugField: 'title',
-      path: 'src/content/awards/*',
+      format: { data: 'json' },
       schema: {
-        title: fields.slug({ name: { label: '수상작 제목', validation: { isRequired: true } } }),
+        title: fields.text({ label: '수상작 제목', validation: { isRequired: true } }),
         year: fields.integer({ label: '수상 연도', validation: { isRequired: true } }),
         awardType: fields.select({
           label: '수상 유형',
@@ -127,6 +126,12 @@ export default config({
             { label: '최우수상', value: 'excellence' },
             { label: '우수상', value: 'merit' },
             { label: '특별상', value: 'special' },
+            { label: '혁신상', value: 'innovation' },
+            { label: '글로벌상', value: 'global' },
+            { label: 'Best', value: 'best' },
+            { label: '노력상', value: 'effort' },
+            { label: '트렌딩상', value: 'trending' },
+            { label: '가능성상', value: 'potential' },
           ],
           defaultValue: 'grand',
         }),
@@ -135,6 +140,16 @@ export default config({
           collection: 'policies',
         }),
         category: fields.text({ label: '분야' }),
+        sector: fields.select({
+          label: '부문',
+          options: [
+            { label: '정부', value: 'government' },
+            { label: '지자체', value: 'local' },
+            { label: '기업', value: 'corporate' },
+            { label: 'NGO', value: 'nonprofit' },
+          ],
+          defaultValue: 'government',
+        }),
         provider: fields.text({ label: '주관기관' }),
         summary: fields.text({ label: '수상 사유 요약', multiline: true }),
         description: fields.mdx({ label: '상세 설명' }),
@@ -149,10 +164,11 @@ export default config({
     // 뉴스/공지사항
     news: collection({
       label: '뉴스/공지',
+      path: 'src/content/news/*/',
       slugField: 'title',
-      path: 'src/content/news/*',
+      format: { data: 'json' },
       schema: {
-        title: fields.slug({ name: { label: '제목', validation: { isRequired: true } } }),
+        title: fields.text({ label: '제목', validation: { isRequired: true } }),
         date: fields.date({ label: '날짜', validation: { isRequired: true } }),
         category: fields.select({
           label: '카테고리',

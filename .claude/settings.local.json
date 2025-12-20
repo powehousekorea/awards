@@ -19,7 +19,9 @@
       "Bash(findstr:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(del \"\\\\?\\\\%cd%\\\\nul\")",
+      "Bash(cmd /c \"cd /d \"\"c:\\\\Users\\\\USER\\\\AI project\\\\awards\"\" && del /f /q \"\"\\\\?\\\\c:\\\\Users\\\\USER\\\\AI project\\\\awards\\\\nul\"\"\")"
     ]
   }
 }
