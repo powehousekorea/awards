@@ -106,6 +106,36 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ===== 2025 시상식 안내 SECTION ===== */}
+      <section className="py-16 md:py-24 border-t border-dark-800 bg-gradient-to-b from-dark-900/50 to-dark-950">
+        <div className="container-custom">
+          <div className="max-w-2xl mx-auto">
+            {/* 섹션 헤더 */}
+            <div className="text-center mb-8">
+              <p className="text-label text-gold-400 mb-3">Coming Soon</p>
+              <h2 className="text-2xl md:text-3xl text-dark-100 mb-2">
+                2025 시상식 안내
+              </h2>
+              <p className="text-dark-400">
+                2025년 12월 23일(화) 10:00 | 국회도서관 대강당
+              </p>
+            </div>
+
+            {/* 포스터 이미지 */}
+            <div className="relative rounded-lg overflow-hidden shadow-2xl border border-dark-700/50">
+              <Image
+                src="/images/2025-ceremony-poster.png"
+                alt="2025 대한민국 청년정책 어워즈 시상식 - 청년이 직접 뽑은 대한민국 최고의 청년정책"
+                width={1206}
+                height={2622}
+                className="w-full h-auto"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== 2. ABOUT SECTION ===== */}
       <section className="py-24 md:py-32 border-t border-dark-800">
         <div className="container-custom">
