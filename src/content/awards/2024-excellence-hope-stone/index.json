@@ -1,9 +1,10 @@
 {
-  "title": "희망디딤돌",
+  "title": "희망두배청년통장",
   "year": 2024,
   "awardType": "excellence",
-  "category": "employment",
-  "provider": "삼성",
-  "sector": "corporate",
-  "summary": "기업에서 청년들의 경력 개발과 취업을 지원하는 프로그램"
+  "category": "finance",
+  "provider": "서울시",
+  "sector": "local",
+  "summary": "청년들의 자산 형성을 돕기 위한 저축 지원 제도",
+  "officialUrl": "https://account.welfare.seoul.kr/"
 }

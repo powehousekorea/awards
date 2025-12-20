@@ -122,7 +122,12 @@ export default async function Home() {
             </div>
 
             {/* 포스터 이미지 */}
-            <div className="relative rounded-lg overflow-hidden shadow-2xl border border-dark-700/50">
+            <Link
+              href="https://event-us.kr/opcl/event/118545"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block relative rounded-lg overflow-hidden shadow-2xl border border-dark-700/50 hover:border-gold-400/50 transition-all duration-300 hover:shadow-gold-400/10"
+            >
               <Image
                 src="/images/2025-ceremony-poster.png"
                 alt="2025 대한민국 청년정책 어워즈 시상식 - 청년이 직접 뽑은 대한민국 최고의 청년정책"
@@ -131,6 +136,18 @@ export default async function Home() {
                 className="w-full h-auto"
                 priority
               />
+            </Link>
+
+            {/* 참가하기 버튼 */}
+            <div className="text-center mt-8">
+              <Link
+                href="https://event-us.kr/opcl/event/118545"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-10 py-4 bg-gold-300 hover:bg-gold-400 text-dark-950 font-semibold text-lg rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-gold-400/20"
+              >
+                참가하기
+              </Link>
             </div>
           </div>
         </div>
@@ -191,7 +208,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-dark-800">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-dark-800">
             {[
               {
                 title: '청년정책 대상',
@@ -201,17 +218,12 @@ export default async function Home() {
               {
                 title: '최우수 청년정책상',
                 titleEn: 'Excellence Award',
-                description: '각 부문별 우수 정책',
+                description: '정부·지자체·기업·비영리 각 부문별 우수 정책',
               },
               {
                 title: '청년정책 혁신상',
                 titleEn: 'Innovation Award',
                 description: '창의적 접근으로 청년 문제를 해결한 정책',
-              },
-              {
-                title: '글로벌 청년정책상',
-                titleEn: 'Global Award',
-                description: '해외 우수 청년정책 중 벤치마킹 가치가 높은 정책',
               },
             ].map((category) => (
               <div
@@ -254,19 +266,19 @@ export default async function Home() {
             </div>
           </header>
 
-          {/* Awards List - 2024년 대상/최우수상 */}
+          {/* Awards List - 2025년 대상/최우수상 */}
           <div className="space-y-0">
-            {/* 2024 Year Header */}
+            {/* 2025 Year Header */}
             <div className="flex items-center gap-6 mb-8">
               <span className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold text-dark-800">
-                2024
+                2025
               </span>
               <div className="flex-1 h-px bg-dark-800" />
             </div>
 
-            {/* Award Entries - 2024년 대상/최우수상만 표시 */}
+            {/* Award Entries - 2025년 대상/최우수상만 표시 */}
             {awards
-              .filter(award => award.entry.year === 2024 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
+              .filter(award => award.entry.year === 2025 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
               .sort((a, b) => {
                 // 먼저 awardType으로 정렬 (grand -> excellence)
                 const typeOrder = { grand: 0, excellence: 1 };

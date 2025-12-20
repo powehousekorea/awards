@@ -159,6 +159,7 @@ export default config({
           publicPath: '/images/awards',
         }),
         videoUrl: fields.url({ label: '관련 영상 URL' }),
+        officialUrl: fields.url({ label: '정책 공식 페이지 URL' }),
       },
     }),
     // 뉴스/공지사항
