@@ -150,68 +150,76 @@ export default async function AwardsPage() {
                 {/* Awards List */}
                 <div className="border-t border-dark-800">
                   {yearAwards.map((award) => {
-                    const hasOfficialUrl = !!award.entry.officialUrl;
-                    const LinkWrapper = hasOfficialUrl ? 'a' : Link;
-                    const linkProps = hasOfficialUrl
-                      ? { href: award.entry.officialUrl, target: '_blank', rel: 'noopener noreferrer' }
-                      : { href: `/awards/${award.slug}` };
+                    const awardContent = (
+                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-6 md:py-8 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
+                        {/* Badge + Sector */}
+                        <div className="col-span-12 md:col-span-3 flex items-center gap-2">
+                          <span className={`text-base md:text-lg lg:text-xl font-medium ${getBadgeClass(award.entry.awardType).replace('badge-', 'text-')}`} style={{
+                            color: award.entry.awardType === 'grand' ? '#D4B886'
+                              : award.entry.awardType === 'excellence' ? '#a3a3a3'
+                              : award.entry.awardType === 'innovation' ? '#34d399'
+                              : award.entry.awardType === 'global' ? '#7dd3c0'
+                              : award.entry.awardType === 'best' ? '#D4B886'
+                              : award.entry.awardType === 'trending' ? '#f472b6'
+                              : award.entry.awardType === 'effort' ? '#fbbf24'
+                              : award.entry.awardType === 'potential' ? '#a78bfa'
+                              : '#8b8b8b'
+                          }}>
+                            {getAwardLabel(award.entry.awardType)}
+                          </span>
+                          {getSectorLabel(award.entry.sector) && (
+                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
+                              {getSectorLabel(award.entry.sector)}
+                            </span>
+                          )}
+                        </div>
 
-                    return (
-                      <LinkWrapper
+                        {/* Title */}
+                        <div className="col-span-12 md:col-span-5">
+                          <h3 className="text-dark-100 text-xl md:text-2xl lg:text-3xl font-medium transition-smooth group-hover:text-gold-300">
+                            {award.entry.title}
+                          </h3>
+                        </div>
+
+                        {/* Provider */}
+                        <div className="col-span-10 md:col-span-3">
+                          <p className="text-dark-400 text-base md:text-lg lg:text-xl">
+                            {award.entry.provider}
+                          </p>
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="col-span-2 md:col-span-1 flex justify-end">
+                          <svg
+                            className="w-5 h-5 text-dark-600 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
+                      </div>
+                    );
+
+                    return award.entry.officialUrl ? (
+                      <a
                         key={award.slug}
-                        {...linkProps}
+                        href={award.entry.officialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="group block"
                       >
-                        <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-6 md:py-8 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
-                          {/* Badge + Sector */}
-                          <div className="col-span-12 md:col-span-3 flex items-center gap-2">
-                            <span className={`text-base md:text-lg lg:text-xl font-medium ${getBadgeClass(award.entry.awardType).replace('badge-', 'text-')}`} style={{
-                              color: award.entry.awardType === 'grand' ? '#D4B886'
-                                : award.entry.awardType === 'excellence' ? '#a3a3a3'
-                                : award.entry.awardType === 'innovation' ? '#34d399'
-                                : award.entry.awardType === 'global' ? '#7dd3c0'
-                                : award.entry.awardType === 'best' ? '#D4B886'
-                                : award.entry.awardType === 'trending' ? '#f472b6'
-                                : award.entry.awardType === 'effort' ? '#fbbf24'
-                                : award.entry.awardType === 'potential' ? '#a78bfa'
-                                : '#8b8b8b'
-                            }}>
-                              {getAwardLabel(award.entry.awardType)}
-                            </span>
-                            {getSectorLabel(award.entry.sector) && (
-                              <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
-                                {getSectorLabel(award.entry.sector)}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Title */}
-                          <div className="col-span-12 md:col-span-5">
-                            <h3 className="text-dark-100 text-xl md:text-2xl lg:text-3xl font-medium transition-smooth group-hover:text-gold-300">
-                              {award.entry.title}
-                            </h3>
-                          </div>
-
-                          {/* Provider */}
-                          <div className="col-span-10 md:col-span-3">
-                            <p className="text-dark-400 text-base md:text-lg lg:text-xl">
-                              {award.entry.provider}
-                            </p>
-                          </div>
-
-                          {/* Arrow */}
-                          <div className="col-span-2 md:col-span-1 flex justify-end">
-                            <svg
-                              className="w-5 h-5 text-dark-600 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-300"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                          </div>
-                        </div>
-                      </LinkWrapper>
+                        {awardContent}
+                      </a>
+                    ) : (
+                      <Link
+                        key={award.slug}
+                        href={`/awards/${award.slug}`}
+                        className="group block"
+                      >
+                        {awardContent}
+                      </Link>
                     );
                   })}
                 </div>
