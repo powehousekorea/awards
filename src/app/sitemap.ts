@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
 
-const BASE_URL = 'https://youthpolicyawards.kr';
+const BASE_URL = 'https://youthpolicyawards.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
