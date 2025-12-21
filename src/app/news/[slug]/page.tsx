@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { reader } from '@/lib/reader';
+import { DocumentRenderer } from '@keystatic/core/renderer';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -26,6 +27,9 @@ export default async function NewsDetailPage({ params }: PageProps) {
   if (!newsItem) {
     notFound();
   }
+
+  // MDX 본문 콘텐츠 가져오기
+  const content = await newsItem.content() as unknown as { children: unknown[] }[] | null;
 
   const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
 
@@ -71,18 +75,31 @@ export default async function NewsDetailPage({ params }: PageProps) {
             </time>
           </header>
 
-          {/* Content */}
-          <div className="prose prose-slate max-w-none">
-            {newsItem.summary && (
-              <p className="text-lg text-[var(--color-navy-700)] leading-relaxed">
+          {/* Summary */}
+          {newsItem.summary && (
+            <div className="mb-8 p-6 bg-[#252525] rounded-lg border-l-4 border-gold-400">
+              <p className="text-lg text-gray-300 leading-relaxed">
                 {newsItem.summary}
               </p>
-            )}
-            {/* MDX 콘텐츠는 추후 렌더링 구현 필요 */}
-            <p className="text-[var(--muted-foreground)] mt-4">
-              상세 내용이 준비 중입니다.
-            </p>
-          </div>
+            </div>
+          )}
+
+          {/* MDX Content - 본문 렌더링 */}
+          {content && content.length > 0 && (
+            <div className="prose prose-invert prose-lg max-w-none
+              prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
+              prose-h2:text-xl prose-h3:text-lg
+              prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+              prose-li:text-gray-300 prose-li:marker:text-gold-400
+              prose-ul:my-4 prose-ol:my-4
+              prose-strong:text-white prose-strong:font-semibold
+              prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
+              prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
+              prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
+            ">
+              <DocumentRenderer document={content as any} />
+            </div>
+          )}
         </article>
 
         {/* Back Button */}

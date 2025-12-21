@@ -1,10 +1,20 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 
+// Check for GitHub environment variables
+const isGithubMode = !!(
+  process.env.KEYSTATIC_GITHUB_CLIENT_ID &&
+  process.env.KEYSTATIC_GITHUB_CLIENT_SECRET
+);
+
 export default config({
-  storage: {
-    kind: 'github',
-    repo: 'powehousekorea/awards',
-  },
+  storage: isGithubMode
+    ? {
+        kind: 'github',
+        repo: 'powehousekorea/awards',
+      }
+    : {
+        kind: 'local',
+      },
   ui: {
     brand: {
       name: '청년정책 어워즈 CMS',
@@ -187,6 +197,7 @@ export default config({
           directory: 'public/images/news',
           publicPath: '/images/news',
         }),
+        externalUrl: fields.url({ label: '외부 링크 (신청하기 버튼)' }),
         isImportant: fields.checkbox({ label: '중요 공지', defaultValue: false }),
       },
     }),

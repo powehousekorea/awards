@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AwardBadge } from '@/components/ui/Badge';
 
 interface AwardCardProps {
   slug: string;
@@ -11,13 +12,6 @@ interface AwardCardProps {
   summary: string;
 }
 
-const awardTypeConfig: Record<string, { label: string; className: string }> = {
-  grand: { label: '대상', className: 'badge-grand' },
-  excellence: { label: '최우수상', className: 'badge-excellence' },
-  merit: { label: '우수상', className: 'badge-merit' },
-  special: { label: '특별상', className: 'badge-special' },
-};
-
 export default function AwardCard({
   slug,
   title,
@@ -27,8 +21,6 @@ export default function AwardCard({
   provider,
   summary,
 }: AwardCardProps) {
-  const awardInfo = awardTypeConfig[awardType] || awardTypeConfig.grand;
-
   return (
     <Link href={`/awards/${slug}`} className="block group">
       <article className="border border-dark-800/50 hover:border-gold-500/20 h-full flex flex-col transition-luxury bg-dark-950/50">
@@ -55,9 +47,7 @@ export default function AwardCard({
               <p className="font-serif font-bold text-dark-200 text-sm">
                 {year}
               </p>
-              <p className="text-[10px] text-dark-500 tracking-[0.15em] uppercase">
-                {awardInfo.label}
-              </p>
+              <AwardBadge value={awardType} size="sm" className="mt-1" />
             </div>
           </div>
         </div>

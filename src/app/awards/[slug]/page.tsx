@@ -1,17 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { reader } from '@/lib/reader';
+import { DocumentRenderer } from '@keystatic/core/renderer';
+import { getAwardShortLabel, getAwardIcon } from '@/lib/award-utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
-
-const awardTypeConfig: Record<string, { label: string; className: string; icon: string }> = {
-  grand: { label: '대상', className: 'badge-grand', icon: '🥇' },
-  excellence: { label: '최우수상', className: 'badge-excellence', icon: '🥈' },
-  merit: { label: '우수상', className: 'badge-merit', icon: '🥉' },
-  special: { label: '특별상', className: 'badge-special', icon: '⭐' },
-};
 
 export async function generateStaticParams() {
   const awards = await reader.collections.awards.all();
@@ -36,7 +31,8 @@ export default async function AwardDetailPage({ params }: PageProps) {
     ? await reader.collections.policies.read(award.policy)
     : null;
 
-  const awardInfo = awardTypeConfig[award.awardType] || awardTypeConfig.grand;
+  // MDX 본문 콘텐츠 가져오기
+  const content = await award.description() as unknown as { children: unknown[] }[] | null;
 
   return (
     <div className="py-8 lg:py-12">
@@ -64,7 +60,7 @@ export default async function AwardDetailPage({ params }: PageProps) {
         }`}>
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-4xl">{awardInfo.icon}</span>
+              <span className="text-4xl">{getAwardIcon(award.awardType)}</span>
               <div>
                 <p className={`text-sm font-medium ${
                   award.awardType === 'grand' ? 'text-[var(--color-navy-700)]' : 'text-[var(--color-navy-600)]'
@@ -74,7 +70,7 @@ export default async function AwardDetailPage({ params }: PageProps) {
                 <p className={`text-2xl font-bold ${
                   award.awardType === 'grand' ? 'text-[var(--color-navy-900)]' : 'text-[var(--color-navy-800)]'
                 }`}>
-                  {awardInfo.label}
+                  {getAwardShortLabel(award.awardType)}
                 </p>
               </div>
             </div>
@@ -120,18 +116,27 @@ export default async function AwardDetailPage({ params }: PageProps) {
               </p>
             </div>
 
-            {/* Description */}
-            <div className="bg-white rounded-xl border border-[var(--border)] p-6 lg:p-8">
-              <h2 className="text-xl font-bold text-[var(--color-navy-900)] mb-4">
-                상세 내용
-              </h2>
-              <div className="prose prose-slate max-w-none">
-                {/* MDX 콘텐츠는 추후 렌더링 구현 필요 */}
-                <p className="text-[var(--muted-foreground)]">
-                  상세 내용이 준비 중입니다.
-                </p>
+            {/* Description - MDX Content */}
+            {content && content.length > 0 && (
+              <div className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 lg:p-8">
+                <h2 className="text-xl font-bold text-gray-100 mb-4">
+                  상세 내용
+                </h2>
+                <div className="prose prose-invert prose-lg max-w-none
+                  prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
+                  prose-h2:text-xl prose-h3:text-lg
+                  prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+                  prose-li:text-gray-300 prose-li:marker:text-gold-400
+                  prose-ul:my-4 prose-ol:my-4
+                  prose-strong:text-white prose-strong:font-semibold
+                  prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
+                  prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
+                  prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
+                ">
+                  <DocumentRenderer document={content as any} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Sidebar */}

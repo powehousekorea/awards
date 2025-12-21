@@ -1,106 +1,75 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import fs from 'fs';
-import path from 'path';
-
-interface AwardEntry {
-  title: string;
-  year: number;
-  awardType: string;
-  category?: string;
-  provider?: string;
-  sector?: string;
-  summary?: string;
-  image?: string;
-}
-
-async function getAwards() {
-  const awardsDir = path.join(process.cwd(), 'src/content/awards');
-  const folders = fs.readdirSync(awardsDir);
-
-  const awards = folders
-    .filter(folder => {
-      const folderPath = path.join(awardsDir, folder);
-      return fs.statSync(folderPath).isDirectory();
-    })
-    .map(folder => {
-      const jsonPath = path.join(awardsDir, folder, 'index.json');
-      if (fs.existsSync(jsonPath)) {
-        const content = JSON.parse(fs.readFileSync(jsonPath, 'utf8')) as AwardEntry;
-        return {
-          slug: folder,
-          entry: content,
-        };
-      }
-      return null;
-    })
-    .filter((award): award is { slug: string; entry: AwardEntry } => award !== null);
-
-  return awards;
-}
+import { reader } from '@/lib/reader';
+import {
+  getAwardLabel,
+  getSectorLabel,
+  getAwardTypeOrder,
+  getSectorOrder,
+} from '@/lib/award-utils';
 
 export default async function Home() {
-  const awards = await getAwards();
-
-  // 수상 타입별 라벨
-  const getAwardLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      grand: '청년정책 대상',
-      excellence: '최우수 청년정책상',
-      merit: '우수 청년정책상',
-      innovation: '청년정책 혁신상',
-      global: '글로벌 청년정책상',
-      special: '특별상',
-    };
-    return labels[type] || 'Award';
-  };
-
-  const getSectorLabel = (sector: string | undefined) => {
-    if (!sector) return null;
-    const labels: Record<string, string> = {
-      government: '정부',
-      local: '지자체',
-      corporate: '기업',
-      nonprofit: 'NGO',
-    };
-    return labels[sector] || null;
-  };
+  const allAwards = await reader.collections.awards.all();
+  const awards = allAwards.map(award => ({
+    slug: award.slug,
+    entry: award.entry,
+  }));
 
   return (
     <div className="min-h-screen bg-dark-950">
       {/* ===== 1. HERO SECTION ===== */}
-      <section className="relative min-h-screen flex flex-col justify-center pt-20">
-        <div className="container-custom">
+      <section className="relative min-h-screen flex flex-col justify-center pt-20 overflow-hidden">
+        {/* Background Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-dark-950 via-dark-950/95 to-dark-900 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(212,184,134,0.05)_0%,_transparent_50%)] pointer-events-none" />
+
+        <div className="container-custom relative z-10">
           {/* Meta Info (Eyebrow) */}
-          <div className="flex justify-between items-end mb-6 border-b border-dark-800 pb-4 animate-slide-up">
-            <span className="text-xs font-sans tracking-[0.2em] text-dark-500 uppercase">
+          <div className="flex justify-between items-end mb-8 border-b border-dark-800/50 pb-4 animate-fade-in-up">
+            <span className="text-[11px] font-mono tracking-[0.25em] text-dark-500 uppercase">
               Since 2021
             </span>
-            <span className="text-xs font-sans tracking-[0.2em] text-dark-500 uppercase hidden md:block">
-              The 4th Edition
+            <span className="text-[11px] font-mono tracking-[0.25em] text-gold-500/60 uppercase hidden md:block">
+              The 5th Edition
             </span>
           </div>
 
-          {/* Main Title (English) */}
-          <h1 className="text-display text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-dark-50 mb-8 animate-slide-up animate-delay-1">
+          {/* Main Title (English) - Serif for Authority */}
+          <h1 className="text-display text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-dark-50 mb-6 animate-fade-in-up animate-delay-1">
             <span className="block">The Korea</span>
             <span className="block">Youth Policy</span>
-            <span className="block text-gold-300">Awards</span>
+            <span className="block text-gradient-gold">Awards</span>
           </h1>
 
-          {/* Korean Title */}
-          <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-sans font-bold text-dark-100 leading-tight mb-12 animate-slide-up animate-delay-2">
+          {/* Korean Title - Bold Sans for Modern Feel */}
+          <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-200 leading-tight mb-12 animate-fade-in-up animate-delay-2">
             대한민국 청년정책 어워즈
           </h2>
 
           {/* Description */}
-          <div className="max-w-2xl animate-slide-up animate-delay-3">
-            <p className="text-dark-300 text-base md:text-lg font-light leading-relaxed mb-10">
+          <div className="max-w-2xl animate-fade-in-up animate-delay-3">
+            <p className="text-dark-400 text-lg md:text-xl font-light leading-relaxed mb-10 tracking-wide">
               청년이 직접 선정하는 대한민국 최고의 청년정책 시상식
             </p>
-            <Link href="/awards" className="btn-primary">
-              역대 수상작 보기
-            </Link>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/awards" className="btn-gold">
+                역대 수상작 보기
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link href="/about" className="btn-outline-gold">
+                어워즈 소개
+              </Link>
+            </div>
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in-up animate-delay-5 hidden md:block">
+            <div className="flex flex-col items-center gap-2 text-dark-600">
+              <span className="text-[10px] font-mono tracking-widest uppercase">Scroll</span>
+              <div className="w-px h-12 bg-gradient-to-b from-dark-600 to-transparent" />
+            </div>
           </div>
 
         </div>
@@ -139,14 +108,17 @@ export default async function Home() {
             </Link>
 
             {/* 참가하기 버튼 */}
-            <div className="text-center mt-8">
+            <div className="text-center mt-10">
               <Link
                 href="https://event-us.kr/opcl/event/118545"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-10 py-4 bg-gold-300 hover:bg-gold-400 text-dark-950 font-semibold text-lg rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-gold-400/20"
+                className="btn-gold inline-flex items-center gap-3 px-12 py-5 text-lg"
               >
-                참가하기
+                시상식 참가 신청
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
               </Link>
             </div>
           </div>
@@ -280,17 +252,13 @@ export default async function Home() {
             {awards
               .filter(award => award.entry.year === 2025 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
               .sort((a, b) => {
-                // 먼저 awardType으로 정렬 (grand -> excellence)
-                const typeOrder = { grand: 0, excellence: 1 };
-                const typeA = typeOrder[a.entry.awardType as keyof typeof typeOrder] ?? 2;
-                const typeB = typeOrder[b.entry.awardType as keyof typeof typeOrder] ?? 2;
-                if (typeA !== typeB) return typeA - typeB;
+                const typeOrderA = getAwardTypeOrder(a.entry.awardType);
+                const typeOrderB = getAwardTypeOrder(b.entry.awardType);
+                if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
 
-                // 같은 타입이면 sector로 정렬 (정부 -> 지자체 -> 기업 -> NGO)
-                const sectorOrder = { government: 0, local: 1, corporate: 2, nonprofit: 3 };
-                const sectorA = sectorOrder[a.entry.sector as keyof typeof sectorOrder] ?? 4;
-                const sectorB = sectorOrder[b.entry.sector as keyof typeof sectorOrder] ?? 4;
-                return sectorA - sectorB;
+                const sectorOrderA = getSectorOrder(a.entry.sector);
+                const sectorOrderB = getSectorOrder(b.entry.sector);
+                return sectorOrderA - sectorOrderB;
               })
               .map((award) => (
                 <Link
@@ -408,20 +376,27 @@ export default async function Home() {
       </section>
 
       {/* ===== FOOTER CTA ===== */}
-      <section className="py-24 md:py-32 border-t border-dark-800">
-        <div className="container-custom text-center">
-          <p className="text-label mb-6">Get Involved</p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl text-dark-100 mb-8">
-            청년들의 더 나은 미래를 함께 만들어요
+      <section className="py-24 md:py-32 border-t border-dark-800 relative overflow-hidden">
+        {/* Background Accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,184,134,0.03)_0%,_transparent_70%)] pointer-events-none" />
+
+        <div className="container-custom text-center relative z-10">
+          <p className="text-[11px] font-mono tracking-[0.3em] text-gold-500/60 uppercase mb-6">Get Involved</p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-dark-100 mb-6 leading-tight">
+            청년들의 더 나은 미래를<br className="hidden sm:block" />
+            함께 만들어요
           </h2>
-          <p className="text-dark-400 text-lg mb-10 max-w-xl mx-auto">
+          <p className="text-dark-400 text-lg md:text-xl mb-12 max-w-xl mx-auto font-light">
             당신의 한 표가 더 나은 청년정책을 만듭니다
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/awards" className="btn-primary">
+            <Link href="/awards" className="btn-gold">
               역대 수상작 보기
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
-            <Link href="/about" className="btn-outline">
+            <Link href="/about" className="btn-outline-gold">
               자세히 알아보기
             </Link>
           </div>

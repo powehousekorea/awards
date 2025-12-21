@@ -19,10 +19,6 @@ export default async function AboutPage() {
       title: '청년정책 혁신상',
       description: '창의적 접근으로 청년 문제를 해결한 혁신 정책',
     },
-    {
-      title: '글로벌 청년정책상',
-      description: '해외 우수 청년정책 중 벤치마킹 가치가 높은 정책',
-    },
   ];
 
   // 참여 주체
