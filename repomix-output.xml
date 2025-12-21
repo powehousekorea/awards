@@ -77,6 +77,10 @@ src/app/notice/page.tsx
 src/app/page.tsx
 src/app/robots.ts
 src/app/sitemap.ts
+src/components/article/ArticleInfo.tsx
+src/components/article/FeaturedArticle.tsx
+src/components/article/RelatedArticles.tsx
+src/components/article/ShareButtons.tsx
 src/components/AwardCard.tsx
 src/components/cards/NewsCard.tsx
 src/components/cards/NoticeListItem.tsx
@@ -159,9 +163,399 @@ tsconfig.json
 <files>
 This section contains the contents of the repository's files.
 
+<file path="src/components/article/ArticleInfo.tsx">
+import { formatDate } from '@/lib/format';
+
+interface ArticleInfoProps {
+  date?: string | null;
+  category?: string;
+  categoryLabel?: string;
+  author?: string;
+}
+
+export default function ArticleInfo({
+  date,
+  category,
+  categoryLabel,
+  author = '청년정책 어워즈',
+}: ArticleInfoProps) {
+  return (
+    <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-5">
+      <h3 className="text-xs font-mono uppercase tracking-wider text-gray-500 mb-4">
+        Article Info
+      </h3>
+      <dl className="space-y-3">
+        {date && (
+          <div className="flex items-center justify-between">
+            <dt className="text-xs text-gray-500">Date</dt>
+            <dd className="text-sm text-gray-300 font-mono">{formatDate(date)}</dd>
+          </div>
+        )}
+        {(category || categoryLabel) && (
+          <div className="flex items-center justify-between">
+            <dt className="text-xs text-gray-500">Category</dt>
+            <dd className="text-sm text-gold-400">{categoryLabel || category}</dd>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+          <dt className="text-xs text-gray-500">Author</dt>
+          <dd className="text-sm text-gray-300">{author}</dd>
+        </div>
+      </dl>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/article/FeaturedArticle.tsx">
+import Link from 'next/link';
+import Image from 'next/image';
+import { formatDate } from '@/lib/format';
+
+interface FeaturedArticleProps {
+  slug: string;
+  title: string;
+  summary?: string | null;
+  date?: string | null;
+  thumbnail?: string | null;
+  category?: string;
+  categoryLabel?: string;
+  basePath: string;
+}
+
+export default function FeaturedArticle({
+  slug,
+  title,
+  summary,
+  date,
+  thumbnail,
+  category,
+  categoryLabel,
+  basePath,
+}: FeaturedArticleProps) {
+  return (
+    <Link
+      href={`${basePath}/${slug}`}
+      className="group block bg-gradient-to-br from-[#1a1a1a] to-[#151515] border border-[#333] hover:border-gold-500/30 rounded-xl overflow-hidden transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+        {/* Image Section */}
+        <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[360px] overflow-hidden bg-[#222]">
+          {thumbnail ? (
+            <>
+              <Image
+                src={thumbnail}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent opacity-60 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#1a1a1a]" />
+            </>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#252525] to-[#1a1a1a]">
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#333] flex items-center justify-center">
+                  <svg className="w-8 h-8 text-[#555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                  </svg>
+                </div>
+                <span className="text-xs text-[#555] font-mono uppercase tracking-wider">Featured</span>
+              </div>
+            </div>
+          )}
+
+          {/* Featured Badge */}
+          <div className="absolute top-4 left-4 z-10">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gold-500/90 backdrop-blur-sm text-dark-950 text-[10px] font-bold uppercase tracking-wider rounded">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              Featured
+            </span>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="p-8 lg:p-10 flex flex-col justify-center">
+          {/* Meta */}
+          <div className="flex items-center gap-3 mb-4">
+            {(category || categoryLabel) && (
+              <span className="text-[10px] font-mono uppercase tracking-wider text-gold-400">
+                {categoryLabel || category}
+              </span>
+            )}
+            {date && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-gray-600" />
+                <span className="text-[10px] font-mono text-gray-500">
+                  {formatDate(date)}
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Title */}
+          <h2 className="text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-gray-100 group-hover:text-gold-300 transition-colors duration-300 mb-4 leading-tight">
+            {title}
+          </h2>
+
+          {/* Summary */}
+          {summary && (
+            <p className="text-gray-400 text-base lg:text-lg leading-relaxed line-clamp-3 mb-6">
+              {summary}
+            </p>
+          )}
+
+          {/* Read More */}
+          <div className="flex items-center gap-2 text-gold-400 group-hover:text-gold-300 transition-colors">
+            <span className="text-sm font-medium">Read Article</span>
+            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+</file>
+
+<file path="src/components/article/RelatedArticles.tsx">
+import Link from 'next/link';
+import { formatDate } from '@/lib/format';
+
+interface RelatedArticle {
+  slug: string;
+  title: string;
+  date?: string | null;
+}
+
+interface RelatedArticlesProps {
+  articles: RelatedArticle[];
+  basePath: string;
+  title?: string;
+}
+
+export default function RelatedArticles({ articles, basePath, title = 'Related' }: RelatedArticlesProps) {
+  if (articles.length === 0) return null;
+
+  return (
+    <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-5">
+      <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-4">
+        {title}
+      </h3>
+      <ul className="space-y-3">
+        {articles.slice(0, 3).map((article) => (
+          <li key={article.slug}>
+            <Link
+              href={`${basePath}/${article.slug}`}
+              className="group block"
+            >
+              <p className="text-sm text-gray-300 group-hover:text-gold-400 transition-colors line-clamp-2 leading-relaxed">
+                {article.title}
+              </p>
+              {article.date && (
+                <p className="text-[10px] font-mono text-gray-600 mt-1">
+                  {formatDate(article.date)}
+                </p>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/article/ShareButtons.tsx">
+'use client';
+
+interface ShareButtonsProps {
+  title: string;
+  url?: string;
+}
+
+export default function ShareButtons({ title, url }: ShareButtonsProps) {
+  const shareUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert('링크가 복사되었습니다.');
+    } catch {
+      alert('복사에 실패했습니다.');
+    }
+  };
+
+  const shareToTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterUrl, '_blank', 'width=550,height=420');
+  };
+
+  const shareToFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(facebookUrl, '_blank', 'width=550,height=420');
+  };
+
+  return (
+    <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-5">
+      <h3 className="text-xs font-mono uppercase tracking-wider text-gray-500 mb-4">
+        Share
+      </h3>
+      <div className="flex items-center gap-2">
+        {/* Copy Link */}
+        <button
+          onClick={copyToClipboard}
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 bg-[#252525] hover:bg-[#333] border border-[#333] hover:border-gold-500/30 rounded transition-all group"
+          title="링크 복사"
+        >
+          <svg className="w-4 h-4 text-gray-400 group-hover:text-gold-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">Copy</span>
+        </button>
+
+        {/* Twitter/X */}
+        <button
+          onClick={shareToTwitter}
+          className="w-10 h-10 flex items-center justify-center bg-[#252525] hover:bg-[#333] border border-[#333] hover:border-gold-500/30 rounded transition-all group"
+          title="X(Twitter)에 공유"
+        >
+          <svg className="w-4 h-4 text-gray-400 group-hover:text-gold-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+        </button>
+
+        {/* Facebook */}
+        <button
+          onClick={shareToFacebook}
+          className="w-10 h-10 flex items-center justify-center bg-[#252525] hover:bg-[#333] border border-[#333] hover:border-gold-500/30 rounded transition-all group"
+          title="Facebook에 공유"
+        >
+          <svg className="w-4 h-4 text-gray-400 group-hover:text-gold-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="README.md">
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</file>
+
 <file path="robots.txt">
 User-agent: Yeti
 Allow:/
+</file>
+
+<file path="src/app/api/keystatic/[...params]/route.tsx">
+import { makeRouteHandler } from '@keystatic/next/route-handler';
+import config from '../../../../../keystatic.config';
+
+export const { POST, GET } = makeRouteHandler({ config });
+</file>
+
+<file path="src/app/keystatic/[[...params]]/page.tsx">
+export { default } from '../keystatic';
+</file>
+
+<file path="src/app/keystatic/keystatic.tsx">
+'use client';
+
+import { makePage } from '@keystatic/next/ui/app';
+import config from '../../../keystatic.config';
+
+export default makePage(config);
 </file>
 
 <file path="src/app/robots.ts">
@@ -182,41 +576,45 @@ export default function robots(): MetadataRoute.Robots {
 
 <file path="src/components/cards/NewsCard.tsx">
 import Image from 'next/image';
+import Link from 'next/link';
 import { formatDate } from '@/lib/format';
 
 interface NewsCardProps {
   id: string;
   title: string;
   summary: string;
-  source: string;
+  source?: string;
   date: string;
-  url: string;
-  thumbnail?: string;
+  url?: string;
+  slug?: string;
+  thumbnail?: string | null;
+  isExternal?: boolean;
 }
 
 export default function NewsCard({
   title,
   summary,
-  source,
+  source = 'Press',
   date,
   url,
+  slug,
   thumbnail,
+  isExternal = false,
 }: NewsCardProps) {
-  return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="
-        group flex flex-col h-full
-        bg-[#1a1a1a] border border-[#2a2a2a]
-        rounded-sm overflow-hidden
-        transition-all duration-500 ease-out
-        hover:border-gold-500/50
-        hover:shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_20px_rgba(212,184,134,0.08)]
-        hover:-translate-y-1
-      "
-    >
+  const href = isExternal && url ? url : `/news/${slug}`;
+
+  const cardClassName = `
+    group flex flex-col h-full
+    bg-[#1a1a1a] border border-[#2a2a2a]
+    rounded-sm overflow-hidden
+    transition-all duration-500 ease-out
+    hover:border-gold-500/50
+    hover:shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_20px_rgba(212,184,134,0.08)]
+    hover:-translate-y-1
+  `;
+
+  const CardContent = (
+    <>
       {/* Thumbnail Image */}
       <div className="relative aspect-video overflow-hidden bg-[#222]">
         {thumbnail ? (
@@ -239,19 +637,21 @@ export default function NewsCard({
         )}
 
         {/* External link indicator */}
-        <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#1a1a1a]/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-          <svg className="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        </div>
+        {isExternal && (
+          <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#1a1a1a]/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+            <svg className="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-[15px] font-semibold text-gray-100 mb-3 line-clamp-2 group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
+        <h3 className="text-[15px] font-semibold text-white mb-3 line-clamp-2 group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
           {title}
         </h3>
-        <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed flex-1 font-light">
+        <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed flex-1 font-light">
           {summary}
         </p>
       </div>
@@ -265,7 +665,26 @@ export default function NewsCard({
           {formatDate(date)}
         </span>
       </div>
-    </a>
+    </>
+  );
+
+  if (isExternal && url) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cardClassName}
+      >
+        {CardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={cardClassName}>
+      {CardContent}
+    </Link>
   );
 }
 </file>
@@ -318,9 +737,12 @@ export default function NoticeListItem({
       </div>
 
       {/* Title */}
-      <div className="flex-1 md:px-4 flex items-center gap-2">
-        <h3 className="text-[15px] text-gray-200 font-medium group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
-          {title}
+      <div className="flex-1 md:px-4 flex items-center gap-2 min-w-0">
+        <h3
+          className="text-[15px] font-bold group-hover:text-gold-400 transition-colors duration-300 leading-snug tracking-tight truncate"
+          style={{ color: '#ffffff' }}
+        >
+          {title || '제목 없음'}
         </h3>
         {isImportant && (
           <StatusBadge value="new" />
@@ -328,8 +750,8 @@ export default function NoticeListItem({
       </div>
 
       {/* Date & Arrow */}
-      <div className="mt-2 md:mt-0 md:w-40 flex items-center justify-end gap-4">
-        <span className="text-[11px] font-mono text-gray-500 tracking-wide">
+      <div className="mt-2 md:mt-0 md:w-40 flex items-center justify-end gap-4 shrink-0">
+        <span className="text-[11px] font-mono text-gray-400 tracking-wide">
           {date}
         </span>
         <span className="hidden md:block text-gray-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400 transition-all duration-300">
@@ -527,770 +949,6 @@ export function CategoryBadge({ value, size = 'md', className = '' }: Omit<Badge
 
 export function StatusBadge({ value, size = 'sm', className = '' }: Omit<BadgeProps, 'type'>) {
   return <Badge type="status" value={value} size={size} className={className} />;
-}
-</file>
-
-<file path="src/content/news/2025-awards-ceremony/index.json">
-{
-  "title": "2025 대한민국 청년정책 어워즈 시상식 안내",
-  "date": "2024-12-23",
-  "category": "event",
-  "summary": "청년이 직접 뽑은 정책을 국회에서 시상하는 자리입니다. 2024년 12월 23일 10:00~11:00, 국회도서관 대강당에서 개최됩니다.",
-  "externalUrl": "https://event-us.kr/opcl/event/118545",
-  "isImportant": true
-}
-</file>
-
-<file path="src/content/news/2025-awards-discovery-team/index.json">
-{
-  "title": "2025 대한민국 청년정책 어워즈 발굴단 모집",
-  "date": "2024-11-10",
-  "category": "event",
-  "summary": "청년들이 주체가 되어 혁신적인 정책을 발굴하고 어워즈 운영에 참여하는 프로그램입니다. 20~39세 대한민국 청년 누구나 참여 가능합니다.",
-  "externalUrl": "https://opcl.kr/event-details/ij_1apoBGedfapFawFVR/",
-  "isImportant": true
-}
-</file>
-
-<file path="src/content/news/2025-awards-voting/index.json">
-{
-  "title": "2025년 대한민국 청년정책 어워즈 전국민 투표",
-  "date": "2025-12-08",
-  "category": "event",
-  "summary": "청년이 직접 뽑는 최고의 청년정책! 12월 8일(월)~14일(일) 18:00까지 투표에 참여하고 스타벅스 아메리카노를 받아가세요.",
-  "externalUrl": "https://opcl.kr/event-details/REiW_JoBGedfapFaUNtq/",
-  "isImportant": true
-}
-</file>
-
-<file path="src/lib/award-utils.ts">
-/**
- * Award 관련 유틸리티 함수 및 상수
- * 수상 타입, 부문 라벨, 배지 스타일 등을 중앙 관리
- */
-
-// 수상 타입 정렬 순서
-export const AWARD_TYPE_ORDER = [
-  'grand',
-  'excellence',
-  'merit',
-  'innovation',
-  'global',
-  'special',
-  'best',
-  'trending',
-  'effort',
-  'potential',
-] as const;
-
-export type AwardType = (typeof AWARD_TYPE_ORDER)[number];
-
-// 수상 타입별 설정 (라벨, 배지 클래스, 아이콘, 색상)
-export const AWARD_CONFIG: Record<
-  string,
-  {
-    label: string;
-    shortLabel: string;
-    className: string;
-    icon: string;
-    color: string;
-  }
-> = {
-  // 2024~ 상 부문
-  grand: {
-    label: '청년정책 대상',
-    shortLabel: '대상',
-    className: 'badge-grand',
-    icon: '🥇',
-    color: '#D4B886',
-  },
-  excellence: {
-    label: '최우수 청년정책상',
-    shortLabel: '최우수상',
-    className: 'badge-excellence',
-    icon: '🥈',
-    color: '#a3a3a3',
-  },
-  merit: {
-    label: '우수 청년정책상',
-    shortLabel: '우수상',
-    className: 'badge-merit',
-    icon: '🥉',
-    color: '#8b8b8b',
-  },
-  innovation: {
-    label: '청년정책 혁신상',
-    shortLabel: '혁신상',
-    className: 'badge-innovation',
-    icon: '💡',
-    color: '#34d399',
-  },
-  global: {
-    label: '글로벌 청년정책상',
-    shortLabel: '글로벌상',
-    className: 'badge-global',
-    icon: '🌍',
-    color: '#7dd3c0',
-  },
-  special: {
-    label: '특별상',
-    shortLabel: '특별상',
-    className: 'badge-special',
-    icon: '⭐',
-    color: '#a78bfa',
-  },
-  // 2023 상 부문
-  best: {
-    label: '열고닫기 최우수상',
-    shortLabel: 'Best',
-    className: 'badge-best',
-    icon: '🏆',
-    color: '#D4B886',
-  },
-  trending: {
-    label: '갑자기떡상',
-    shortLabel: '떡상',
-    className: 'badge-trending',
-    icon: '📈',
-    color: '#f472b6',
-  },
-  effort: {
-    label: '노력은가상',
-    shortLabel: '노력상',
-    className: 'badge-effort',
-    icon: '💪',
-    color: '#fbbf24',
-  },
-  potential: {
-    label: '왕이될관상',
-    shortLabel: '가능성상',
-    className: 'badge-potential',
-    icon: '👑',
-    color: '#a78bfa',
-  },
-};
-
-// 부문(섹터) 설정
-export const SECTOR_CONFIG: Record<string, { label: string; order: number }> = {
-  government: { label: '정부', order: 0 },
-  local: { label: '지자체', order: 1 },
-  corporate: { label: '기업', order: 2 },
-  nonprofit: { label: 'NGO', order: 3 },
-};
-
-/**
- * 수상 타입의 전체 라벨 반환
- * @example getAwardLabel('grand') // '청년정책 대상'
- */
-export function getAwardLabel(type: string): string {
-  return AWARD_CONFIG[type]?.label ?? 'Award';
-}
-
-/**
- * 수상 타입의 짧은 라벨 반환
- * @example getAwardShortLabel('grand') // '대상'
- */
-export function getAwardShortLabel(type: string): string {
-  return AWARD_CONFIG[type]?.shortLabel ?? 'Award';
-}
-
-/**
- * 수상 타입의 배지 클래스 반환
- * @example getAwardBadgeClass('grand') // 'badge-grand'
- */
-export function getAwardBadgeClass(type: string): string {
-  return AWARD_CONFIG[type]?.className ?? 'badge-merit';
-}
-
-/**
- * 수상 타입의 아이콘 반환
- * @example getAwardIcon('grand') // '🥇'
- */
-export function getAwardIcon(type: string): string {
-  return AWARD_CONFIG[type]?.icon ?? '🏆';
-}
-
-/**
- * 수상 타입의 색상 반환
- * @example getAwardColor('grand') // '#D4B886'
- */
-export function getAwardColor(type: string): string {
-  return AWARD_CONFIG[type]?.color ?? '#8b8b8b';
-}
-
-/**
- * 부문(섹터) 라벨 반환
- * @example getSectorLabel('government') // '정부'
- */
-export function getSectorLabel(sector: string | undefined): string | null {
-  if (!sector) return null;
-  return SECTOR_CONFIG[sector]?.label ?? null;
-}
-
-/**
- * 부문(섹터) 정렬 순서 반환
- * @example getSectorOrder('government') // 0
- */
-export function getSectorOrder(sector: string | undefined): number {
-  if (!sector) return 99;
-  return SECTOR_CONFIG[sector]?.order ?? 99;
-}
-
-/**
- * 수상 타입 정렬 순서 반환
- * @example getAwardTypeOrder('grand') // 0
- */
-export function getAwardTypeOrder(type: string): number {
-  const index = AWARD_TYPE_ORDER.indexOf(type as AwardType);
-  return index === -1 ? 99 : index;
-}
-
-/**
- * 수상작 배열을 타입 → 섹터 순으로 정렬
- */
-export function sortAwards<T extends { awardType: string; sector?: string }>(
-  awards: T[]
-): T[] {
-  return [...awards].sort((a, b) => {
-    // 먼저 awardType으로 정렬
-    const typeOrderA = getAwardTypeOrder(a.awardType);
-    const typeOrderB = getAwardTypeOrder(b.awardType);
-    if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
-
-    // 같은 타입이면 sector로 정렬
-    const sectorOrderA = getSectorOrder(a.sector);
-    const sectorOrderB = getSectorOrder(b.sector);
-    return sectorOrderA - sectorOrderB;
-  });
-}
-</file>
-
-<file path="src/lib/format.ts">
-/**
- * 포맷팅 관련 유틸리티 함수
- */
-
-/**
- * 날짜 문자열을 YYYY-MM-DD 형식으로 변환
- * @param dateString - 변환할 날짜 문자열
- * @returns YYYY-MM-DD 형식의 문자열. 유효하지 않은 경우 원본 반환
- * @example formatDate('2024-12-25') // '2024-12-25'
- * @example formatDate('December 25, 2024') // '2024-12-25'
- */
-export function formatDate(dateString: string): string {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * 날짜를 한국어 형식으로 변환
- * @param dateString - 변환할 날짜 문자열
- * @returns 'YYYY년 MM월 DD일' 형식의 문자열
- * @example formatDateKorean('2024-12-25') // '2024년 12월 25일'
- */
-export function formatDateKorean(dateString: string): string {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
-
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  return `${year}년 ${month}월 ${day}일`;
-}
-
-/**
- * 상대적 시간 표시 (예: '3일 전', '1주일 전')
- * @param dateString - 변환할 날짜 문자열
- * @returns 상대적 시간 문자열
- */
-export function formatRelativeTime(dateString: string): string {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
-
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return '오늘';
-  if (diffDays === 1) return '어제';
-  if (diffDays < 7) return `${diffDays}일 전`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}주 전`;
-  if (diffDays < 365) return `${Math.floor(diffDays / 30)}개월 전`;
-  return `${Math.floor(diffDays / 365)}년 전`;
-}
-</file>
-
-<file path="eslint.config.mjs">
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
-
-export default eslintConfig;
-</file>
-
-<file path="postcss.config.mjs">
-const config = {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-
-export default config;
-</file>
-
-<file path="public/file.svg">
-<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
-</file>
-
-<file path="public/globe.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
-</file>
-
-<file path="public/next.svg">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
-</file>
-
-<file path="public/vercel.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
-</file>
-
-<file path="public/window.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
-</file>
-
-<file path="README.md">
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-</file>
-
-<file path="src/app/api/keystatic/[...params]/route.tsx">
-import { makeRouteHandler } from '@keystatic/next/route-handler';
-import config from '../../../../../keystatic.config';
-
-export const { POST, GET } = makeRouteHandler({ config });
-</file>
-
-<file path="src/app/keystatic/[[...params]]/page.tsx">
-export { default } from '../keystatic';
-</file>
-
-<file path="src/app/keystatic/keystatic.tsx">
-'use client';
-
-import { makePage } from '@keystatic/next/ui/app';
-import config from '../../../keystatic.config';
-
-export default makePage(config);
-</file>
-
-<file path="src/app/news/[slug]/page.tsx">
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { reader } from '@/lib/reader';
-import { DocumentRenderer } from '@keystatic/core/renderer';
-
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-const categoryLabels: Record<string, { label: string; className: string }> = {
-  notice: { label: '공지사항', className: 'bg-[var(--color-navy-100)] text-[var(--color-navy-700)]' },
-  news: { label: '뉴스', className: 'bg-[var(--color-mint-100)] text-[var(--color-mint-700)]' },
-  event: { label: '이벤트', className: 'bg-[var(--color-yellow-100)] text-[var(--color-yellow-700)]' },
-};
-
-export async function generateStaticParams() {
-  const news = await reader.collections.news.all();
-  return news.map((item) => ({
-    slug: item.slug,
-  }));
-}
-
-export default async function NewsDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const newsItem = await reader.collections.news.read(slug);
-
-  if (!newsItem) {
-    notFound();
-  }
-
-  // MDX 본문 콘텐츠 가져오기
-  const content = await newsItem.content() as unknown as { children: unknown[] }[] | null;
-
-  const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
-
-  return (
-    <div className="py-8 lg:py-12">
-      <div className="container-custom max-w-3xl">
-        {/* Breadcrumb */}
-        <nav className="mb-6">
-          <ol className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
-            <li>
-              <Link href="/" className="hover:text-[var(--color-navy-600)]">홈</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/news" className="hover:text-[var(--color-navy-600)]">뉴스/공지</Link>
-            </li>
-            <li>/</li>
-            <li className="text-[var(--color-navy-900)] truncate max-w-[200px]">{newsItem.title}</li>
-          </ol>
-        </nav>
-
-        {/* Article */}
-        <article className="bg-white rounded-xl border border-[var(--border)] p-6 lg:p-10">
-          {/* Header */}
-          <header className="mb-8 pb-8 border-b border-[var(--border)]">
-            <div className="flex items-center gap-2 mb-4">
-              <span className={`text-sm px-3 py-1 rounded-full font-medium ${categoryInfo.className}`}>
-                {categoryInfo.label}
-              </span>
-              {newsItem.isImportant && (
-                <span className="text-sm px-3 py-1 rounded-full font-medium bg-red-100 text-red-700">
-                  중요
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-2xl lg:text-3xl font-bold text-[var(--color-navy-900)] mb-4">
-              {newsItem.title}
-            </h1>
-
-            <time className="text-[var(--muted-foreground)]">
-              {newsItem.date}
-            </time>
-          </header>
-
-          {/* Summary */}
-          {newsItem.summary && (
-            <div className="mb-8 p-6 bg-[#252525] rounded-lg border-l-4 border-gold-400">
-              <p className="text-lg text-gray-300 leading-relaxed">
-                {newsItem.summary}
-              </p>
-            </div>
-          )}
-
-          {/* MDX Content - 본문 렌더링 */}
-          {content && content.length > 0 && (
-            <div className="prose prose-invert prose-lg max-w-none
-              prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
-              prose-h2:text-xl prose-h3:text-lg
-              prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
-              prose-li:text-gray-300 prose-li:marker:text-gold-400
-              prose-ul:my-4 prose-ol:my-4
-              prose-strong:text-white prose-strong:font-semibold
-              prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
-              prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
-            ">
-              <DocumentRenderer document={content as any} />
-            </div>
-          )}
-        </article>
-
-        {/* Back Button */}
-        <div className="mt-8">
-          <Link
-            href="/news"
-            className="inline-flex items-center text-[var(--color-navy-600)] hover:text-[var(--color-navy-800)] font-medium"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            목록으로 돌아가기
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="src/app/notice/[slug]/page.tsx">
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { reader } from '@/lib/reader';
-import { DocumentRenderer } from '@keystatic/core/renderer';
-
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-const categoryLabels: Record<string, { label: string; className: string }> = {
-  notice: { label: '공지', className: 'bg-amber-500/15 text-amber-300 border border-amber-500/20' },
-  event: { label: '이벤트', className: 'bg-violet-500/15 text-violet-300 border border-violet-500/20' },
-  update: { label: '업데이트', className: 'bg-sky-500/15 text-sky-300 border border-sky-500/20' },
-};
-
-export async function generateStaticParams() {
-  const news = await reader.collections.news.all();
-  return news.map((item) => ({
-    slug: item.slug,
-  }));
-}
-
-export default async function NoticeDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const newsItem = await reader.collections.news.read(slug);
-
-  if (!newsItem) {
-    notFound();
-  }
-
-  // MDX 본문 콘텐츠 가져오기
-  const content = await newsItem.content() as unknown as { children: unknown[] }[] | null;
-
-  const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
-  // CMS의 thumbnail 필드 사용 (하드코딩 제거)
-  const posterImage = newsItem.thumbnail || null;
-
-  return (
-    <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
-      <div className="container-custom py-8 lg:py-12">
-        {/* Breadcrumb */}
-        <nav className="mb-8 max-w-4xl mx-auto">
-          <ol className="flex items-center gap-2 text-sm text-gray-500">
-            <li>
-              <Link href="/" className="hover:text-gold-400 transition-colors">Home</Link>
-            </li>
-            <li className="text-gray-600">/</li>
-            <li>
-              <Link href="/notice" className="hover:text-gold-400 transition-colors">Notice</Link>
-            </li>
-            <li className="text-gray-600">/</li>
-            <li className="text-gray-300 truncate max-w-[200px]">{newsItem.title}</li>
-          </ol>
-        </nav>
-
-        {/* Article Card */}
-        <article className="max-w-4xl mx-auto bg-[#1a1a1a] border border-[#333] rounded-xl p-8 md:p-12">
-          {/* Header */}
-          <header className="mb-8 pb-6 border-b border-[#333]">
-            <div className="flex items-center gap-3 mb-4">
-              <span className={`text-[10px] px-3 py-1 font-mono uppercase tracking-wider rounded ${categoryInfo.className}`}>
-                {categoryInfo.label}
-              </span>
-              {newsItem.isImportant && (
-                <span className="text-[10px] px-3 py-1 font-mono uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/20 rounded">
-                  Important
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-100 mb-4 leading-tight">
-              {newsItem.title}
-            </h1>
-
-            <time className="text-gray-500 font-mono text-sm">
-              {newsItem.date}
-            </time>
-          </header>
-
-          {/* Poster Image - CMS thumbnail 필드 사용 */}
-          {posterImage && (
-            <div className="mb-8 flex justify-center">
-              <div className="relative w-full max-w-[500px]">
-                <Image
-                  src={posterImage}
-                  alt={newsItem.title || '공지사항 포스터'}
-                  width={500}
-                  height={667}
-                  className="w-full h-auto max-h-[500px] object-contain"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Summary */}
-          {newsItem.summary && (
-            <div className="mb-8 p-6 bg-[#252525] rounded-lg border-l-4 border-gold-400">
-              <p className="text-lg text-gray-300 leading-relaxed">
-                {newsItem.summary}
-              </p>
-            </div>
-          )}
-
-          {/* MDX Content - 본문 렌더링 */}
-          {content && content.length > 0 && (
-            <div className="prose prose-invert prose-lg max-w-none
-              prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
-              prose-h2:text-xl prose-h3:text-lg
-              prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
-              prose-li:text-gray-300 prose-li:marker:text-gold-400
-              prose-ul:my-4 prose-ol:my-4
-              prose-strong:text-white prose-strong:font-semibold
-              prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
-              prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
-            ">
-              <DocumentRenderer document={content as any} />
-            </div>
-          )}
-
-          {/* Footer Action Bar */}
-          <div className="mt-10 pt-6 border-t border-[#333] flex items-center justify-between">
-            <Link
-              href="/notice"
-              className="inline-flex items-center text-gray-400 hover:text-gold-400 font-medium transition-colors group"
-            >
-              <svg className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-              </svg>
-              목록으로
-            </Link>
-            {newsItem.externalUrl && (
-              <a
-                href={newsItem.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-gold inline-flex items-center gap-2 px-6 py-3"
-              >
-                {newsItem.category === 'event' ? '참여하기' : '바로가기'}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            )}
-          </div>
-        </article>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="src/app/notice/page.tsx">
-import { reader } from '@/lib/reader';
-import NoticeListItem from '@/components/cards/NoticeListItem';
-
-export default async function NoticePage() {
-  const news = await reader.collections.news.all();
-
-  // 날짜순 정렬 (최신순)
-  const sortedNews = news.sort((a, b) => {
-    const dateA = a.entry.date ? new Date(a.entry.date).getTime() : 0;
-    const dateB = b.entry.date ? new Date(b.entry.date).getTime() : 0;
-    return dateB - dateA;
-  });
-
-  return (
-    <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
-      <div className="container-custom py-8 lg:py-12">
-        {/* Header */}
-        <header className="mb-12 md:mb-16">
-          <p className="text-[11px] font-mono tracking-[0.25em] text-gray-500 uppercase mb-3">
-            Announcements
-          </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
-            Notice
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl">
-            대한민국 청년정책 어워즈의 공지사항과 안내를 확인하세요.
-          </p>
-        </header>
-
-        {/* Board List */}
-        <section className="bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden">
-          {/* Table Header */}
-          <div className="hidden md:flex items-center py-4 px-6 bg-[#222] border-b border-[#333] text-xs font-mono text-gray-500 uppercase tracking-wider">
-            <div className="w-16 text-center">No</div>
-            <div className="w-28 text-center">분류</div>
-            <div className="flex-1">제목</div>
-            <div className="w-32 text-right">작성일</div>
-          </div>
-
-          {/* List Items */}
-          {sortedNews.length > 0 ? (
-            <div>
-              {sortedNews.map((item, index) => (
-                <NoticeListItem
-                  key={item.slug}
-                  slug={item.slug}
-                  rowNumber={sortedNews.length - index}
-                  title={item.entry.title || ''}
-                  category={item.entry.category}
-                  date={item.entry.date || ''}
-                  isImportant={item.entry.isImportant}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-24">
-              <p className="text-gray-500">아직 등록된 공지사항이 없습니다.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Footer Info */}
-        <div className="mt-6 text-right">
-          <span className="text-sm text-gray-500 font-mono">
-            Total {sortedNews.length} posts
-          </span>
-        </div>
-      </div>
-    </div>
-  );
 }
 </file>
 
@@ -1567,7 +1225,7 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
   "sector": "nonprofit",
   "provider": "청년재단",
   "summary": "2025 대한민국 청년정책 어워즈 최우수상 (비영리 부문)",
-  "officialUrl": "https://kyf.or.kr/"
+  "officialUrl": "https://kyf.or.kr/user/business/businessGuide.do"
 }
 </file>
 
@@ -1580,7 +1238,7 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
   "sector": "government",
   "provider": "고용노동부",
   "summary": "2025 대한민국 청년정책 어워즈 최우수상 (정부 부문)",
-  "officialUrl": "https://www.work.go.kr/youthjob/main/index.do"
+  "officialUrl": "https://yw.work24.go.kr/main.do"
 }
 </file>
 
@@ -1606,7 +1264,7 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
   "sector": "local",
   "provider": "전라남도 화순군",
   "summary": "2025 대한민국 청년정책 어워즈 혁신상",
-  "officialUrl": "https://www.hwasun.go.kr/youth/contents.do?S=S08&M=070100000000"
+  "officialUrl": "https://www.hwasun.go.kr/youth/contents.do?S=S08&M=040200000000"
 }
 </file>
 
@@ -1632,7 +1290,7 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
   "sector": "nonprofit",
   "provider": "두나무 / (사)함께만드는세상",
   "summary": "2025 대한민국 청년정책 어워즈 혁신상",
-  "officialUrl": "https://www.bss.or.kr/archive/data-room/9864/"
+  "officialUrl": "https://www.dunamunextseries.or.kr/"
 }
 </file>
 
@@ -1726,6 +1384,39 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
   "icon": "🌟",
   "order": 4,
   "color": "#4a9ad8"
+}
+</file>
+
+<file path="src/content/news/2025-awards-ceremony/index.json">
+{
+  "title": "2025 대한민국 청년정책 어워즈 시상식 안내",
+  "date": "2024-12-23",
+  "category": "event",
+  "summary": "청년이 직접 뽑은 정책을 국회에서 시상하는 자리입니다. 2024년 12월 23일 10:00~11:00, 국회도서관 대강당에서 개최됩니다.",
+  "externalUrl": "https://event-us.kr/opcl/event/118545",
+  "isImportant": true
+}
+</file>
+
+<file path="src/content/news/2025-awards-discovery-team/index.json">
+{
+  "title": "2025 대한민국 청년정책 어워즈 발굴단 모집",
+  "date": "2024-11-10",
+  "category": "event",
+  "summary": "청년들이 주체가 되어 혁신적인 정책을 발굴하고 어워즈 운영에 참여하는 프로그램입니다. 20~39세 대한민국 청년 누구나 참여 가능합니다.",
+  "externalUrl": "https://opcl.kr/event-details/ij_1apoBGedfapFawFVR/",
+  "isImportant": true
+}
+</file>
+
+<file path="src/content/news/2025-awards-voting/index.json">
+{
+  "title": "2025년 대한민국 청년정책 어워즈 전국민 투표",
+  "date": "2025-12-08",
+  "category": "event",
+  "summary": "청년이 직접 뽑는 최고의 청년정책! 12월 8일(월)~14일(일) 18:00까지 투표에 참여하고 스타벅스 아메리카노를 받아가세요.",
+  "externalUrl": "https://opcl.kr/event-details/REiW_JoBGedfapFaUNtq/",
+  "isImportant": true
 }
 </file>
 
@@ -2039,6 +1730,276 @@ YCDP(Youth Center for Dialogue and Peace)는 국제적 협력을 통한 청년 �
 }
 </file>
 
+<file path="src/lib/award-utils.ts">
+/**
+ * Award 관련 유틸리티 함수 및 상수
+ * 수상 타입, 부문 라벨, 배지 스타일 등을 중앙 관리
+ */
+
+// 수상 타입 정렬 순서
+export const AWARD_TYPE_ORDER = [
+  'grand',
+  'excellence',
+  'merit',
+  'innovation',
+  'global',
+  'special',
+  'best',
+  'trending',
+  'effort',
+  'potential',
+] as const;
+
+export type AwardType = (typeof AWARD_TYPE_ORDER)[number];
+
+// 수상 타입별 설정 (라벨, 배지 클래스, 아이콘, 색상)
+export const AWARD_CONFIG: Record<
+  string,
+  {
+    label: string;
+    shortLabel: string;
+    className: string;
+    icon: string;
+    color: string;
+  }
+> = {
+  // 2024~ 상 부문
+  grand: {
+    label: '청년정책 대상',
+    shortLabel: '대상',
+    className: 'badge-grand',
+    icon: '🥇',
+    color: '#D4B886',
+  },
+  excellence: {
+    label: '최우수 청년정책상',
+    shortLabel: '최우수상',
+    className: 'badge-excellence',
+    icon: '🥈',
+    color: '#a3a3a3',
+  },
+  merit: {
+    label: '우수 청년정책상',
+    shortLabel: '우수상',
+    className: 'badge-merit',
+    icon: '🥉',
+    color: '#8b8b8b',
+  },
+  innovation: {
+    label: '청년정책 혁신상',
+    shortLabel: '혁신상',
+    className: 'badge-innovation',
+    icon: '💡',
+    color: '#34d399',
+  },
+  global: {
+    label: '글로벌 청년정책상',
+    shortLabel: '글로벌상',
+    className: 'badge-global',
+    icon: '🌍',
+    color: '#7dd3c0',
+  },
+  special: {
+    label: '특별상',
+    shortLabel: '특별상',
+    className: 'badge-special',
+    icon: '⭐',
+    color: '#a78bfa',
+  },
+  // 2023 상 부문
+  best: {
+    label: '열고닫기 최우수상',
+    shortLabel: 'Best',
+    className: 'badge-best',
+    icon: '🏆',
+    color: '#D4B886',
+  },
+  trending: {
+    label: '갑자기떡상',
+    shortLabel: '떡상',
+    className: 'badge-trending',
+    icon: '📈',
+    color: '#f472b6',
+  },
+  effort: {
+    label: '노력은가상',
+    shortLabel: '노력상',
+    className: 'badge-effort',
+    icon: '💪',
+    color: '#fbbf24',
+  },
+  potential: {
+    label: '왕이될관상',
+    shortLabel: '가능성상',
+    className: 'badge-potential',
+    icon: '👑',
+    color: '#a78bfa',
+  },
+};
+
+// 부문(섹터) 설정
+export const SECTOR_CONFIG: Record<string, { label: string; order: number }> = {
+  government: { label: '정부', order: 0 },
+  local: { label: '지자체', order: 1 },
+  corporate: { label: '기업', order: 2 },
+  nonprofit: { label: 'NGO', order: 3 },
+};
+
+/**
+ * 수상 타입의 전체 라벨 반환
+ * @example getAwardLabel('grand') // '청년정책 대상'
+ */
+export function getAwardLabel(type: string): string {
+  return AWARD_CONFIG[type]?.label ?? 'Award';
+}
+
+/**
+ * 수상 타입의 짧은 라벨 반환
+ * @example getAwardShortLabel('grand') // '대상'
+ */
+export function getAwardShortLabel(type: string): string {
+  return AWARD_CONFIG[type]?.shortLabel ?? 'Award';
+}
+
+/**
+ * 수상 타입의 배지 클래스 반환
+ * @example getAwardBadgeClass('grand') // 'badge-grand'
+ */
+export function getAwardBadgeClass(type: string): string {
+  return AWARD_CONFIG[type]?.className ?? 'badge-merit';
+}
+
+/**
+ * 수상 타입의 아이콘 반환
+ * @example getAwardIcon('grand') // '🥇'
+ */
+export function getAwardIcon(type: string): string {
+  return AWARD_CONFIG[type]?.icon ?? '🏆';
+}
+
+/**
+ * 수상 타입의 색상 반환
+ * @example getAwardColor('grand') // '#D4B886'
+ */
+export function getAwardColor(type: string): string {
+  return AWARD_CONFIG[type]?.color ?? '#8b8b8b';
+}
+
+/**
+ * 부문(섹터) 라벨 반환
+ * @example getSectorLabel('government') // '정부'
+ */
+export function getSectorLabel(sector: string | undefined): string | null {
+  if (!sector) return null;
+  return SECTOR_CONFIG[sector]?.label ?? null;
+}
+
+/**
+ * 부문(섹터) 정렬 순서 반환
+ * @example getSectorOrder('government') // 0
+ */
+export function getSectorOrder(sector: string | undefined): number {
+  if (!sector) return 99;
+  return SECTOR_CONFIG[sector]?.order ?? 99;
+}
+
+/**
+ * 수상 타입 정렬 순서 반환
+ * @example getAwardTypeOrder('grand') // 0
+ */
+export function getAwardTypeOrder(type: string): number {
+  const index = AWARD_TYPE_ORDER.indexOf(type as AwardType);
+  return index === -1 ? 99 : index;
+}
+
+/**
+ * 수상작 배열을 타입 → 섹터 순으로 정렬
+ */
+export function sortAwards<T extends { awardType: string; sector?: string }>(
+  awards: T[]
+): T[] {
+  return [...awards].sort((a, b) => {
+    // 먼저 awardType으로 정렬
+    const typeOrderA = getAwardTypeOrder(a.awardType);
+    const typeOrderB = getAwardTypeOrder(b.awardType);
+    if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
+
+    // 같은 타입이면 sector로 정렬
+    const sectorOrderA = getSectorOrder(a.sector);
+    const sectorOrderB = getSectorOrder(b.sector);
+    return sectorOrderA - sectorOrderB;
+  });
+}
+</file>
+
+<file path="src/lib/format.ts">
+/**
+ * 포맷팅 관련 유틸리티 함수
+ */
+
+/**
+ * 날짜 문자열을 YYYY-MM-DD 형식으로 변환
+ * @param dateString - 변환할 날짜 문자열
+ * @returns YYYY-MM-DD 형식의 문자열. 유효하지 않은 경우 원본 반환
+ * @example formatDate('2024-12-25') // '2024-12-25'
+ * @example formatDate('December 25, 2024') // '2024-12-25'
+ */
+export function formatDate(dateString: string): string {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * 날짜를 한국어 형식으로 변환
+ * @param dateString - 변환할 날짜 문자열
+ * @returns 'YYYY년 MM월 DD일' 형식의 문자열
+ * @example formatDateKorean('2024-12-25') // '2024년 12월 25일'
+ */
+export function formatDateKorean(dateString: string): string {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
+}
+
+/**
+ * 상대적 시간 표시 (예: '3일 전', '1주일 전')
+ * @param dateString - 변환할 날짜 문자열
+ * @returns 상대적 시간 문자열
+ */
+export function formatRelativeTime(dateString: string): string {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return '오늘';
+  if (diffDays === 1) return '어제';
+  if (diffDays < 7) return `${diffDays}일 전`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}주 전`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}개월 전`;
+  return `${Math.floor(diffDays / 365)}년 전`;
+}
+</file>
+
 <file path="src/lib/reader.ts">
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
@@ -2126,6 +2087,963 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+</file>
+
+<file path="src/app/keystatic/layout.tsx">
+export default function KeystaticLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <style>{`
+        body {
+          background: #141211 !important;
+          color: #e8e4e0 !important;
+        }
+        /* Keystatic 다크 테마 */
+        [data-keystatic-root] {
+          --ks-background: #141211;
+          --ks-surface: #1a1512;
+          --ks-border: #302820;
+          --ks-text: #e8e4e0;
+          --ks-text-muted: #a09590;
+        }
+        /* 헤더/푸터 숨기기 */
+        header, footer {
+          display: none !important;
+        }
+      `}</style>
+      <div className="fixed inset-0 z-50">
+        {children}
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="src/app/news/[slug]/page.tsx">
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import type { Metadata } from 'next';
+import { reader } from '@/lib/reader';
+import { DocumentRenderer } from '@keystatic/core/renderer';
+import ShareButtons from '@/components/article/ShareButtons';
+import RelatedArticles from '@/components/article/RelatedArticles';
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+const categoryLabels: Record<string, { label: string; className: string }> = {
+  notice: { label: '공지사항', className: 'bg-amber-500/15 text-amber-300 border border-amber-500/20' },
+  news: { label: '뉴스', className: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20' },
+  event: { label: '이벤트', className: 'bg-violet-500/15 text-violet-300 border border-violet-500/20' },
+};
+
+export async function generateStaticParams() {
+  const news = await reader.collections.news.all();
+  return news.map((item) => ({
+    slug: item.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const newsItem = await reader.collections.news.read(slug);
+
+  if (!newsItem) {
+    return {
+      title: '뉴스를 찾을 수 없습니다 | 대한민국 청년정책 어워즈',
+    };
+  }
+
+  const categoryLabel = categoryLabels[newsItem.category]?.label || '뉴스';
+  const title = `${newsItem.title} | ${categoryLabel} - 대한민국 청년정책 어워즈`;
+  const description = newsItem.summary || `대한민국 청년정책 어워즈 ${categoryLabel}입니다.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      locale: 'ko_KR',
+      publishedTime: newsItem.date || undefined,
+      images: newsItem.thumbnail
+        ? [{ url: newsItem.thumbnail, width: 1200, height: 630, alt: newsItem.title || '뉴스 이미지' }]
+        : [{ url: '/images/og-image.jpg', width: 1200, height: 630, alt: '대한민국 청년정책 어워즈' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: newsItem.thumbnail ? [newsItem.thumbnail] : ['/images/og-image.jpg'],
+    },
+  };
+}
+
+export default async function NewsDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const newsItem = await reader.collections.news.read(slug);
+
+  if (!newsItem) {
+    notFound();
+  }
+
+  // MDX 본문 콘텐츠 가져오기
+  const content = await newsItem.content() as unknown as { children: unknown[] }[] | null;
+
+  // 관련 기사 가져오기 (같은 카테고리, 현재 기사 제외)
+  const allNews = await reader.collections.news.all();
+  const relatedNews = allNews
+    .filter(item => item.slug !== slug && item.entry.category === newsItem.category)
+    .sort((a, b) => {
+      const dateA = new Date(a.entry.date || '').getTime();
+      const dateB = new Date(b.entry.date || '').getTime();
+      return dateB - dateA;
+    })
+    .slice(0, 3)
+    .map(item => ({
+      slug: item.slug,
+      title: item.entry.title || '',
+      date: item.entry.date || undefined,
+      thumbnail: item.entry.thumbnail || undefined,
+    }));
+
+  const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
+  const thumbnailImage = newsItem.thumbnail || null;
+
+  return (
+    <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12">
+        {/* Breadcrumb */}
+        <nav className="mb-8 animate-fade-in-up">
+          <ol className="flex items-center gap-2 text-sm text-gray-500">
+            <li>
+              <Link href="/" className="hover:text-gold-400 transition-colors">Home</Link>
+            </li>
+            <li className="text-gray-600">/</li>
+            <li>
+              <Link href="/news" className="hover:text-gold-400 transition-colors">News</Link>
+            </li>
+            <li className="text-gray-600">/</li>
+            <li className="text-gray-300 truncate max-w-[200px]">{newsItem.title}</li>
+          </ol>
+        </nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Main Article */}
+          <article className="lg:col-span-8 animate-fade-in-up animate-delay-1">
+            {/* Hero Image */}
+            {thumbnailImage && (
+              <div className="relative aspect-video mb-8 rounded-xl overflow-hidden">
+                <Image
+                  src={thumbnailImage}
+                  alt={newsItem.title || '뉴스 이미지'}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              </div>
+            )}
+
+            {/* Article Card */}
+            <div className="bg-[#1a1a1a] border border-[#333] rounded-xl p-8 md:p-10">
+              {/* Header */}
+              <header className="mb-8 pb-6 border-b border-[#333]">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className={`text-[10px] px-3 py-1 font-mono uppercase tracking-wider rounded ${categoryInfo.className}`}>
+                    {categoryInfo.label}
+                  </span>
+                  {newsItem.isImportant && (
+                    <span className="text-[10px] px-3 py-1 font-mono uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/20 rounded">
+                      Important
+                    </span>
+                  )}
+                </div>
+
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-100 mb-4 leading-tight">
+                  {newsItem.title}
+                </h1>
+
+                <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <time className="font-mono">{newsItem.date}</time>
+                </div>
+              </header>
+
+              {/* Summary */}
+              {newsItem.summary && (
+                <div className="mb-8 p-6 bg-[#252525] rounded-lg border-l-4 border-gold-400">
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    {newsItem.summary}
+                  </p>
+                </div>
+              )}
+
+              {/* MDX Content */}
+              {content && content.length > 0 && (
+                <div className="prose prose-invert prose-lg max-w-none
+                  prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
+                  prose-h2:text-xl prose-h3:text-lg
+                  prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+                  prose-li:text-gray-300 prose-li:marker:text-gold-400
+                  prose-ul:my-4 prose-ol:my-4
+                  prose-strong:text-white prose-strong:font-semibold
+                  prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
+                  prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
+                  prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
+                ">
+                  <DocumentRenderer document={content as any} />
+                </div>
+              )}
+
+              {/* Footer Action Bar */}
+              <div className="mt-10 pt-6 border-t border-[#333] flex items-center justify-between">
+                <Link
+                  href="/news"
+                  className="inline-flex items-center text-gray-400 hover:text-gold-400 font-medium transition-colors group"
+                >
+                  <svg className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  목록으로
+                </Link>
+                {newsItem.externalUrl && (
+                  <a
+                    href={newsItem.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold inline-flex items-center gap-2 px-6 py-3"
+                  >
+                    원문 보기
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 space-y-6 animate-fade-in-up animate-delay-2">
+            {/* Share Buttons */}
+            <ShareButtons title={newsItem.title || ''} />
+
+            {/* Article Info */}
+            <div className="bg-[#1a1a1a] border border-[#333] rounded-xl p-6">
+              <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-4">
+                Article Info
+              </h3>
+              <dl className="space-y-4">
+                <div>
+                  <dt className="text-xs text-gray-500 mb-1">발행일</dt>
+                  <dd className="text-gray-300 font-mono text-sm">{newsItem.date}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500 mb-1">카테고리</dt>
+                  <dd>
+                    <span className={`inline-block text-[10px] px-2 py-0.5 font-mono uppercase tracking-wider rounded ${categoryInfo.className}`}>
+                      {categoryInfo.label}
+                    </span>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* Related Articles */}
+            {relatedNews.length > 0 && (
+              <RelatedArticles articles={relatedNews} basePath="/news" />
+            )}
+
+            {/* Notice Link */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#252525] border border-[#333] rounded-xl p-6">
+              <p className="text-gray-400 text-sm mb-3">공지사항도 확인하세요</p>
+              <Link
+                href="/notice"
+                className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 font-medium transition-colors group"
+              >
+                공지사항 보기
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/notice/[slug]/page.tsx">
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import type { Metadata } from 'next';
+import { reader } from '@/lib/reader';
+import { DocumentRenderer } from '@keystatic/core/renderer';
+import ShareButtons from '@/components/article/ShareButtons';
+import RelatedArticles from '@/components/article/RelatedArticles';
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+const categoryLabels: Record<string, { label: string; className: string }> = {
+  notice: { label: '공지', className: 'bg-amber-500/15 text-amber-300 border border-amber-500/20' },
+  event: { label: '이벤트', className: 'bg-violet-500/15 text-violet-300 border border-violet-500/20' },
+  update: { label: '업데이트', className: 'bg-sky-500/15 text-sky-300 border border-sky-500/20' },
+};
+
+export async function generateStaticParams() {
+  const news = await reader.collections.news.all();
+  return news.map((item) => ({
+    slug: item.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const newsItem = await reader.collections.news.read(slug);
+
+  if (!newsItem) {
+    return {
+      title: '공지사항을 찾을 수 없습니다 | 대한민국 청년정책 어워즈',
+    };
+  }
+
+  const categoryLabel = categoryLabels[newsItem.category]?.label || '공지';
+  const title = `${newsItem.title} | ${categoryLabel} - 대한민국 청년정책 어워즈`;
+  const description = newsItem.summary || `대한민국 청년정책 어워즈 ${categoryLabel}입니다.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      locale: 'ko_KR',
+      publishedTime: newsItem.date || undefined,
+      images: newsItem.thumbnail
+        ? [{ url: newsItem.thumbnail, width: 1200, height: 630, alt: newsItem.title || '공지사항 이미지' }]
+        : [{ url: '/images/og-image.jpg', width: 1200, height: 630, alt: '대한민국 청년정책 어워즈' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: newsItem.thumbnail ? [newsItem.thumbnail] : ['/images/og-image.jpg'],
+    },
+  };
+}
+
+export default async function NoticeDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const newsItem = await reader.collections.news.read(slug);
+
+  if (!newsItem) {
+    notFound();
+  }
+
+  // MDX 본문 콘텐츠 가져오기
+  const content = await newsItem.content() as unknown as { children: unknown[] }[] | null;
+
+  // 관련 공지사항 가져오기 (현재 공지 제외, 최신순)
+  const allNews = await reader.collections.news.all();
+  const relatedNotices = allNews
+    .filter(item => item.slug !== slug)
+    .sort((a, b) => {
+      const dateA = new Date(a.entry.date || '').getTime();
+      const dateB = new Date(b.entry.date || '').getTime();
+      return dateB - dateA;
+    })
+    .slice(0, 3)
+    .map(item => ({
+      slug: item.slug,
+      title: item.entry.title || '',
+      date: item.entry.date || undefined,
+      thumbnail: item.entry.thumbnail || undefined,
+    }));
+
+  const categoryInfo = categoryLabels[newsItem.category] || categoryLabels.notice;
+  const posterImage = newsItem.thumbnail || null;
+
+  return (
+    <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12">
+        {/* Breadcrumb */}
+        <nav className="mb-8 animate-fade-in-up">
+          <ol className="flex items-center gap-2 text-sm text-gray-500">
+            <li>
+              <Link href="/" className="hover:text-gold-400 transition-colors">Home</Link>
+            </li>
+            <li className="text-gray-600">/</li>
+            <li>
+              <Link href="/notice" className="hover:text-gold-400 transition-colors">Notice</Link>
+            </li>
+            <li className="text-gray-600">/</li>
+            <li className="text-gray-300 truncate max-w-[200px]">{newsItem.title}</li>
+          </ol>
+        </nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Main Article */}
+          <article className="lg:col-span-8 animate-fade-in-up animate-delay-1">
+            {/* Hero Image - 크게 표시 */}
+            {posterImage && (
+              <div className="relative mb-8 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333]">
+                <Image
+                  src={posterImage}
+                  alt={newsItem.title || '공지사항 포스터'}
+                  width={800}
+                  height={1067}
+                  className="w-full h-auto object-contain"
+                  priority
+                />
+              </div>
+            )}
+
+            {/* Article Card */}
+            <div className="bg-[#1a1a1a] border border-[#333] rounded-xl p-8 md:p-10">
+              {/* Header */}
+              <header className="mb-8 pb-6 border-b border-[#333]">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className={`text-[10px] px-3 py-1 font-mono uppercase tracking-wider rounded ${categoryInfo.className}`}>
+                    {categoryInfo.label}
+                  </span>
+                  {newsItem.isImportant && (
+                    <span className="text-[10px] px-3 py-1 font-mono uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/20 rounded">
+                      Important
+                    </span>
+                  )}
+                </div>
+
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-100 mb-4 leading-tight">
+                  {newsItem.title}
+                </h1>
+
+                <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <time className="font-mono">{newsItem.date}</time>
+                </div>
+              </header>
+
+              {/* MDX Content 또는 Summary 표시 */}
+              {content && content.length > 0 ? (
+                <>
+                  {/* Summary - 요약 박스 */}
+                  {newsItem.summary && (
+                    <div className="mb-8 p-6 bg-[#252525] rounded-lg border-l-4 border-gold-400">
+                      <p className="text-lg text-gray-300 leading-relaxed">
+                        {newsItem.summary}
+                      </p>
+                    </div>
+                  )}
+                  {/* MDX 본문 */}
+                  <div className="prose prose-invert prose-lg max-w-none
+                    prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-8 prose-headings:mb-4
+                    prose-h2:text-xl prose-h3:text-lg
+                    prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+                    prose-li:text-gray-300 prose-li:marker:text-gold-400
+                    prose-ul:my-4 prose-ol:my-4
+                    prose-strong:text-white prose-strong:font-semibold
+                    prose-a:text-gold-400 prose-a:no-underline hover:prose-a:underline
+                    prose-blockquote:border-gold-400 prose-blockquote:bg-[#252525] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
+                    prose-code:text-gold-300 prose-code:bg-[#252525] prose-code:px-1 prose-code:rounded
+                  ">
+                    <DocumentRenderer document={content as any} />
+                  </div>
+                </>
+              ) : (
+                /* 본문이 없으면 Summary를 본문처럼 크게 표시 */
+                newsItem.summary && (
+                  <div className="py-8">
+                    <p className="text-xl md:text-2xl text-gray-200 leading-relaxed whitespace-pre-line">
+                      {newsItem.summary}
+                    </p>
+                  </div>
+                )
+              )}
+
+              {/* 큰 신청 버튼 - 본문 하단 */}
+              {newsItem.externalUrl && (
+                <div className="mt-10 mb-6">
+                  <a
+                    href={newsItem.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold w-full flex items-center justify-center gap-3 px-8 py-5 text-lg font-semibold"
+                  >
+                    👉 {newsItem.category === 'event' ? '지금 바로 참여하기' : '지금 바로 신청하기'}
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              )}
+
+              {/* Footer Action Bar */}
+              <div className="mt-6 pt-6 border-t border-[#333] flex items-center justify-between">
+                <Link
+                  href="/notice"
+                  className="inline-flex items-center text-gray-400 hover:text-gold-400 font-medium transition-colors group"
+                >
+                  <svg className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  목록으로
+                </Link>
+                {newsItem.externalUrl && (
+                  <a
+                    href={newsItem.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-outline-gold inline-flex items-center gap-2 px-6 py-3"
+                  >
+                    {newsItem.category === 'event' ? '참여하기' : '바로가기'}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 space-y-6 animate-fade-in-up animate-delay-2">
+            {/* Share Buttons */}
+            <ShareButtons title={newsItem.title || ''} />
+
+            {/* Notice Info */}
+            <div className="bg-[#1a1a1a] border border-[#333] rounded-xl p-6">
+              <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-4">
+                Notice Info
+              </h3>
+              <dl className="space-y-4">
+                <div>
+                  <dt className="text-xs text-gray-500 mb-1">등록일</dt>
+                  <dd className="text-gray-300 font-mono text-sm">{newsItem.date}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500 mb-1">분류</dt>
+                  <dd>
+                    <span className={`inline-block text-[10px] px-2 py-0.5 font-mono uppercase tracking-wider rounded ${categoryInfo.className}`}>
+                      {categoryInfo.label}
+                    </span>
+                  </dd>
+                </div>
+                {newsItem.isImportant && (
+                  <div>
+                    <dt className="text-xs text-gray-500 mb-1">중요도</dt>
+                    <dd>
+                      <span className="inline-block text-[10px] px-2 py-0.5 font-mono uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/20 rounded">
+                        Important
+                      </span>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
+            {/* Related Notices */}
+            {relatedNotices.length > 0 && (
+              <RelatedArticles
+                articles={relatedNotices}
+                basePath="/notice"
+                title="Other Notices"
+              />
+            )}
+
+            {/* News Link */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#252525] border border-[#333] rounded-xl p-6">
+              <p className="text-gray-400 text-sm mb-3">뉴스도 확인하세요</p>
+              <Link
+                href="/news"
+                className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 font-medium transition-colors group"
+              >
+                뉴스 보기
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/notice/page.tsx">
+import Link from 'next/link';
+import { reader } from '@/lib/reader';
+import NoticeListItem from '@/components/cards/NoticeListItem';
+
+export default async function NoticePage() {
+  const news = await reader.collections.news.all();
+
+  // 날짜순 정렬 (최신순)
+  const sortedNews = [...news].sort((a, b) => {
+    const dateA = a.entry.date ? new Date(a.entry.date).getTime() : 0;
+    const dateB = b.entry.date ? new Date(b.entry.date).getTime() : 0;
+    return dateB - dateA;
+  });
+
+  return (
+    <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
+      <div className="container-custom py-8 lg:py-12">
+        {/* Header */}
+        <header className="mb-12 md:mb-16 animate-fade-in-up">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-px bg-gradient-to-r from-gold-500/50 to-transparent" />
+            <p className="text-[11px] font-mono tracking-[0.25em] text-gold-500/60 uppercase">
+              Announcements
+            </p>
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
+            Notice
+          </h1>
+          <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
+            대한민국 청년정책 어워즈의 공지사항과 안내를 확인하세요.
+          </p>
+        </header>
+
+        {sortedNews.length > 0 ? (
+          <section className="animate-fade-in-up animate-delay-1">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500">
+                All Notices
+              </span>
+              <div className="flex-1 h-px bg-[#333]" />
+              <span className="text-[10px] font-mono text-gray-600">
+                {sortedNews.length} posts
+              </span>
+            </div>
+
+            {/* Board List */}
+            <div className="bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden">
+              {/* Table Header */}
+              <div className="hidden md:flex items-center py-4 px-6 bg-[#1f1f1f] border-b border-[#333] text-[10px] font-mono text-gray-500 uppercase tracking-wider">
+                <div className="w-16 text-center">No</div>
+                <div className="w-28 text-center">Category</div>
+                <div className="flex-1">Title</div>
+                <div className="w-32 text-right">Date</div>
+              </div>
+
+              {/* List Items */}
+              <div>
+                {sortedNews.map((item, index) => (
+                  <NoticeListItem
+                    key={item.slug}
+                    slug={item.slug}
+                    rowNumber={sortedNews.length - index}
+                    title={item.entry.title || ''}
+                    category={item.entry.category}
+                    date={item.entry.date || ''}
+                    isImportant={item.entry.isImportant}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : (
+          <div className="text-center py-24">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#1a1a1a] flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <p className="text-gray-500 text-lg mb-2">아직 등록된 공지사항이 없습니다.</p>
+            <p className="text-gray-600 text-sm">새로운 공지가 곧 업데이트됩니다.</p>
+          </div>
+        )}
+
+        {/* News Link */}
+        <div className="mt-20 pt-12 border-t border-[#252525]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-gradient-to-r from-[#1a1a1a] to-transparent rounded-lg border border-[#333]">
+            <div>
+              <p className="text-gray-300 font-medium mb-1">뉴스를 찾으시나요?</p>
+              <p className="text-gray-500 text-sm">어워즈 관련 언론 보도를 확인하세요.</p>
+            </div>
+            <Link href="/news" className="btn-outline-gold inline-flex items-center gap-2 shrink-0">
+              뉴스 보기
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/sitemap.ts">
+import { MetadataRoute } from 'next';
+import fs from 'fs';
+import path from 'path';
+
+const BASE_URL = 'https://youthpolicyawards.com';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPages = [
+    {
+      url: BASE_URL,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 1,
+    },
+    {
+      url: `${BASE_URL}/awards`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/news`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/notice`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+  ];
+
+  // Awards 동적 페이지
+  const awardsDir = path.join(process.cwd(), 'src/content/awards');
+  let awardPages: MetadataRoute.Sitemap = [];
+
+  if (fs.existsSync(awardsDir)) {
+    const folders = fs.readdirSync(awardsDir);
+    awardPages = folders
+      .filter(folder => {
+        const folderPath = path.join(awardsDir, folder);
+        return fs.statSync(folderPath).isDirectory();
+      })
+      .map(folder => ({
+        url: `${BASE_URL}/awards/${folder}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      }));
+  }
+
+  // News 동적 페이지
+  const newsDir = path.join(process.cwd(), 'src/content/news');
+  let newsPages: MetadataRoute.Sitemap = [];
+
+  if (fs.existsSync(newsDir)) {
+    const folders = fs.readdirSync(newsDir);
+    newsPages = folders
+      .filter(folder => {
+        const folderPath = path.join(newsDir, folder);
+        return fs.statSync(folderPath).isDirectory();
+      })
+      .map(folder => ({
+        url: `${BASE_URL}/news/${folder}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      }));
+  }
+
+  // Notice 동적 페이지
+  const noticeDir = path.join(process.cwd(), 'src/content/notices');
+  let noticePages: MetadataRoute.Sitemap = [];
+
+  if (fs.existsSync(noticeDir)) {
+    const folders = fs.readdirSync(noticeDir);
+    noticePages = folders
+      .filter(folder => {
+        const folderPath = path.join(noticeDir, folder);
+        return fs.statSync(folderPath).isDirectory();
+      })
+      .map(folder => ({
+        url: `${BASE_URL}/notice/${folder}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      }));
+  }
+
+  return [...staticPages, ...awardPages, ...newsPages, ...noticePages];
+}
+</file>
+
+<file path="src/content/awards/2023-effort-doyak/index.json">
+{
+  "title": "청년도약계좌",
+  "year": 2023,
+  "awardType": "effort",
+  "category": "finance",
+  "provider": "금융위원회",
+  "sector": "government",
+  "summary": "청년의 중장기 자산형성 지원. '노력은가상' 부문 17.5%로 1위 (2관왕)",
+  "officialUrl": "https://ylaccount.kinfa.or.kr/"
+}
+</file>
+
+<file path="src/content/awards/2024-excellence-culture-pass/index.json">
+{
+  "title": "서울청년문화패스",
+  "year": 2024,
+  "awardType": "excellence",
+  "category": "culture",
+  "provider": "서울시",
+  "sector": "local",
+  "summary": "청년들의 문화 접근성을 높이고 문화생활을 지원하는 정책",
+  "officialUrl": "https://www.youthcultureseoul.kr/"
+}
+</file>
+
+<file path="src/content/awards/2024-excellence-hope-stone/index.json">
+{
+  "title": "희망두배청년통장",
+  "year": 2024,
+  "awardType": "excellence",
+  "category": "finance",
+  "provider": "서울시",
+  "sector": "local",
+  "summary": "청년들의 자산 형성을 돕기 위한 저축 지원 제도",
+  "officialUrl": "https://account.welfare.seoul.kr/"
+}
+</file>
+
+<file path="src/content/awards/2024-excellence-housing-crisis/index.json">
+{
+  "title": "주거위기청년 주거비상",
+  "year": 2024,
+  "awardType": "excellence",
+  "category": "housing",
+  "provider": "아름다운재단, 다다다협동조합",
+  "sector": "nonprofit",
+  "summary": "주거 위기에 처한 청년들을 위한 긴급 주거 지원 사업",
+  "officialUrl": "https://beautifulfund.org/changestory/living/"
+}
+</file>
+
+<file path="src/content/awards/2024-excellence-youth-rent/index.json">
+{
+  "title": "청년월세특별한시지원제도",
+  "year": 2024,
+  "awardType": "excellence",
+  "category": "housing",
+  "provider": "국토교통부",
+  "sector": "government",
+  "summary": "청년들의 주거비 부담을 완화하기 위한 월세 지원 정책",
+  "officialUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004661"
+}
+</file>
+
+<file path="src/content/awards/2024-global-ycdp/index.json">
+{
+  "title": "Youth Center for Dialogue and Peace (YCDP)",
+  "year": 2024,
+  "awardType": "global",
+  "category": "global",
+  "provider": "국제청년단체",
+  "summary": "국제적 협력과 청년 참여의 새로운 모델을 제시한 글로벌 청년정책",
+  "officialUrl": "https://www.ycdp.ch/"
+}
+</file>
+
+<file path="src/content/awards/2024-grand-naeil-savings/index.json">
+{
+  "title": "청년내일저축계좌",
+  "year": 2024,
+  "awardType": "grand",
+  "category": "welfare",
+  "provider": "보건복지부",
+  "summary": "경제적 취약 청년들에게 자산 형성의 기회를 제공하고 재정적 자립을 지원하며, 경제적 불평등 해소와 사회적 이동성을 높임",
+  "officialUrl": "https://hope.welfareinfo.or.kr/bsns/bsnsIntrcnAcc.do"
+}
+</file>
+
+<file path="src/content/awards/2024-innovation-hiki-signal/index.json">
+{
+  "title": "히키시그널",
+  "year": 2024,
+  "awardType": "innovation",
+  "category": "social",
+  "provider": "안무서운회사",
+  "summary": "은둔형 외톨이 청년 발견 및 지원을 위한 혁신적 솔루션",
+  "officialUrl": "https://notscary.co.kr/"
+}
+</file>
+
+<file path="src/content/awards/2024-innovation-meaningful-house/index.json">
+{
+  "title": "터무늬있는집",
+  "year": 2024,
+  "awardType": "innovation",
+  "category": "housing",
+  "provider": "사회투자지원재단",
+  "summary": "청년 주거 문제를 창의적으로 해결하는 혁신적 주거 모델",
+  "officialUrl": "https://themuni.co.kr/"
+}
+</file>
+
+<file path="src/content/awards/2024-innovation-mind-health/index.json">
+{
+  "title": "마음건강지원사업",
+  "year": 2024,
+  "awardType": "innovation",
+  "category": "health",
+  "provider": "보건복지부",
+  "summary": "청년들의 정신건강을 지원하고 심리상담 접근성을 높이는 혁신적 정책",
+  "officialUrl": "https://www.ncmh.go.kr/"
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "awards",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@keystatic/core": "^0.5.48",
+    "@keystatic/next": "^5.0.4",
+    "next": "16.0.10",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
 </file>
 
 <file path="src/app/about/page.tsx">
@@ -2482,9 +3400,10 @@ export default async function AboutPage() {
 <file path="src/app/awards/[slug]/page.tsx">
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { reader } from '@/lib/reader';
 import { DocumentRenderer } from '@keystatic/core/renderer';
-import { getAwardShortLabel, getAwardIcon } from '@/lib/award-utils';
+import { getAwardShortLabel, getAwardIcon, getAwardLabel } from '@/lib/award-utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -2495,6 +3414,40 @@ export async function generateStaticParams() {
   return awards.map((award) => ({
     slug: award.slug,
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const award = await reader.collections.awards.read(slug);
+
+  if (!award) {
+    return {
+      title: '수상작을 찾을 수 없습니다 | 대한민국 청년정책 어워즈',
+    };
+  }
+
+  const title = `${award.title} | ${award.year} ${getAwardLabel(award.awardType)} - 대한민국 청년정책 어워즈`;
+  const description = award.summary || `${award.year}년 대한민국 청년정책 어워즈 ${getAwardLabel(award.awardType)} 수상작입니다.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      locale: 'ko_KR',
+      images: award.image
+        ? [{ url: award.image, width: 1200, height: 630, alt: award.title || '수상작 이미지' }]
+        : [{ url: '/images/og-image.jpg', width: 1200, height: 630, alt: '대한민국 청년정책 어워즈' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: award.image ? [award.image] : ['/images/og-image.jpg'],
+    },
+  };
 }
 
 export default async function AwardDetailPage({ params }: PageProps) {
@@ -2698,142 +3651,6 @@ export default async function AwardDetailPage({ params }: PageProps) {
 }
 </file>
 
-<file path="src/app/keystatic/layout.tsx">
-export default function KeystaticLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <style>{`
-        body {
-          background: #141211 !important;
-          color: #e8e4e0 !important;
-        }
-        /* Keystatic 다크 테마 */
-        [data-keystatic-root] {
-          --ks-background: #141211;
-          --ks-surface: #1a1512;
-          --ks-border: #302820;
-          --ks-text: #e8e4e0;
-          --ks-text-muted: #a09590;
-        }
-        /* 헤더/푸터 숨기기 */
-        header, footer {
-          display: none !important;
-        }
-      `}</style>
-      <div className="fixed inset-0 z-50">
-        {children}
-      </div>
-    </>
-  );
-}
-</file>
-
-<file path="src/app/sitemap.ts">
-import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
-
-const BASE_URL = 'https://youthpolicyawards.com';
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1,
-    },
-    {
-      url: `${BASE_URL}/awards`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/news`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/notice`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-  ];
-
-  // Awards 동적 페이지
-  const awardsDir = path.join(process.cwd(), 'src/content/awards');
-  let awardPages: MetadataRoute.Sitemap = [];
-
-  if (fs.existsSync(awardsDir)) {
-    const folders = fs.readdirSync(awardsDir);
-    awardPages = folders
-      .filter(folder => {
-        const folderPath = path.join(awardsDir, folder);
-        return fs.statSync(folderPath).isDirectory();
-      })
-      .map(folder => ({
-        url: `${BASE_URL}/awards/${folder}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      }));
-  }
-
-  // News 동적 페이지
-  const newsDir = path.join(process.cwd(), 'src/content/news');
-  let newsPages: MetadataRoute.Sitemap = [];
-
-  if (fs.existsSync(newsDir)) {
-    const folders = fs.readdirSync(newsDir);
-    newsPages = folders
-      .filter(folder => {
-        const folderPath = path.join(newsDir, folder);
-        return fs.statSync(folderPath).isDirectory();
-      })
-      .map(folder => ({
-        url: `${BASE_URL}/news/${folder}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.5,
-      }));
-  }
-
-  // Notice 동적 페이지
-  const noticeDir = path.join(process.cwd(), 'src/content/notices');
-  let noticePages: MetadataRoute.Sitemap = [];
-
-  if (fs.existsSync(noticeDir)) {
-    const folders = fs.readdirSync(noticeDir);
-    noticePages = folders
-      .filter(folder => {
-        const folderPath = path.join(noticeDir, folder);
-        return fs.statSync(folderPath).isDirectory();
-      })
-      .map(folder => ({
-        url: `${BASE_URL}/notice/${folder}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.5,
-      }));
-  }
-
-  return [...staticPages, ...awardPages, ...newsPages, ...noticePages];
-}
-</file>
-
 <file path="src/components/AwardCard.tsx">
 import Link from 'next/link';
 import { AwardBadge } from '@/components/ui/Badge';
@@ -2929,128 +3746,68 @@ export default function AwardCard({
 }
 </file>
 
-<file path="src/content/awards/2023-effort-doyak/index.json">
+<file path="src/content/awards/2023-best-altteul/index.json">
+{
+  "title": "알뜰교통카드",
+  "year": 2023,
+  "awardType": "best",
+  "category": "transport",
+  "provider": "국토교통부",
+  "sector": "government",
+  "summary": "대중교통 이용 시 보행/자전거 이동거리에 비례해 마일리지 지급. 청년 선호도 18.1%로 1위 달성",
+  "officialUrl": "https://www.alcard.kr/"
+}
+</file>
+
+<file path="src/content/awards/2023-excellence-kua/index.json">
+{
+  "title": "국민취업지원제도",
+  "year": 2023,
+  "awardType": "best",
+  "category": "employment",
+  "provider": "고용노동부",
+  "sector": "government",
+  "summary": "취업지원서비스와 생계지원을 함께 제공하는 한국형 실업부조. 청년 선호도 15%로 2위",
+  "officialUrl": "https://www.work24.go.kr/kua/index.do"
+}
+</file>
+
+<file path="src/content/awards/2023-merit-doyak/index.json">
 {
   "title": "청년도약계좌",
   "year": 2023,
-  "awardType": "effort",
+  "awardType": "trending",
   "category": "finance",
   "provider": "금융위원회",
   "sector": "government",
-  "summary": "청년의 중장기 자산형성 지원. '노력은가상' 부문 17.5%로 1위 (2관왕)",
+  "summary": "청년의 중장기 자산형성 지원. 청년 선호도 27.1%로 '갑자기떡상' 부문 1위",
   "officialUrl": "https://ylaccount.kinfa.or.kr/"
 }
 </file>
 
-<file path="src/content/awards/2024-excellence-culture-pass/index.json">
+<file path="src/content/awards/2023-merit-naebaeum/index.json">
 {
-  "title": "서울청년문화패스",
-  "year": 2024,
-  "awardType": "excellence",
-  "category": "culture",
-  "provider": "서울시",
-  "sector": "local",
-  "summary": "청년들의 문화 접근성을 높이고 문화생활을 지원하는 정책",
-  "officialUrl": "https://www.youthcultureseoul.kr/"
-}
-</file>
-
-<file path="src/content/awards/2024-excellence-hope-stone/index.json">
-{
-  "title": "희망두배청년통장",
-  "year": 2024,
-  "awardType": "excellence",
-  "category": "finance",
-  "provider": "서울시",
-  "sector": "local",
-  "summary": "청년들의 자산 형성을 돕기 위한 저축 지원 제도",
-  "officialUrl": "https://account.welfare.seoul.kr/"
-}
-</file>
-
-<file path="src/content/awards/2024-excellence-housing-crisis/index.json">
-{
-  "title": "주거위기청년 주거비상",
-  "year": 2024,
-  "awardType": "excellence",
-  "category": "housing",
-  "provider": "아름다운재단, 다다다협동조합",
-  "sector": "nonprofit",
-  "summary": "주거 위기에 처한 청년들을 위한 긴급 주거 지원 사업",
-  "officialUrl": "https://beautifulfund.org/changestory/living/"
-}
-</file>
-
-<file path="src/content/awards/2024-excellence-youth-rent/index.json">
-{
-  "title": "청년월세특별한시지원제도",
-  "year": 2024,
-  "awardType": "excellence",
-  "category": "housing",
-  "provider": "국토교통부",
+  "title": "국민내일배움카드",
+  "year": 2023,
+  "awardType": "potential",
+  "category": "education",
+  "provider": "고용노동부",
   "sector": "government",
-  "summary": "청년들의 주거비 부담을 완화하기 위한 월세 지원 정책",
-  "officialUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004661"
+  "summary": "직업훈련비 최대 500만원 지원. '왕이될관상' 부문 수상",
+  "officialUrl": "https://www.hrd.go.kr/"
 }
 </file>
 
-<file path="src/content/awards/2024-global-ycdp/index.json">
+<file path="src/content/awards/2023-special-jeonse/index.json">
 {
-  "title": "Youth Center for Dialogue and Peace (YCDP)",
-  "year": 2024,
-  "awardType": "global",
-  "category": "global",
-  "provider": "국제청년단체",
-  "summary": "국제적 협력과 청년 참여의 새로운 모델을 제시한 글로벌 청년정책",
-  "officialUrl": "https://www.ycdp.ch/"
-}
-</file>
-
-<file path="src/content/awards/2024-grand-naeil-savings/index.json">
-{
-  "title": "청년내일저축계좌",
-  "year": 2024,
-  "awardType": "grand",
-  "category": "welfare",
-  "provider": "보건복지부",
-  "summary": "경제적 취약 청년들에게 자산 형성의 기회를 제공하고 재정적 자립을 지원하며, 경제적 불평등 해소와 사회적 이동성을 높임",
-  "officialUrl": "https://hope.welfareinfo.or.kr/bsns/bsnsIntrcnAcc.do"
-}
-</file>
-
-<file path="src/content/awards/2024-innovation-hiki-signal/index.json">
-{
-  "title": "히키시그널",
-  "year": 2024,
-  "awardType": "innovation",
-  "category": "social",
-  "provider": "안무서운회사",
-  "summary": "은둔형 외톨이 청년 발견 및 지원을 위한 혁신적 솔루션",
-  "officialUrl": "https://notscary.co.kr/"
-}
-</file>
-
-<file path="src/content/awards/2024-innovation-meaningful-house/index.json">
-{
-  "title": "터무늬있는집",
-  "year": 2024,
-  "awardType": "innovation",
+  "title": "중소기업취업청년 전월세보증금대출",
+  "year": 2023,
+  "awardType": "best",
   "category": "housing",
-  "provider": "사회투자지원재단",
-  "summary": "청년 주거 문제를 창의적으로 해결하는 혁신적 주거 모델",
-  "officialUrl": "https://themuni.co.kr/"
-}
-</file>
-
-<file path="src/content/awards/2024-innovation-mind-health/index.json">
-{
-  "title": "마음건강지원사업",
-  "year": 2024,
-  "awardType": "innovation",
-  "category": "health",
-  "provider": "보건복지부",
-  "summary": "청년들의 정신건강을 지원하고 심리상담 접근성을 높이는 혁신적 정책",
-  "officialUrl": "https://www.ncmh.go.kr/"
+  "provider": "주택도시기금",
+  "sector": "government",
+  "summary": "중소기업 재직 청년 대상 저금리 전월세 대출. 청년 선호도 11.7%로 5위",
+  "officialUrl": "https://nhuf.molit.go.kr/"
 }
 </file>
 
@@ -3083,7 +3840,10 @@ export default function AwardCard({
       "Bash(npm ls:*)",
       "Bash(npm run build:*)",
       "Bash(dir /b:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; Remove-Item -Recurse -Force ''c:\\\\Users\\\\USER-PC\\\\AI project\\\\awards\\\\.next'' -ErrorAction SilentlyContinue; Write-Host ''Processes killed and cache cleared''\")"
     ]
   }
 }
@@ -3150,238 +3910,111 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 </file>
 
-<file path="package.json">
-{
-  "name": "awards",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@keystatic/core": "^0.5.48",
-    "@keystatic/next": "^5.0.4",
-    "next": "16.0.10",
-    "react": "19.2.1",
-    "react-dom": "19.2.1"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.10",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
-</file>
-
 <file path="src/app/news/page.tsx">
 import Link from 'next/link';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
 import NewsCard from '@/components/cards/NewsCard';
 
-// 외부 뉴스 데이터 - 청년정책 어워즈 관련 언론 보도
-const externalNews = [
-  {
-    id: 'ext-1',
-    title: "청년의 선택은 '삼성 희망디딤돌'…실효성 입증된 정책 8선 공개",
-    source: '소셜임팩트뉴스',
-    date: '2025-12-19',
-    url: 'https://www.socialimpactnews.net/news/articleView.html?idxno=5284',
-    summary: "2025 대한민국 청년정책 어워즈 결과 발표. 청년이 직접 선정한 실효성 있는 정책 8선이 공개되었다.",
-    thumbnail: 'https://cdn.socialimpactnews.net/news/thumbnail/202512/5284_9663_1557_v150.jpg',
-  },
-  {
-    id: 'ext-2',
-    title: "올해 최고의 청년 정책에 '청년내일저축계좌' 선정",
-    source: '매일경제',
-    date: '2024-12-30',
-    url: 'https://n.news.naver.com/mnews/article/009/0005421731?sid=101',
-    summary: "2024 대한민국 청년정책 어워즈에서 청년내일저축계좌가 최고의 청년정책으로 선정되었다.",
-    thumbnail: 'https://imgnews.pstatic.net/image/009/2024/12/30/0005421731_001_20241230180109262.png?type=w800',
-  },
-  {
-    id: 'ext-3',
-    title: "올해 청년이 뽑은 최고의 청년정책은?...대한민국 청년정책 어워즈 결과 발표",
-    source: '스포츠서울',
-    date: '2024-12-26',
-    url: 'https://n.news.naver.com/mnews/article/468/0001117221?sid=102',
-    summary: "2024 대한민국 청년정책 어워즈 최종 결과가 발표되었다.",
-    thumbnail: 'https://imgnews.pstatic.net/image/468/2024/12/26/0001117221_001_20241226100021407.png?type=w800',
-  },
-  {
-    id: 'ext-4',
-    title: "청년정책 어워즈 결과 발표…삼성 '희망디딤돌' 대상 선정",
-    source: '청년일보',
-    date: '2025-12-18',
-    url: 'https://www.youthdaily.co.kr/news/article.html?no=206531',
-    summary: "청년이 직접 발굴하고 평가한 올해 최고의 청년정책으로 삼성의 '희망디딤돌'이 선정되었다.",
-    thumbnail: 'https://www.youthdaily.co.kr/data/photos/20251251/art_1766015576824_940b86.png',
-  },
-  {
-    id: 'ext-5',
-    title: "대한민국 청년이 직접 뽑은 최고의 정책은 '삼성 희망디딤돌'",
-    source: '이로운넷',
-    date: '2025-12-18',
-    url: 'https://www.eroun.net/news/articleView.html?idxno=69366',
-    summary: "2024 대한민국 청년정책 어워즈 최종 결과 발표. 삼성 '희망디딤돌'이 대상 수상.",
-    thumbnail: 'https://cdn.eroun.net/news/thumbnail/202512/69366_121302_267_v150.jpg',
-  },
-  {
-    id: 'ext-6',
-    title: '2024 대한민국 청년정책 어워즈 투표 시작',
-    source: '요즘것들',
-    date: '2024-12-09',
-    url: 'https://www.allforyoung.com/posts/58372',
-    summary: '200개 이상의 정책 중 전문가 검토와 청년 패널 평가를 거쳐 최종 후보 30개 정책이 선정되었다.',
-    thumbnail: 'https://allforyoung-homepage-maycan.s3.ap-northeast-2.amazonaws.com/uploads/post_photos/2024/12/13/5253749841a046faa9ca933e150f30b5.png',
-  },
-  {
-    id: 'ext-7',
-    title: "지난해 청년 선호 정책 '이것'…열고닫기, '청년정책 어워즈' 결과 발표",
-    source: '청년일보',
-    date: '2024-02-08',
-    url: 'https://www.youthdaily.co.kr/news/article.html?no=145274',
-    summary: '알뜰교통카드(18.1%)가 최우수상, 청년도약계좌가 갑자기떡상(27.1%)과 노력은가상(17.5%) 동시 수상.',
-    thumbnail: 'https://www.youthdaily.co.kr/data/photos/20240206/art_17073523691712_2fd062.png',
-  },
-  {
-    id: 'ext-8',
-    title: '2023 열고닫기 청년정책 어워즈 개최',
-    source: '요즘것들',
-    date: '2023-12-26',
-    url: 'https://www.allforyoung.com/posts/41099',
-    summary: '청년이 직접 뽑는 최고의 청년정책, 2023 열고닫기 청년정책 어워즈가 시작되었다.',
-    thumbnail: 'https://allforyoung-homepage-maycan.s3.ap-northeast-2.amazonaws.com/uploads/post_photos/2024/01/02/aa4f3f7c94e347c0be4c931d0a1b2265.jpg',
-  },
-  {
-    id: 'ext-9',
-    title: "청년정책 큐레이션 서비스 '열고닫기', 홈페이지 리뉴얼 오픈",
-    source: '이로운넷',
-    date: '2022-04-26',
-    url: 'https://www.eroun.net/news/articleView.html?idxno=28153',
-    summary: '청년정책 정보 플랫폼 열고닫기가 새로운 모습으로 리뉴얼되었다.',
-    thumbnail: 'https://cdn.eroun.net/news/thumbnail/202204/28153_52923_2417_v150.jpg',
-  },
-];
+const reader = createReader(process.cwd(), keystaticConfig);
 
-// 날짜순 정렬 (최신순)
-const sortedNews = [...externalNews].sort((a, b) => {
-  const dateA = new Date(a.date).getTime();
-  const dateB = new Date(b.date).getTime();
-  return dateB - dateA;
-});
+export default async function NewsPage() {
+  // CMS에서 뉴스 데이터 가져오기
+  const allNews = await reader.collections.news.all();
 
-export default function NewsPage() {
+  // category가 'news'인 항목만 필터링 (언론 보도만)
+  const filteredNews = allNews.filter(
+    (item) => item.entry.category === 'news'
+  );
+
+  // 날짜순 정렬 (최신순)
+  const sortedNews = [...filteredNews].sort((a, b) => {
+    const dateA = new Date(a.entry.date || '').getTime();
+    const dateB = new Date(b.entry.date || '').getTime();
+    return dateB - dateA;
+  });
 
   return (
     <div className="min-h-screen bg-[#121212] pt-28 md:pt-32">
       <div className="container-custom py-8 lg:py-12">
         {/* Header */}
-        <header className="mb-16 md:mb-20">
-          <p className="text-[11px] font-mono tracking-[0.25em] text-gray-500 uppercase mb-3">
-            Media Coverage
-          </p>
+        <header className="mb-12 md:mb-16 animate-fade-in-up">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-px bg-gradient-to-r from-gold-500/50 to-transparent" />
+            <p className="text-[11px] font-mono tracking-[0.25em] text-gold-500/60 uppercase">
+              Press Coverage
+            </p>
+          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
             News
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl">
+          <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
             대한민국 청년정책 어워즈 관련 언론 보도를 확인하세요.
           </p>
         </header>
 
-        {/* News Grid */}
-        <section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedNews.map((article) => (
-              <NewsCard key={article.id} {...article} />
-            ))}
+        {sortedNews.length > 0 ? (
+          <section className="animate-fade-in-up animate-delay-1">
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500">
+                All Articles
+              </span>
+              <div className="flex-1 h-px bg-[#333]" />
+              <span className="text-[10px] font-mono text-gray-600">
+                {sortedNews.length} articles
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sortedNews.map((item, index) => (
+                <div
+                  key={item.slug}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+                >
+                  <NewsCard
+                    id={item.slug}
+                    slug={item.slug}
+                    title={item.entry.title || ''}
+                    summary={item.entry.summary || ''}
+                    date={item.entry.date || ''}
+                    thumbnail={item.entry.thumbnail || null}
+                    source="News"
+                    isExternal={false}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : (
+          <div className="text-center py-24">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#1a1a1a] flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            <p className="text-gray-500 text-lg mb-2">등록된 뉴스가 없습니다.</p>
+            <p className="text-gray-600 text-sm">새로운 소식이 곧 업데이트됩니다.</p>
           </div>
-        </section>
+        )}
 
         {/* Notice Link */}
-        <div className="mt-16 pt-10 border-t border-[#333] text-center">
-          <p className="text-gray-500 mb-4">공지사항을 찾으시나요?</p>
-          <Link href="/notice" className="btn-outline-gold inline-flex items-center gap-2">
-            공지사항 보기
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+        <div className="mt-20 pt-12 border-t border-[#252525]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-gradient-to-r from-[#1a1a1a] to-transparent rounded-lg border border-[#333]">
+            <div>
+              <p className="text-gray-300 font-medium mb-1">공지사항을 찾으시나요?</p>
+              <p className="text-gray-500 text-sm">어워즈 관련 공식 안내사항을 확인하세요.</p>
+            </div>
+            <Link href="/notice" className="btn-outline-gold inline-flex items-center gap-2 shrink-0">
+              공지사항 보기
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
-}
-</file>
-
-<file path="src/content/awards/2023-best-altteul/index.json">
-{
-  "title": "알뜰교통카드",
-  "year": 2023,
-  "awardType": "best",
-  "category": "transport",
-  "provider": "국토교통부",
-  "sector": "government",
-  "summary": "대중교통 이용 시 보행/자전거 이동거리에 비례해 마일리지 지급. 청년 선호도 18.1%로 1위 달성",
-  "officialUrl": "https://www.alcard.kr/"
-}
-</file>
-
-<file path="src/content/awards/2023-excellence-kua/index.json">
-{
-  "title": "국민취업지원제도",
-  "year": 2023,
-  "awardType": "best",
-  "category": "employment",
-  "provider": "고용노동부",
-  "sector": "government",
-  "summary": "취업지원서비스와 생계지원을 함께 제공하는 한국형 실업부조. 청년 선호도 15%로 2위",
-  "officialUrl": "https://www.work24.go.kr/kua/index.do"
-}
-</file>
-
-<file path="src/content/awards/2023-merit-doyak/index.json">
-{
-  "title": "청년도약계좌",
-  "year": 2023,
-  "awardType": "trending",
-  "category": "finance",
-  "provider": "금융위원회",
-  "sector": "government",
-  "summary": "청년의 중장기 자산형성 지원. 청년 선호도 27.1%로 '갑자기떡상' 부문 1위",
-  "officialUrl": "https://ylaccount.kinfa.or.kr/"
-}
-</file>
-
-<file path="src/content/awards/2023-merit-naebaeum/index.json">
-{
-  "title": "국민내일배움카드",
-  "year": 2023,
-  "awardType": "potential",
-  "category": "education",
-  "provider": "고용노동부",
-  "sector": "government",
-  "summary": "직업훈련비 최대 500만원 지원. '왕이될관상' 부문 수상",
-  "officialUrl": "https://www.hrd.go.kr/"
-}
-</file>
-
-<file path="src/content/awards/2023-special-jeonse/index.json">
-{
-  "title": "중소기업취업청년 전월세보증금대출",
-  "year": 2023,
-  "awardType": "best",
-  "category": "housing",
-  "provider": "주택도시기금",
-  "sector": "government",
-  "summary": "중소기업 재직 청년 대상 저금리 전월세 대출. 청년 선호도 11.7%로 5위",
-  "officialUrl": "https://nhuf.molit.go.kr/"
 }
 </file>
 
@@ -3487,167 +4120,6 @@ export default function Footer() {
 }
 </file>
 
-<file path="src/app/awards/page.tsx">
-import Link from 'next/link';
-import { reader } from '@/lib/reader';
-import {
-  getAwardLabel,
-  getAwardColor,
-  getSectorLabel,
-  getAwardTypeOrder,
-  getSectorOrder,
-} from '@/lib/award-utils';
-
-export default async function AwardsPage() {
-  const allAwards = await reader.collections.awards.all();
-  const awards = allAwards.map(award => ({
-    slug: award.slug,
-    entry: award.entry,
-  }));
-
-  // 연도별로 그룹화
-  const awardsByYear = awards.reduce((acc, award) => {
-    const year = award.entry.year;
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(award);
-    return acc;
-  }, {} as Record<number, typeof awards>);
-
-  // 연도 내림차순 정렬
-  const sortedYears = Object.keys(awardsByYear)
-    .map(Number)
-    .sort((a, b) => b - a);
-
-  return (
-    <div className="min-h-screen bg-dark-950 pt-24 md:pt-32">
-      <div className="container-custom py-12 lg:py-20">
-        {/* Header */}
-        <div className="mb-20 md:mb-28">
-          <p className="text-label mb-4">Hall of Fame</p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl text-dark-100 mb-6">
-            Winners
-          </h1>
-          <p className="text-dark-400 text-lg max-w-2xl">
-            대한민국 청년정책 어워즈에서 선정된 우수 정책들을 만나보세요.
-            청년들의 삶을 변화시킨 의미있는 정책들입니다.
-          </p>
-        </div>
-
-        {/* Awards by Year */}
-        <div className="space-y-24 md:space-y-32">
-          {sortedYears.map((year) => {
-            const yearAwards = [...awardsByYear[year]].sort((a, b) => {
-              const typeOrderA = getAwardTypeOrder(a.entry.awardType);
-              const typeOrderB = getAwardTypeOrder(b.entry.awardType);
-              if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
-
-              const sectorOrderA = getSectorOrder(a.entry.sector);
-              const sectorOrderB = getSectorOrder(b.entry.sector);
-              return sectorOrderA - sectorOrderB;
-            });
-
-            return (
-              <section key={year}>
-                {/* Year Header */}
-                <div className="flex items-center gap-8 mb-10">
-                  <span className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-dark-600">
-                    {year}
-                  </span>
-                  <div className="flex-1 h-px bg-dark-800" />
-                  <span className="text-label">
-                    {yearAwards.length} Winners
-                  </span>
-                </div>
-
-                {/* Awards List */}
-                <div className="border-t border-dark-800">
-                  {yearAwards.map((award) => {
-                    const awardContent = (
-                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-6 md:py-8 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
-                        {/* Badge + Sector */}
-                        <div className="col-span-12 md:col-span-3 flex items-center gap-2">
-                          <span
-                            className="text-base md:text-lg lg:text-xl font-medium"
-                            style={{ color: getAwardColor(award.entry.awardType) }}
-                          >
-                            {getAwardLabel(award.entry.awardType)}
-                          </span>
-                          {getSectorLabel(award.entry.sector) && (
-                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
-                              {getSectorLabel(award.entry.sector)}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Title */}
-                        <div className="col-span-12 md:col-span-5">
-                          <h3 className="text-dark-100 text-xl md:text-2xl lg:text-3xl font-medium transition-smooth group-hover:text-gold-300">
-                            {award.entry.title}
-                          </h3>
-                        </div>
-
-                        {/* Provider */}
-                        <div className="col-span-10 md:col-span-3">
-                          <p className="text-dark-400 text-base md:text-lg lg:text-xl">
-                            {award.entry.provider}
-                          </p>
-                        </div>
-
-                        {/* Arrow */}
-                        <div className="col-span-2 md:col-span-1 flex justify-end">
-                          <svg
-                            className="w-5 h-5 text-dark-600 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-300"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </div>
-                      </div>
-                    );
-
-                    return award.entry.officialUrl ? (
-                      <a
-                        key={award.slug}
-                        href={award.entry.officialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group block"
-                      >
-                        {awardContent}
-                      </a>
-                    ) : (
-                      <Link
-                        key={award.slug}
-                        href={`/awards/${award.slug}`}
-                        className="group block"
-                      >
-                        {awardContent}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-
-        {sortedYears.length === 0 && (
-          <div className="text-center py-32">
-            <p className="text-dark-500 text-lg">
-              아직 등록된 수상작이 없습니다.
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-</file>
-
 <file path="src/components/Header.tsx">
 'use client';
 
@@ -3749,6 +4221,208 @@ export default function Header() {
         )}
       </nav>
     </header>
+  );
+}
+</file>
+
+<file path="src/app/awards/page.tsx">
+import Link from 'next/link';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { reader } from '@/lib/reader';
+import {
+  getAwardLabel,
+  getAwardColor,
+  getSectorLabel,
+  getAwardTypeOrder,
+  getSectorOrder,
+} from '@/lib/award-utils';
+
+// Award 타입 정의
+type Award = {
+  slug: string;
+  title: string;
+  year: number;
+  awardType: string;
+  sector: string;
+  provider: string;
+  officialUrl: string | null;
+};
+
+// JSON 파일에서 직접 title을 읽는 함수
+async function getAwardTitle(slug: string): Promise<string> {
+  try {
+    const filePath = path.join(process.cwd(), 'src/content/awards', slug, 'index.json');
+    const content = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(content);
+    return data.title || 'Unknown';
+  } catch {
+    return 'Unknown';
+  }
+}
+
+export default async function AwardsPage() {
+  const allAwards = await reader.collections.awards.all();
+
+  // 데이터 매핑 - JSON 파일에서 직접 title 읽기 (Keystatic slugField 버그 우회)
+  const awards: Award[] = await Promise.all(
+    allAwards.map(async (award) => {
+      // Keystatic에서 slugField로 지정된 title은 null이 되므로, JSON에서 직접 읽음
+      const title = await getAwardTitle(award.slug);
+      return {
+        slug: award.slug,
+        title,
+        year: award.entry.year,
+        awardType: award.entry.awardType,
+        sector: award.entry.sector,
+        provider: award.entry.provider,
+        officialUrl: award.entry.officialUrl,
+      };
+    })
+  );
+
+  // 연도별로 그룹화
+  const awardsByYear = awards.reduce((acc, award) => {
+    const year = award.year;
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(award);
+    return acc;
+  }, {} as Record<number, Award[]>);
+
+  // 연도 내림차순 정렬
+  const sortedYears = Object.keys(awardsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+  return (
+    <div className="min-h-screen bg-dark-950 pt-24 md:pt-32">
+      <div className="container-custom py-12 lg:py-20">
+        {/* Header */}
+        <div className="mb-20 md:mb-28">
+          <p className="text-label mb-4">Hall of Fame</p>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl text-dark-100 mb-6">
+            Winners
+          </h1>
+          <p className="text-dark-400 text-lg max-w-2xl">
+            대한민국 청년정책 어워즈에서 선정된 우수 정책들을 만나보세요.
+            청년들의 삶을 변화시킨 의미있는 정책들입니다.
+          </p>
+        </div>
+
+        {/* Awards by Year */}
+        <div className="space-y-24 md:space-y-32">
+          {sortedYears.map((year) => {
+            const yearAwards = [...awardsByYear[year]].sort((a, b) => {
+              const typeOrderA = getAwardTypeOrder(a.awardType);
+              const typeOrderB = getAwardTypeOrder(b.awardType);
+              if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
+
+              const sectorOrderA = getSectorOrder(a.sector);
+              const sectorOrderB = getSectorOrder(b.sector);
+              return sectorOrderA - sectorOrderB;
+            });
+
+            return (
+              <section key={year}>
+                {/* Year Header */}
+                <div className="flex items-center gap-8 mb-10">
+                  <span className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-dark-600">
+                    {year}
+                  </span>
+                  <div className="flex-1 h-px bg-dark-800" />
+                  <span className="text-label">
+                    {yearAwards.length} Winners
+                  </span>
+                </div>
+
+                {/* Awards List */}
+                <div className="border-t border-dark-800">
+                  {yearAwards.map((award) => {
+                    const awardContent = (
+                      <div className="grid grid-cols-12 gap-4 md:gap-6 items-center py-6 md:py-8 border-b border-dark-800 transition-smooth hover:bg-dark-900 hover:px-4 -mx-0 hover:-mx-4">
+                        {/* Badge + Sector */}
+                        <div className="col-span-12 md:col-span-3 flex items-center gap-2">
+                          <span
+                            className="text-base md:text-lg lg:text-xl font-medium"
+                            style={{ color: getAwardColor(award.awardType) }}
+                          >
+                            {getAwardLabel(award.awardType)}
+                          </span>
+                          {getSectorLabel(award.sector) && (
+                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700" style={{ color: '#9ca3af' }}>
+                              {getSectorLabel(award.sector)}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <div className="col-span-12 md:col-span-5">
+                          <h3
+                            className="text-xl md:text-2xl lg:text-3xl font-medium group-hover:text-gold-300 transition-colors"
+                            style={{ color: '#ffffff' }}
+                          >
+                            {award.title ? award.title : <span style={{ color: '#ef4444' }}>Data Error</span>}
+                          </h3>
+                        </div>
+
+                        {/* Provider */}
+                        <div className="col-span-10 md:col-span-3">
+                          <p className="text-base md:text-lg lg:text-xl" style={{ color: '#d1d5db' }}>
+                            {award.provider}
+                          </p>
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="col-span-2 md:col-span-1 flex justify-end">
+                          <svg
+                            className="w-5 h-5 text-dark-600 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
+                      </div>
+                    );
+
+                    return award.officialUrl ? (
+                      <a
+                        key={award.slug}
+                        href={award.officialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block"
+                      >
+                        {awardContent}
+                      </a>
+                    ) : (
+                      <Link
+                        key={award.slug}
+                        href={`/awards/${award.slug}`}
+                        className="group block"
+                      >
+                        {awardContent}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+
+        {sortedYears.length === 0 && (
+          <div className="text-center py-32">
+            <p className="text-dark-500 text-lg">
+              아직 등록된 수상작이 없습니다.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 </file>
@@ -4512,14 +5186,23 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: '대한민국 청년정책 어워즈',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://awards.opcl.kr'
+  ),
+  title: {
+    default: '대한민국 청년정책 어워즈',
+    template: '%s | 대한민국 청년정책 어워즈',
+  },
   description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식입니다.',
-  keywords: ['청년정책', '어워즈', '청년', '정책', '시상식'],
+  keywords: ['청년정책', '어워즈', '청년', '정책', '시상식', '청년정책 어워즈', '열고닫기'],
+  authors: [{ name: '대한민국 청년정책 어워즈 추진위원회' }],
+  creator: '대한민국 청년정책 어워즈',
   openGraph: {
     title: '대한민국 청년정책 어워즈',
     description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
     type: 'website',
     locale: 'ko_KR',
+    siteName: '대한민국 청년정책 어워즈',
     images: [
       {
         url: '/images/og-image.jpg',
@@ -4534,6 +5217,20 @@ export const metadata: Metadata = {
     title: '대한민국 청년정책 어워즈',
     description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
     images: ['/images/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'GTM-WPBF3ZJ5',
   },
 };
 
@@ -4596,6 +5293,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <file path="src/app/page.tsx">
 import Link from 'next/link';
 import Image from 'next/image';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { reader } from '@/lib/reader';
 import {
   getAwardLabel,
@@ -4604,12 +5303,34 @@ import {
   getSectorOrder,
 } from '@/lib/award-utils';
 
+// JSON 파일에서 직접 title을 읽는 함수
+async function getAwardTitle(slug: string): Promise<string> {
+  try {
+    const filePath = path.join(process.cwd(), 'src/content/awards', slug, 'index.json');
+    const content = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(content);
+    return data.title || 'Unknown';
+  } catch {
+    return 'Unknown';
+  }
+}
+
 export default async function Home() {
   const allAwards = await reader.collections.awards.all();
-  const awards = allAwards.map(award => ({
-    slug: award.slug,
-    entry: award.entry,
-  }));
+
+  // Keystatic slugField 버그로 인해 title이 null이 되므로 JSON에서 직접 읽음
+  const awards = await Promise.all(
+    allAwards.map(async (award) => ({
+      slug: award.slug,
+      title: await getAwardTitle(award.slug),
+      year: award.entry.year,
+      awardType: award.entry.awardType,
+      sector: award.entry.sector,
+      provider: award.entry.provider,
+      officialUrl: award.entry.officialUrl,
+      image: award.entry.image,
+    }))
+  );
 
   return (
     <div className="min-h-screen bg-dark-950">
@@ -4846,64 +5567,74 @@ export default async function Home() {
 
             {/* Award Entries - 2025년 대상/최우수상만 표시 */}
             {awards
-              .filter(award => award.entry.year === 2025 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
+              .filter(award => award.year === 2025 && (award.awardType === 'grand' || award.awardType === 'excellence'))
               .sort((a, b) => {
-                const typeOrderA = getAwardTypeOrder(a.entry.awardType);
-                const typeOrderB = getAwardTypeOrder(b.entry.awardType);
+                const typeOrderA = getAwardTypeOrder(a.awardType);
+                const typeOrderB = getAwardTypeOrder(b.awardType);
                 if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
 
-                const sectorOrderA = getSectorOrder(a.entry.sector);
-                const sectorOrderB = getSectorOrder(b.entry.sector);
+                const sectorOrderA = getSectorOrder(a.sector);
+                const sectorOrderB = getSectorOrder(b.sector);
                 return sectorOrderA - sectorOrderB;
               })
-              .map((award) => (
-                <Link
-                  key={award.slug}
-                  href={`/awards/${award.slug}`}
-                  className="group block relative"
-                >
-                  {/* List Row */}
-                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-6 md:py-8 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
+              .map((award) => {
+                // officialUrl이 있으면 외부 링크, 없으면 내부 링크
+                const hasExternalUrl = !!award.officialUrl;
+                const href = hasExternalUrl ? (award.officialUrl as string) : `/awards/${award.slug}`;
 
+                const CardContent = (
+                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-6 md:py-8 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
                     {/* 수상 타입 + 부문 */}
                     <div className="md:col-span-3 flex items-center gap-2">
                       <span className={`text-base md:text-lg font-medium ${
-                        award.entry.awardType === 'grand'
+                        award.awardType === 'grand'
                           ? 'text-gold-400'
-                          : 'text-dark-300'
+                          : 'text-gray-100'
                       }`}>
-                        {getAwardLabel(award.entry.awardType)}
+                        {getAwardLabel(award.awardType)}
                       </span>
-                      {getSectorLabel(award.entry.sector) && (
-                        <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
-                          {getSectorLabel(award.entry.sector)}
+                      {getSectorLabel(award.sector) && (
+                        <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-gray-300">
+                          {getSectorLabel(award.sector)}
                         </span>
                       )}
                     </div>
 
                     {/* 정책 타이틀 */}
                     <div className="md:col-span-5 mt-2 md:mt-0">
-                      <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold text-dark-100 leading-tight transition-colors duration-300 group-hover:text-gold-300">
-                        {award.entry.title}
+                      <h3
+                        className="text-xl md:text-2xl lg:text-3xl font-semibold leading-tight transition-colors duration-300 group-hover:text-gold-300"
+                        style={{ color: '#ffffff' }}
+                      >
+                        {award.title}
                       </h3>
                     </div>
 
                     {/* 기관명 */}
                     <div className="md:col-span-3 mt-2 md:mt-0 flex items-center">
-                      <span className="text-base md:text-lg text-dark-400">
-                        {award.entry.provider}
+                      <span
+                        className="text-base md:text-lg"
+                        style={{ color: '#d1d5db' }}
+                      >
+                        {award.provider}
                       </span>
                     </div>
 
-                    {/* 화살표 - Hover시 나타남 */}
+                    {/* 화살표/외부링크 아이콘 - Hover시 나타남 */}
                     <div className="md:col-span-1 hidden md:flex items-center justify-end">
-                      <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
-                        →
-                      </span>
+                      {hasExternalUrl ? (
+                        <svg className="w-5 h-5 text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      ) : (
+                        <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
+                          →
+                        </span>
+                      )}
                     </div>
 
                     {/* 썸네일 오버레이 - Hover시 우측에 나타남 (옵션) */}
-                    {award.entry.image && (
+                    {award.image && (
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 pointer-events-none transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 z-10 hidden lg:block">
                         <div className="w-32 h-20 bg-dark-800 border border-dark-700 shadow-2xl overflow-hidden">
                           <div className="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
@@ -4913,8 +5644,28 @@ export default async function Home() {
                       </div>
                     )}
                   </div>
-                </Link>
-              ))}
+                );
+
+                return hasExternalUrl ? (
+                  <a
+                    key={award.slug}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block relative"
+                  >
+                    {CardContent}
+                  </a>
+                ) : (
+                  <Link
+                    key={award.slug}
+                    href={href}
+                    className="group block relative"
+                  >
+                    {CardContent}
+                  </Link>
+                );
+              })}
           </div>
 
           {/* Empty State */}

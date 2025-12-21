@@ -71,10 +71,10 @@ export default function NewsCard({
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-[15px] font-semibold text-gray-100 mb-3 line-clamp-2 group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
+        <h3 className="text-[15px] font-semibold text-white mb-3 line-clamp-2 group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
           {title}
         </h3>
-        <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed flex-1 font-light">
+        <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed flex-1 font-light">
           {summary}
         </p>
       </div>

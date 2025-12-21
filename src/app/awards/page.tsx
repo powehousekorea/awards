@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { reader } from '@/lib/reader';
 import {
   getAwardLabel,
@@ -8,22 +10,58 @@ import {
   getSectorOrder,
 } from '@/lib/award-utils';
 
+// Award 타입 정의
+type Award = {
+  slug: string;
+  title: string;
+  year: number;
+  awardType: string;
+  sector: string;
+  provider: string;
+  officialUrl: string | null;
+};
+
+// JSON 파일에서 직접 title을 읽는 함수
+async function getAwardTitle(slug: string): Promise<string> {
+  try {
+    const filePath = path.join(process.cwd(), 'src/content/awards', slug, 'index.json');
+    const content = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(content);
+    return data.title || 'Unknown';
+  } catch {
+    return 'Unknown';
+  }
+}
+
 export default async function AwardsPage() {
   const allAwards = await reader.collections.awards.all();
-  const awards = allAwards.map(award => ({
-    slug: award.slug,
-    entry: award.entry,
-  }));
+
+  // 데이터 매핑 - JSON 파일에서 직접 title 읽기 (Keystatic slugField 버그 우회)
+  const awards: Award[] = await Promise.all(
+    allAwards.map(async (award) => {
+      // Keystatic에서 slugField로 지정된 title은 null이 되므로, JSON에서 직접 읽음
+      const title = await getAwardTitle(award.slug);
+      return {
+        slug: award.slug,
+        title,
+        year: award.entry.year,
+        awardType: award.entry.awardType,
+        sector: award.entry.sector,
+        provider: award.entry.provider,
+        officialUrl: award.entry.officialUrl,
+      };
+    })
+  );
 
   // 연도별로 그룹화
   const awardsByYear = awards.reduce((acc, award) => {
-    const year = award.entry.year;
+    const year = award.year;
     if (!acc[year]) {
       acc[year] = [];
     }
     acc[year].push(award);
     return acc;
-  }, {} as Record<number, typeof awards>);
+  }, {} as Record<number, Award[]>);
 
   // 연도 내림차순 정렬
   const sortedYears = Object.keys(awardsByYear)
@@ -49,12 +87,12 @@ export default async function AwardsPage() {
         <div className="space-y-24 md:space-y-32">
           {sortedYears.map((year) => {
             const yearAwards = [...awardsByYear[year]].sort((a, b) => {
-              const typeOrderA = getAwardTypeOrder(a.entry.awardType);
-              const typeOrderB = getAwardTypeOrder(b.entry.awardType);
+              const typeOrderA = getAwardTypeOrder(a.awardType);
+              const typeOrderB = getAwardTypeOrder(b.awardType);
               if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
 
-              const sectorOrderA = getSectorOrder(a.entry.sector);
-              const sectorOrderB = getSectorOrder(b.entry.sector);
+              const sectorOrderA = getSectorOrder(a.sector);
+              const sectorOrderB = getSectorOrder(b.sector);
               return sectorOrderA - sectorOrderB;
             });
 
@@ -80,28 +118,31 @@ export default async function AwardsPage() {
                         <div className="col-span-12 md:col-span-3 flex items-center gap-2">
                           <span
                             className="text-base md:text-lg lg:text-xl font-medium"
-                            style={{ color: getAwardColor(award.entry.awardType) }}
+                            style={{ color: getAwardColor(award.awardType) }}
                           >
-                            {getAwardLabel(award.entry.awardType)}
+                            {getAwardLabel(award.awardType)}
                           </span>
-                          {getSectorLabel(award.entry.sector) && (
-                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
-                              {getSectorLabel(award.entry.sector)}
+                          {getSectorLabel(award.sector) && (
+                            <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700" style={{ color: '#9ca3af' }}>
+                              {getSectorLabel(award.sector)}
                             </span>
                           )}
                         </div>
 
                         {/* Title */}
                         <div className="col-span-12 md:col-span-5">
-                          <h3 className="text-dark-100 text-xl md:text-2xl lg:text-3xl font-medium transition-smooth group-hover:text-gold-300">
-                            {award.entry.title}
+                          <h3
+                            className="text-xl md:text-2xl lg:text-3xl font-medium group-hover:text-gold-300 transition-colors"
+                            style={{ color: '#ffffff' }}
+                          >
+                            {award.title ? award.title : <span style={{ color: '#ef4444' }}>Data Error</span>}
                           </h3>
                         </div>
 
                         {/* Provider */}
                         <div className="col-span-10 md:col-span-3">
-                          <p className="text-dark-400 text-base md:text-lg lg:text-xl">
-                            {award.entry.provider}
+                          <p className="text-base md:text-lg lg:text-xl" style={{ color: '#d1d5db' }}>
+                            {award.provider}
                           </p>
                         </div>
 
@@ -119,10 +160,10 @@ export default async function AwardsPage() {
                       </div>
                     );
 
-                    return award.entry.officialUrl ? (
+                    return award.officialUrl ? (
                       <a
                         key={award.slug}
-                        href={award.entry.officialUrl}
+                        href={award.officialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group block"

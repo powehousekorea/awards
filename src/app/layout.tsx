@@ -4,14 +4,23 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: '대한민국 청년정책 어워즈',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://awards.opcl.kr'
+  ),
+  title: {
+    default: '대한민국 청년정책 어워즈',
+    template: '%s | 대한민국 청년정책 어워즈',
+  },
   description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식입니다.',
-  keywords: ['청년정책', '어워즈', '청년', '정책', '시상식'],
+  keywords: ['청년정책', '어워즈', '청년', '정책', '시상식', '청년정책 어워즈', '열고닫기'],
+  authors: [{ name: '대한민국 청년정책 어워즈 추진위원회' }],
+  creator: '대한민국 청년정책 어워즈',
   openGraph: {
     title: '대한민국 청년정책 어워즈',
     description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
     type: 'website',
     locale: 'ko_KR',
+    siteName: '대한민국 청년정책 어워즈',
     images: [
       {
         url: '/images/og-image.jpg',
@@ -26,6 +35,20 @@ export const metadata: Metadata = {
     title: '대한민국 청년정책 어워즈',
     description: '청년이 직접 선정하는 대한민국 최고의 청년정책 시상식',
     images: ['/images/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'GTM-WPBF3ZJ5',
   },
 };
 

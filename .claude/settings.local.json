@@ -26,7 +26,10 @@
       "Bash(npm ls:*)",
       "Bash(npm run build:*)",
       "Bash(dir /b:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; Remove-Item -Recurse -Force ''c:\\\\Users\\\\USER-PC\\\\AI project\\\\awards\\\\.next'' -ErrorAction SilentlyContinue; Write-Host ''Processes killed and cache cleared''\")"
     ]
   }
 }

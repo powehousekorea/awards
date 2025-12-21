@@ -190,6 +190,7 @@ export default config({
           ],
           defaultValue: 'notice',
         }),
+        source: fields.text({ label: '언론사명 (뉴스일 경우)' }),
         summary: fields.text({ label: '요약', multiline: true }),
         content: fields.mdx({ label: '내용' }),
         thumbnail: fields.image({

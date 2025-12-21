@@ -45,9 +45,12 @@ export default function NoticeListItem({
       </div>
 
       {/* Title */}
-      <div className="flex-1 md:px-4 flex items-center gap-2">
-        <h3 className="text-[15px] text-gray-200 font-medium group-hover:text-gold-300 transition-colors duration-300 leading-snug tracking-tight">
-          {title}
+      <div className="flex-1 md:px-4 flex items-center gap-2 min-w-0">
+        <h3
+          className="text-[15px] font-bold group-hover:text-gold-400 transition-colors duration-300 leading-snug tracking-tight truncate"
+          style={{ color: '#ffffff' }}
+        >
+          {title || '제목 없음'}
         </h3>
         {isImportant && (
           <StatusBadge value="new" />
@@ -55,8 +58,8 @@ export default function NoticeListItem({
       </div>
 
       {/* Date & Arrow */}
-      <div className="mt-2 md:mt-0 md:w-40 flex items-center justify-end gap-4">
-        <span className="text-[11px] font-mono text-gray-500 tracking-wide">
+      <div className="mt-2 md:mt-0 md:w-40 flex items-center justify-end gap-4 shrink-0">
+        <span className="text-[11px] font-mono text-gray-400 tracking-wide">
           {date}
         </span>
         <span className="hidden md:block text-gray-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400 transition-all duration-300">

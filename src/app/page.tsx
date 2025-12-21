@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { reader } from '@/lib/reader';
 import {
   getAwardLabel,
@@ -8,12 +10,34 @@ import {
   getSectorOrder,
 } from '@/lib/award-utils';
 
+// JSON 파일에서 직접 title을 읽는 함수
+async function getAwardTitle(slug: string): Promise<string> {
+  try {
+    const filePath = path.join(process.cwd(), 'src/content/awards', slug, 'index.json');
+    const content = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(content);
+    return data.title || 'Unknown';
+  } catch {
+    return 'Unknown';
+  }
+}
+
 export default async function Home() {
   const allAwards = await reader.collections.awards.all();
-  const awards = allAwards.map(award => ({
-    slug: award.slug,
-    entry: award.entry,
-  }));
+
+  // Keystatic slugField 버그로 인해 title이 null이 되므로 JSON에서 직접 읽음
+  const awards = await Promise.all(
+    allAwards.map(async (award) => ({
+      slug: award.slug,
+      title: await getAwardTitle(award.slug),
+      year: award.entry.year,
+      awardType: award.entry.awardType,
+      sector: award.entry.sector,
+      provider: award.entry.provider,
+      officialUrl: award.entry.officialUrl,
+      image: award.entry.image,
+    }))
+  );
 
   return (
     <div className="min-h-screen bg-dark-950">
@@ -250,64 +274,74 @@ export default async function Home() {
 
             {/* Award Entries - 2025년 대상/최우수상만 표시 */}
             {awards
-              .filter(award => award.entry.year === 2025 && (award.entry.awardType === 'grand' || award.entry.awardType === 'excellence'))
+              .filter(award => award.year === 2025 && (award.awardType === 'grand' || award.awardType === 'excellence'))
               .sort((a, b) => {
-                const typeOrderA = getAwardTypeOrder(a.entry.awardType);
-                const typeOrderB = getAwardTypeOrder(b.entry.awardType);
+                const typeOrderA = getAwardTypeOrder(a.awardType);
+                const typeOrderB = getAwardTypeOrder(b.awardType);
                 if (typeOrderA !== typeOrderB) return typeOrderA - typeOrderB;
 
-                const sectorOrderA = getSectorOrder(a.entry.sector);
-                const sectorOrderB = getSectorOrder(b.entry.sector);
+                const sectorOrderA = getSectorOrder(a.sector);
+                const sectorOrderB = getSectorOrder(b.sector);
                 return sectorOrderA - sectorOrderB;
               })
-              .map((award) => (
-                <Link
-                  key={award.slug}
-                  href={`/awards/${award.slug}`}
-                  className="group block relative"
-                >
-                  {/* List Row */}
-                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-6 md:py-8 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
+              .map((award) => {
+                // officialUrl이 있으면 외부 링크, 없으면 내부 링크
+                const hasExternalUrl = !!award.officialUrl;
+                const href = hasExternalUrl ? (award.officialUrl as string) : `/awards/${award.slug}`;
 
+                const CardContent = (
+                  <div className="relative grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-6 md:py-8 border-b border-dark-800/50 transition-all duration-300 hover:bg-dark-900/50 hover:border-dark-700/50">
                     {/* 수상 타입 + 부문 */}
                     <div className="md:col-span-3 flex items-center gap-2">
                       <span className={`text-base md:text-lg font-medium ${
-                        award.entry.awardType === 'grand'
+                        award.awardType === 'grand'
                           ? 'text-gold-400'
-                          : 'text-dark-300'
+                          : 'text-gray-100'
                       }`}>
-                        {getAwardLabel(award.entry.awardType)}
+                        {getAwardLabel(award.awardType)}
                       </span>
-                      {getSectorLabel(award.entry.sector) && (
-                        <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-dark-400">
-                          {getSectorLabel(award.entry.sector)}
+                      {getSectorLabel(award.sector) && (
+                        <span className="text-xs md:text-sm px-2 py-0.5 rounded border border-dark-700 text-gray-300">
+                          {getSectorLabel(award.sector)}
                         </span>
                       )}
                     </div>
 
                     {/* 정책 타이틀 */}
                     <div className="md:col-span-5 mt-2 md:mt-0">
-                      <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold text-dark-100 leading-tight transition-colors duration-300 group-hover:text-gold-300">
-                        {award.entry.title}
+                      <h3
+                        className="text-xl md:text-2xl lg:text-3xl font-semibold leading-tight transition-colors duration-300 group-hover:text-gold-300"
+                        style={{ color: '#ffffff' }}
+                      >
+                        {award.title}
                       </h3>
                     </div>
 
                     {/* 기관명 */}
                     <div className="md:col-span-3 mt-2 md:mt-0 flex items-center">
-                      <span className="text-base md:text-lg text-dark-400">
-                        {award.entry.provider}
+                      <span
+                        className="text-base md:text-lg"
+                        style={{ color: '#d1d5db' }}
+                      >
+                        {award.provider}
                       </span>
                     </div>
 
-                    {/* 화살표 - Hover시 나타남 */}
+                    {/* 화살표/외부링크 아이콘 - Hover시 나타남 */}
                     <div className="md:col-span-1 hidden md:flex items-center justify-end">
-                      <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
-                        →
-                      </span>
+                      {hasExternalUrl ? (
+                        <svg className="w-5 h-5 text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      ) : (
+                        <span className="text-dark-600 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-gold-400">
+                          →
+                        </span>
+                      )}
                     </div>
 
                     {/* 썸네일 오버레이 - Hover시 우측에 나타남 (옵션) */}
-                    {award.entry.image && (
+                    {award.image && (
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 pointer-events-none transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 z-10 hidden lg:block">
                         <div className="w-32 h-20 bg-dark-800 border border-dark-700 shadow-2xl overflow-hidden">
                           <div className="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
@@ -317,8 +351,28 @@ export default async function Home() {
                       </div>
                     )}
                   </div>
-                </Link>
-              ))}
+                );
+
+                return hasExternalUrl ? (
+                  <a
+                    key={award.slug}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block relative"
+                  >
+                    {CardContent}
+                  </a>
+                ) : (
+                  <Link
+                    key={award.slug}
+                    href={href}
+                    className="group block relative"
+                  >
+                    {CardContent}
+                  </Link>
+                );
+              })}
           </div>
 
           {/* Empty State */}

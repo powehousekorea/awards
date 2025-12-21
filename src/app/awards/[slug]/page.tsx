@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { reader } from '@/lib/reader';
 import { DocumentRenderer } from '@keystatic/core/renderer';
-import { getAwardShortLabel, getAwardIcon } from '@/lib/award-utils';
+import { getAwardShortLabel, getAwardIcon, getAwardLabel } from '@/lib/award-utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -13,6 +14,40 @@ export async function generateStaticParams() {
   return awards.map((award) => ({
     slug: award.slug,
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const award = await reader.collections.awards.read(slug);
+
+  if (!award) {
+    return {
+      title: '수상작을 찾을 수 없습니다 | 대한민국 청년정책 어워즈',
+    };
+  }
+
+  const title = `${award.title} | ${award.year} ${getAwardLabel(award.awardType)} - 대한민국 청년정책 어워즈`;
+  const description = award.summary || `${award.year}년 대한민국 청년정책 어워즈 ${getAwardLabel(award.awardType)} 수상작입니다.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      locale: 'ko_KR',
+      images: award.image
+        ? [{ url: award.image, width: 1200, height: 630, alt: award.title || '수상작 이미지' }]
+        : [{ url: '/images/og-image.jpg', width: 1200, height: 630, alt: '대한민국 청년정책 어워즈' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: award.image ? [award.image] : ['/images/og-image.jpg'],
+    },
+  };
 }
 
 export default async function AwardDetailPage({ params }: PageProps) {
