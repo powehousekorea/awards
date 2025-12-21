@@ -37,6 +37,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        {/* Naver Site Verification */}
+        <meta name="naver-site-verification" content="6cbfef53d193fc09605526cf8594653cbc97e780" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
