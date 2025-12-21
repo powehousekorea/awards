@@ -29,7 +29,8 @@
       "Bash(mkdir:*)",
       "Bash(cat:*)",
       "Bash(npx ts-node:*)",
-      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; Remove-Item -Recurse -Force ''c:\\\\Users\\\\USER-PC\\\\AI project\\\\awards\\\\.next'' -ErrorAction SilentlyContinue; Write-Host ''Processes killed and cache cleared''\")"
+      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; Remove-Item -Recurse -Force ''c:\\\\Users\\\\USER-PC\\\\AI project\\\\awards\\\\.next'' -ErrorAction SilentlyContinue; Write-Host ''Processes killed and cache cleared''\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Notice 날짜 2024 → 2025로 수정\n\n- 시상식 안내: 2024-12-23 → 2025-12-23\n- 전국민 투표: 2024-12-08 → 2025-12-08\n- 발굴단 모집: 2024-11-10 → 2025-11-10\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
